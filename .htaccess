@@ -1,0 +1,27 @@
+# CodeIgniter front controller routing and hardening
+<IfModule mod_rewrite.c>
+  Options -Indexes -MultiViews
+  RewriteEngine On
+
+  # If this app runs in a subfolder (e.g. http://localhost/spa-order/), uncomment and set the base
+  RewriteBase /spa-order/
+
+  # Security: prevent direct access to sensitive directories
+  RewriteRule ^(application|system|database)/ - [F,L]
+
+  # Skip rewriting for existing files and directories
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Send everything else to index.php (CodeIgniter)
+  RewriteRule ^(.*)$ index.php/$1 [L]
+</IfModule>
+
+# Fallback: if mod_rewrite is not available, at least disable directory listings
+<IfModule !mod_rewrite.c>
+  Options -Indexes
+</IfModule>
+
+# Allow PATH_INFO (required by CodeIgniter for URI segments)
+AcceptPathInfo On

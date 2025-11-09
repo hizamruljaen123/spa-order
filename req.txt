@@ -1,0 +1,242 @@
+
+> Buatkan aplikasi web menggunakan **CodeIgniter 3** dengan fitur **pemesanan Spa** dan **admin dashboard**.
+> Sistem ini terdiri dari **frontend untuk pelanggan** dan **backend (admin dashboard)** untuk mengelola data dan laporan.
+
+---
+
+### 🏗️ **1. Arsitektur Utama**
+
+Gunakan struktur MVC CodeIgniter 3:
+
+```
+application/
+├── controllers/
+│   ├── Booking.php
+│   ├── Admin.php
+│   └── Api.php (untuk kirim ke Telegram)
+├── models/
+│   ├── Booking_model.php
+│   ├── Therapist_model.php
+│   ├── Package_model.php
+│   └── Report_model.php
+├── views/
+│   ├── booking_form.php
+│   ├── admin/
+│   │   ├── dashboard.php
+│   │   ├── therapist_list.php
+│   │   ├── package_list.php
+│   │   ├── schedule_calendar.php
+│   │   └── report.php
+```
+
+---
+
+### 🌐 **2. Fitur Utama**
+
+#### 💁‍♀️ **Frontend (User)**
+
+Form pemesanan berdasarkan layout dari gambar:
+
+```
+Nama:
+Alamat:
+Nama Therapist (optional, dropdown dari database)
+Package (dropdown dari database)
+Tanggal:
+Jam:
+```
+
+➡️ Tombol [Kirim Pesanan]
+
+**Fungsi:**
+
+* Simpan data ke tabel `booking`
+
+* Kirim notifikasi ke Telegram via API:
+
+  ```
+  https://api.telegram.org/bot<YOUR_BOT_TOKEN>/sendMessage
+  ```
+
+* Pesan Telegram dikirim ke admin:
+
+  ```
+  📋 SPA BOOKING REQUEST
+  Nama: [nama]
+  Alamat: [alamat]
+  Therapist: [therapist]
+  Paket: [package]
+  Tanggal: [tanggal]
+  Jam: [jam]
+  ```
+
+* Setelah dikirim → tampil pesan sukses.
+
+* (Opsional) tampilkan no. rekening & kode QR untuk DP.
+
+---
+
+#### 🧑‍💼 **Backend (Admin Dashboard)**
+
+Menu utama di sidebar:
+
+1. **Dashboard**
+
+   * Ringkasan total booking hari ini, total pendapatan, jumlah therapist aktif, paket populer.
+2. **Data Therapist**
+
+   * CRUD (Tambah, Edit, Hapus)
+   * Status aktif / tidak aktif
+   * Jadwal ketersediaan
+3. **Data Package**
+
+   * CRUD paket spa (nama, durasi, harga, deskripsi)
+4. **Booking / Kalender Jadwal**
+
+   * Tampilkan jadwal booking dengan **plugin FullCalendar.js**
+   * Klik pada slot waktu menampilkan detail booking
+   * Warna hijau = tersedia, merah = sudah dibooking
+5. **Laporan Pendapatan**
+
+   * Filter berdasarkan tanggal / bulan
+   * Total pendapatan, jumlah pelanggan, paket terlaris
+6. **Invoice**
+
+   * Generate otomatis saat booking dikonfirmasi
+   * Format PDF dengan nomor unik (`INV-YYYYMMDD-####`)
+   * Detail: nama pelanggan, therapist, paket, harga, tanggal, status pembayaran (DP / Lunas)
+   * Tombol "Download PDF"
+
+---
+
+### 🧩 **3. Struktur Database (MySQL)**
+
+#### `therapist`
+
+| Field      | Type                           | Description    |
+| ---------- | ------------------------------ | -------------- |
+| id         | INT                            | PK             |
+| name       | VARCHAR(100)                   | Nama therapist |
+| phone      | VARCHAR(20)                    | No HP          |
+| status     | ENUM('available','busy','off') | Status kerja   |
+| created_at | DATETIME                       |                |
+
+#### `package`
+
+| Field       | Type          | Description    |
+| ----------- | ------------- | -------------- |
+| id          | INT           | PK             |
+| name        | VARCHAR(100)  | Nama paket     |
+| duration    | INT           | Durasi (menit) |
+| price       | DECIMAL(10,2) | Harga          |
+| description | TEXT          | Deskripsi      |
+
+#### `booking`
+
+| Field         | Type                                               | Description       |
+| ------------- | -------------------------------------------------- | ----------------- |
+| id            | INT                                                | PK                |
+| customer_name | VARCHAR(100)                                       |                   |
+| address       | TEXT                                               |                   |
+| therapist_id  | INT                                                | FK → therapist.id |
+| package_id    | INT                                                | FK → package.id   |
+| date          | DATE                                               |                   |
+| time          | TIME                                               |                   |
+| total_price   | DECIMAL(10,2)                                      |                   |
+| status        | ENUM('pending','confirmed','completed','canceled') |                   |
+| created_at    | DATETIME                                           |                   |
+
+#### `invoice`
+
+| Field          | Type               | Description     |
+| -------------- | ------------------ | --------------- |
+| id             | INT                | PK              |
+| booking_id     | INT                | FK → booking.id |
+| invoice_number | VARCHAR(50)        |                 |
+| total          | DECIMAL(10,2)      |                 |
+| payment_status | ENUM('DP','Lunas') |                 |
+| created_at     | DATETIME           |                 |
+
+---
+
+### 📅 **4. Kalender Jadwal (FullCalendar Integration)**
+
+Gunakan FullCalendar ([https://fullcalendar.io/](https://fullcalendar.io/)):
+
+* Endpoint `/admin/schedule` → JSON booking data.
+* Tampilkan booking berdasarkan therapist.
+* Event warna merah untuk “booked”, hijau untuk “available”.
+* Klik event → tampilkan modal detail booking.
+
+---
+
+### 💬 **5. Integrasi Telegram**
+
+Buat controller `Api.php`:
+
+```php
+class Api extends CI_Controller {
+    private $botToken = 'YOUR_TELEGRAM_BOT_TOKEN';
+    private $chatId = 'YOUR_CHAT_ID';
+
+    public function send_booking_notification($data) {
+        $message = "📋 *SPA BOOKING REQUEST*\n"
+            ."👤 Nama: {$data['customer_name']}\n"
+            ."🏠 Alamat: {$data['address']}\n"
+            ."💆‍♀️ Therapist: {$data['therapist_name']}\n"
+            ."💅 Paket: {$data['package_name']}\n"
+            ."📅 Tanggal: {$data['date']}\n"
+            ."⏰ Jam: {$data['time']}";
+        
+        $url = "https://api.telegram.org/bot{$this->botToken}/sendMessage";
+        $post = [
+            'chat_id' => $this->chatId,
+            'text' => $message,
+            'parse_mode' => 'Markdown'
+        ];
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+        curl_exec($ch);
+        curl_close($ch);
+    }
+}
+```
+
+---
+
+### 💰 **6. Laporan & Pendapatan**
+
+* Controller `Report.php`
+* Fungsi menghitung:
+
+  ```sql
+  SELECT SUM(total_price) AS total_pendapatan, COUNT(id) AS total_booking
+  FROM booking
+  WHERE MONTH(date) = ?;
+  ```
+* Tampilkan grafik pendapatan per bulan (pakai Chart.js).
+
+---
+
+### 🧾 **7. Invoice Otomatis**
+
+Gunakan **dompdf** library (bisa via Composer atau manual).
+Generate file PDF ketika status booking → “confirmed”.
+
+File PDF berisi:
+
+```
+INVOICE #: INV-20251107-0001
+Nama: Cindi Rahayu
+Paket: Full Body Massage
+Harga: Rp 350.000
+Tanggal: 7 Nov 2025
+Jam: 15:00
+Status: DP / Lunas
+```
+
+---
+
