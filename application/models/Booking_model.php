@@ -123,25 +123,30 @@ class Booking_model extends CI_Model
      */
     public function get_calendar_events($start, $end, $therapist_id = null)
     {
-        $this->db->select('b.id, b.customer_name, b.date, b.time, b.status, p.name AS package_name, t.name AS therapist_name')
+        $this->db->select('b.id, b.customer_name, b.date, b.time, b.status, p.name AS package_name, p.duration AS package_duration, t.name AS therapist_name')
                  ->from($this->table . ' b')
                  ->join('package p', 'p.id = b.package_id', 'left')
                  ->join('therapist t', 't.id = b.therapist_id', 'left')
                  ->where('b.date >=', date('Y-m-d', strtotime($start)))
                  ->where('b.date <=', date('Y-m-d', strtotime($end)));
-
+    
         if (!empty($therapist_id)) {
             $this->db->where('b.therapist_id', (int)$therapist_id);
         }
-
+    
         $rows = $this->db->get()->result();
-
+    
         $events = [];
         foreach ($rows as $r) {
             // Build ISO8601 datetime
             $startDt = $r->date . 'T' . $r->time;
+            $durationMin = is_numeric($r->package_duration) ? (int)$r->package_duration : 60;
+            $startTs = strtotime($startDt);
+            $endTs   = $startTs !== false ? ($startTs + ($durationMin * 60)) : null;
+            $endDt   = $endTs ? date('Y-m-d\TH:i:s', $endTs) : null;
+    
             $title = sprintf('%s - %s (%s)', $r->customer_name, $r->package_name, $r->therapist_name ?: 'N/A');
-
+    
             // Determine color: red for pending/confirmed, gray for completed, orange for canceled
             $color = '#28a745'; // default green (available) not used here
             if ($r->status === 'pending' || $r->status === 'confirmed') {
@@ -151,21 +156,26 @@ class Booking_model extends CI_Model
             } elseif ($r->status === 'canceled') {
                 $color = '#fd7e14'; // orange
             }
-
-            $events[] = [
+    
+            $ev = [
                 'id'    => (int)$r->id,
                 'title' => $title,
                 'start' => $startDt,
                 'color' => $color,
                 'extendedProps' => [
-                    'status' => $r->status,
-                    'customer_name' => $r->customer_name,
-                    'package_name'  => $r->package_name,
-                    'therapist_name'=> $r->therapist_name,
+                    'status'         => $r->status,
+                    'customer_name'  => $r->customer_name,
+                    'package_name'   => $r->package_name,
+                    'therapist_name' => $r->therapist_name,
+                    'duration'       => $durationMin,
                 ],
             ];
+            if ($endDt) {
+                $ev['end'] = $endDt;
+            }
+            $events[] = $ev;
         }
-
+    
         return $events;
     }
 

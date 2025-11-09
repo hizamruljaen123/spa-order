@@ -84,6 +84,8 @@ $route['admin/invoice/generate/(:any)'] = 'admin/generate_invoice/$1';
 $route['admin/booking/confirm/(:any)'] = 'admin/booking_confirm/$1';
 $route['admin/booking/complete/(:any)'] = 'admin/booking_complete/$1';
 $route['admin/booking/cancel/(:any)'] = 'admin/booking_cancel/$1';
+$route['admin/booking/update-time'] = 'admin/booking_update_time';
+$route['admin/booking/delete'] = 'admin/booking_delete';
 
 /* API (Telegram) */
 $route['api/telegram/send'] = 'api/send_booking_notification';

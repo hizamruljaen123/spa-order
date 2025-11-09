@@ -1,5 +1,5 @@
 <?php
-$this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'Data Paket Spa (APITT Menu)']);
+$this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'Data Pakej Spa (Menu APITT)']);
 ?>
 
 <?php if (!empty($flash['success'])): ?>
@@ -13,62 +13,15 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
   </div>
 <?php endif; ?>
 
-<!-- Add Package (new schema) -->
-<div class="rounded-lg border border-gray-200 bg-white shadow-sm mb-6">
-  <div class="px-5 py-3 border-b border-gray-200">
-    <h2 class="text-base font-semibold text-gray-900">Tambah Paket Spa (APITT Format)</h2>
-  </div>
-  <div class="p-5">
-    <form class="grid grid-cols-1 md:grid-cols-12 gap-4" method="post" action="<?= site_url('admin/package/create'); ?>">
-      <div class="md:col-span-4">
-        <label for="name" class="block text-sm font-medium text-gray-700">Nama Paket</label>
-        <input type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500" id="name" name="name" required minlength="2" placeholder="Contoh: Solo Package A">
-      </div>
-      <div class="md:col-span-4">
-        <label for="category" class="block text-sm font-medium text-gray-700">Kategori</label>
-        <input type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500" id="category" name="category" required placeholder="Contoh: Solo Oil Relaxing Massage">
-      </div>
-      <div class="md:col-span-4">
-        <label for="hands" class="block text-sm font-medium text-gray-700">Jumlah Therapist</label>
-        <select class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500" id="hands" name="hands" required>
-          <option value="1">1 (Solo)</option>
-          <option value="2">2 (4 Hand)</option>
-        </select>
-      </div>
-
-      <div class="md:col-span-3">
-        <label for="duration" class="block text-sm font-medium text-gray-700">Durasi (menit)</label>
-        <input type="number" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500" id="duration" name="duration" min="15" step="5" required placeholder="60">
-      </div>
-      <div class="md:col-span-3">
-        <label for="currency" class="block text-sm font-medium text-gray-700">Mata Uang</label>
-        <input type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500" id="currency" name="currency" maxlength="10" value="RM" placeholder="Contoh: RM">
-      </div>
-      <div class="md:col-span-3">
-        <label for="price_in_call" class="block text-sm font-medium text-gray-700">Harga In Call</label>
-        <input type="number" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-right" id="price_in_call" name="price_in_call" min="0" step="1" required placeholder="Contoh: 89">
-      </div>
-      <div class="md:col-span-3">
-        <label for="price_out_call" class="block text-sm font-medium text-gray-700">Harga Out Call</label>
-        <input type="number" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-right" id="price_out_call" name="price_out_call" min="0" step="1" required placeholder="Contoh: 150">
-      </div>
-
-      <div class="md:col-span-12">
-        <label for="description" class="block text-sm font-medium text-gray-700">Deskripsi</label>
-        <textarea class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500" id="description" name="description" rows="2" placeholder="Deskripsi paket (contoh: Full Body Massage + Manhood)"></textarea>
-      </div>
-
-      <div class="md:col-span-12 flex justify-end">
-        <button class="inline-flex items-center rounded-md bg-sky-600 text-white px-4 py-2 text-sm hover:bg-sky-700" type="submit">Tambah</button>
-      </div>
-    </form>
-  </div>
+<!-- Toolbar: Tambah Pakej (modal) -->
+<div class="mb-4 flex justify-end">
+  <button type="button" onclick="window.pkgCreateOpen()" class="inline-flex items-center rounded-md bg-sky-600 text-white px-4 py-2 text-sm hover:bg-sky-700">Tambah Pakej</button>
 </div>
 
 <!-- List Packages -->
 <div class="rounded-lg border border-gray-200 bg-white shadow-sm">
   <div class="px-5 py-3 border-b border-gray-200">
-    <h2 class="text-base font-semibold text-gray-900">Daftar Paket (APITT)</h2>
+    <h2 class="text-base font-semibold text-gray-900">Senarai Pakej (APITT)</h2>
   </div>
   <div class="p-0">
     <div class="overflow-x-auto">
@@ -76,15 +29,15 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
         <thead class="bg-gray-50">
           <tr class="text-left text-sm text-gray-600">
             <th class="px-5 py-3 w-12">#</th>
-            <th class="px-5 py-3">Nama Paket</th>
+            <th class="px-5 py-3">Nama Pakej</th>
             <th class="px-5 py-3">Kategori</th>
-            <th class="px-5 py-3 text-center w-32">Therapist</th>
-            <th class="px-5 py-3 text-center w-36">Durasi</th>
-            <th class="px-5 py-3 text-right w-40">In Call</th>
-            <th class="px-5 py-3 text-right w-40">Out Call</th>
-            <th class="px-5 py-3 text-center w-28">Currency</th>
-            <th class="px-5 py-3 w-[360px]">Deskripsi</th>
-            <th class="px-5 py-3 text-right w-56">Aksi</th>
+            <th class="px-5 py-3 text-center w-32">Terapis</th>
+            <th class="px-5 py-3 text-center w-36">Tempoh</th>
+            <th class="px-5 py-3 text-right w-40">Di Premis</th>
+            <th class="px-5 py-3 text-right w-40">Luar Premis</th>
+            <th class="px-5 py-3 text-center w-28">Mata Wang</th>
+            <th class="px-5 py-3 w-[360px]">Keterangan</th>
+            <th class="px-5 py-3 text-right w-56">Tindakan</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-200">
@@ -96,7 +49,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
 
               <!-- Name -->
               <td class="px-5 py-3">
-                <?php if ($isEdit): ?>
+                <?php if (false): ?>
                   <form method="post" action="<?= site_url('admin/package/edit/' . (isset($p->token) ? $p->token : (int)$p->id)); ?>" class="grid grid-cols-1 gap-2">
                     <input type="text" name="name" class="rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500" value="<?= htmlspecialchars($p->name); ?>" required minlength="2">
                 <?php else: ?>
@@ -106,7 +59,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
 
               <!-- Category -->
               <td class="px-5 py-3">
-                <?php if ($isEdit): ?>
+                <?php if (false): ?>
                   <input type="text" name="category" class="rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500" value="<?= htmlspecialchars($p->category ?? ''); ?>" required>
                 <?php else: ?>
                   <div class="text-gray-600"><?= htmlspecialchars($p->category ?? '-'); ?></div>
@@ -115,7 +68,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
 
               <!-- Hands -->
               <td class="px-5 py-3 text-center">
-                <?php if ($isEdit): ?>
+                <?php if (false): ?>
                   <select name="hands" class="rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
                     <option value="1" <?= ((int)($p->hands ?? 1) === 1) ? 'selected' : ''; ?>>1</option>
                     <option value="2" <?= ((int)($p->hands ?? 1) === 2) ? 'selected' : ''; ?>>2</option>
@@ -127,16 +80,16 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
 
               <!-- Duration -->
               <td class="px-5 py-3 text-center">
-                <?php if ($isEdit): ?>
+                <?php if (false): ?>
                   <input type="number" name="duration" class="w-24 text-center rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500" value="<?= (int)($p->duration ?? 0); ?>" min="15" step="5" required>
                 <?php else: ?>
-                  <?= (int)($p->duration ?? 0); ?> menit
+                  <?= (int)($p->duration ?? 0); ?> minit
                 <?php endif; ?>
               </td>
 
               <!-- In Call -->
               <td class="px-5 py-3 text-right">
-                <?php if ($isEdit): ?>
+                <?php if (false): ?>
                   <input type="number" name="price_in_call" class="w-28 text-right rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500" value="<?= (float)($p->price_in_call ?? 0); ?>" min="0" step="1" required>
                 <?php else: ?>
                   <?= htmlspecialchars($p->currency ?? 'RM'); ?> <?= number_format((float)($p->price_in_call ?? 0), 0, ',', '.'); ?>
@@ -145,7 +98,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
 
               <!-- Out Call -->
               <td class="px-5 py-3 text-right">
-                <?php if ($isEdit): ?>
+                <?php if (false): ?>
                   <input type="number" name="price_out_call" class="w-28 text-right rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500" value="<?= (float)($p->price_out_call ?? 0); ?>" min="0" step="1" required>
                 <?php else: ?>
                   <?= htmlspecialchars($p->currency ?? 'RM'); ?> <?= number_format((float)($p->price_out_call ?? 0), 0, ',', '.'); ?>
@@ -154,7 +107,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
 
               <!-- Currency -->
               <td class="px-5 py-3 text-center">
-                <?php if ($isEdit): ?>
+                <?php if (false): ?>
                   <input type="text" name="currency" class="w-20 text-center rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500" value="<?= htmlspecialchars($p->currency ?? 'RM'); ?>" maxlength="10" required>
                 <?php else: ?>
                   <span class="inline-flex items-center px-2 py-1 rounded bg-gray-200 text-gray-700 text-xs"><?= htmlspecialchars($p->currency ?? 'RM'); ?></span>
@@ -163,7 +116,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
 
               <!-- Description -->
               <td class="px-5 py-3">
-                <?php if ($isEdit): ?>
+                <?php if (false): ?>
                   <textarea name="description" class="w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500" rows="1"><?= htmlspecialchars($p->description ?? ''); ?></textarea>
                 <?php else: ?>
                   <div class="text-gray-700 truncate max-w-[340px]"><?= htmlspecialchars($p->description ?? '-'); ?></div>
@@ -172,20 +125,18 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
 
               <!-- Actions -->
               <td class="px-5 py-3 text-right">
-                <?php if ($isEdit): ?>
-                  <button type="submit" class="inline-flex items-center rounded-md bg-sky-600 text-white px-3 py-1.5 text-xs hover:bg-sky-700">Simpan</button>
-                  <a href="<?= site_url('admin/packages'); ?>" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-3 py-1.5 text-xs hover:bg-gray-50">Batal</a>
-                  </form>
+                <?php if (false): ?>
+                    <!-- Inline edit disabled; using modal -->
                 <?php else: ?>
-                  <a class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-3 py-1.5 text-xs hover:bg-gray-50" href="<?= site_url('admin/package/edit/' . (isset($p->token) ? $p->token : (int)$p->id)); ?>">Edit</a>
-                  <a class="inline-flex items-center rounded-md border border-red-300 bg-white text-red-600 px-3 py-1.5 text-xs hover:bg-red-50" href="<?= site_url('admin/package/delete/' . (isset($p->token) ? $p->token : (int)$p->id)); ?>" onclick="return confirm('Hapus paket ini?');">Hapus</a>
+                    <a class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-3 py-1.5 text-xs hover:bg-gray-50" href="<?= site_url('admin/package/edit/' . (isset($p->token) ? $p->token : (int)$p->id)); ?>">Sunting</a>
+                    <a class="inline-flex items-center rounded-md border border-red-300 bg-white text-red-600 px-3 py-1.5 text-xs hover:bg-red-50" href="<?= site_url('admin/package/delete/' . (isset($p->token) ? $p->token : (int)$p->id)); ?>" onclick="return confirm('Padam pakej ini?');">Padam</a>
                 <?php endif; ?>
               </td>
             </tr>
           <?php endforeach; ?>
         <?php else: ?>
           <tr>
-            <td colspan="10" class="px-5 py-6 text-center text-gray-500">Belum ada data paket.</td>
+            <td colspan="10" class="px-5 py-6 text-center text-gray-500">Belum ada data pakej.</td>
           </tr>
         <?php endif; ?>
         </tbody>
@@ -195,7 +146,239 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
 </div>
 
 <footer class="pt-6 text-gray-500 text-xs">
-  <p>© <?= date('Y'); ?> Spa Management System</p>
+  <p>© <?= date('Y'); ?> Sistem Pengurusan Spa</p>
 </footer>
+
+<?php
+  // Prepare modal data (token lookup for the edited item)
+  $hasEdit   = isset($editItem) && isset($editItemId);
+  $editToken = null;
+  if ($hasEdit && isset($packages) && is_array($packages)) {
+    foreach ($packages as $pkgCandidate) {
+      if ((int)($pkgCandidate->id ?? 0) === (int)$editItemId) {
+        $editToken = isset($pkgCandidate->token) ? $pkgCandidate->token : (string)$pkgCandidate->id;
+        break;
+      }
+    }
+  }
+?>
+
+<!-- Edit Package Modal -->
+<div id="pkgEditModalOverlay" class="fixed inset-0 bg-black/40 <?= $hasEdit ? '' : 'hidden'; ?>"></div>
+<div id="pkgEditModal"
+     role="dialog"
+     aria-modal="true"
+     aria-hidden="<?= $hasEdit ? 'false' : 'true'; ?>"
+     class="fixed inset-0 z-50 <?= $hasEdit ? 'flex' : 'hidden'; ?> items-center justify-center p-4">
+  <div class="w-full max-w-2xl bg-white rounded-xl shadow-xl ring-1 ring-gray-200">
+    <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+      <h3 class="text-lg font-semibold text-gray-900">Sunting Pakej</h3>
+      <button type="button" class="text-gray-400 hover:text-gray-600" onclick="window.pkgEditClose()" aria-label="Tutup">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="p-6">
+      <?php if ($hasEdit && isset($editItem)): ?>
+        <form method="post" action="<?= site_url('admin/package/edit/' . $editToken); ?>" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="md:col-span-2">
+            <label for="edit_name" class="block text-sm font-medium text-gray-700">Nama Pakej</label>
+            <input id="edit_name" name="name" type="text" value="<?= htmlspecialchars($editItem->name ?? ''); ?>" required minlength="2"
+                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
+          </div>
+
+          <div class="md:col-span-2">
+            <label for="edit_category" class="block text-sm font-medium text-gray-700">Kategori</label>
+            <input id="edit_category" name="category" type="text" value="<?= htmlspecialchars($editItem->category ?? ''); ?>" required
+                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
+          </div>
+
+          <div>
+            <label for="edit_hands" class="block text-sm font-medium text-gray-700">Bilangan Terapis</label>
+            <select id="edit_hands" name="hands" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
+              <option value="1" <?= ((int)($editItem->hands ?? 1) === 1) ? 'selected' : ''; ?>>1 (Solo)</option>
+              <option value="2" <?= ((int)($editItem->hands ?? 1) === 2) ? 'selected' : ''; ?>>2 (4 Hand)</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="edit_duration" class="block text-sm font-medium text-gray-700">Tempoh (minit)</label>
+            <input id="edit_duration" name="duration" type="number" min="15" step="5" required value="<?= (int)($editItem->duration ?? 0); ?>"
+                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-center">
+          </div>
+
+          <div>
+            <label for="edit_currency" class="block text-sm font-medium text-gray-700">Mata Wang</label>
+            <input id="edit_currency" name="currency" type="text" maxlength="10" required value="<?= htmlspecialchars($editItem->currency ?? 'RM'); ?>"
+                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
+          </div>
+
+          <div>
+            <label for="edit_price_in_call" class="block text-sm font-medium text-gray-700">Harga Di Premis</label>
+            <input id="edit_price_in_call" name="price_in_call" type="number" min="0" step="1" required value="<?= (float)($editItem->price_in_call ?? 0); ?>"
+                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-right">
+          </div>
+
+          <div>
+            <label for="edit_price_out_call" class="block text-sm font-medium text-gray-700">Harga Luar Premis</label>
+            <input id="edit_price_out_call" name="price_out_call" type="number" min="0" step="1" required value="<?= (float)($editItem->price_out_call ?? 0); ?>"
+                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-right">
+          </div>
+
+          <div class="md:col-span-2">
+            <label for="edit_description" class="block text-sm font-medium text-gray-700">Keterangan</label>
+            <textarea id="edit_description" name="description" rows="2"
+                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"><?= htmlspecialchars($editItem->description ?? ''); ?></textarea>
+          </div>
+
+          <div class="md:col-span-2 flex justify-end gap-3 mt-2">
+            <button type="submit" class="inline-flex items-center rounded-md bg-sky-600 text-white px-4 py-2 text-sm hover:bg-sky-700">Simpan</button>
+            <a href="<?= site_url('admin/packages'); ?>" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-4 py-2 text-sm hover:bg-gray-50">Batal</a>
+          </div>
+        </form>
+      <?php else: ?>
+        <p class="text-sm text-gray-500">Data pakej tidak ditemui.</p>
+      <?php endif; ?>
+    </div>
+  </div>
+</div>
+
+<!-- Create Package Modal -->
+<div id="pkgCreateModalOverlay" class="fixed inset-0 bg-black/40 hidden"></div>
+<div id="pkgCreateModal"
+     role="dialog"
+     aria-modal="true"
+     aria-hidden="true"
+     class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+  <div class="w-full max-w-2xl bg-white rounded-xl shadow-xl ring-1 ring-gray-200">
+    <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+      <h3 class="text-lg font-semibold text-gray-900">Tambah Pakej</h3>
+      <button type="button" class="text-gray-400 hover:text-gray-600" onclick="window.pkgCreateClose()" aria-label="Tutup">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="p-6">
+      <form method="post" action="<?= site_url('admin/package/create'); ?>" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="md:col-span-2">
+          <label for="create_name" class="block text-sm font-medium text-gray-700">Nama Pakej</label>
+          <input id="create_name" name="name" type="text" required minlength="2" placeholder="Contoh: Solo Package A"
+                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
+        </div>
+
+        <div class="md:col-span-2">
+          <label for="create_category" class="block text-sm font-medium text-gray-700">Kategori</label>
+          <input id="create_category" name="category" type="text" required placeholder="Contoh: Solo Oil Relaxing Massage"
+                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
+        </div>
+
+        <div>
+          <label for="create_hands" class="block text-sm font-medium text-gray-700">Bilangan Terapis</label>
+          <select id="create_hands" name="hands" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
+            <option value="1">1 (Solo)</option>
+            <option value="2">2 (4 Hand)</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="create_duration" class="block text-sm font-medium text-gray-700">Tempoh (minit)</label>
+          <input id="create_duration" name="duration" type="number" min="15" step="5" required placeholder="60"
+                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
+        </div>
+
+        <div>
+          <label for="create_currency" class="block text-sm font-medium text-gray-700">Mata Wang</label>
+          <input id="create_currency" name="currency" type="text" maxlength="10" value="RM" placeholder="Contoh: RM"
+                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
+        </div>
+
+        <div>
+          <label for="create_price_in_call" class="block text-sm font-medium text-gray-700">Harga Di Premis</label>
+          <input id="create_price_in_call" name="price_in_call" type="number" min="0" step="1" required placeholder="Contoh: 89"
+                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-right">
+        </div>
+
+        <div>
+          <label for="create_price_out_call" class="block text-sm font-medium text-gray-700">Harga Luar Premis</label>
+          <input id="create_price_out_call" name="price_out_call" type="number" min="0" step="1" required placeholder="Contoh: 150"
+                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-right">
+        </div>
+
+        <div class="md:col-span-2">
+          <label for="create_description" class="block text-sm font-medium text-gray-700">Keterangan</label>
+          <textarea id="create_description" name="description" rows="2" placeholder="Keterangan pakej (contoh: Urutan Badan Penuh + Manhood)"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"></textarea>
+        </div>
+
+        <div class="md:col-span-2 flex justify-end gap-3 mt-2">
+          <button type="submit" class="inline-flex items-center rounded-md bg-sky-600 text-white px-4 py-2 text-sm hover:bg-sky-700">Tambah</button>
+          <button type="button" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-4 py-2 text-sm hover:bg-gray-50" onclick="window.pkgCreateClose()">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Modal helpers
+  window.pkgEditOpen = function() {
+    var m = document.getElementById('pkgEditModal');
+    var o = document.getElementById('pkgEditModalOverlay');
+    if (m && o) {
+      m.classList.remove('hidden'); m.classList.add('flex');
+      o.classList.remove('hidden');
+      m.setAttribute('aria-hidden', 'false');
+    }
+  };
+  window.pkgEditClose = function() {
+    var m = document.getElementById('pkgEditModal');
+    var o = document.getElementById('pkgEditModalOverlay');
+    if (m && o) {
+      m.classList.add('hidden'); m.classList.remove('flex');
+      o.classList.add('hidden');
+      m.setAttribute('aria-hidden', 'true');
+    }
+  };
+
+  // Create modal helpers
+  window.pkgCreateOpen = function() {
+    var m = document.getElementById('pkgCreateModal');
+    var o = document.getElementById('pkgCreateModalOverlay');
+    if (m && o) {
+      m.classList.remove('hidden'); m.classList.add('flex');
+      o.classList.remove('hidden');
+      m.setAttribute('aria-hidden', 'false');
+    }
+  };
+  window.pkgCreateClose = function() {
+    var m = document.getElementById('pkgCreateModal');
+    var o = document.getElementById('pkgCreateModalOverlay');
+    if (m && o) {
+      m.classList.add('hidden'); m.classList.remove('flex');
+      o.classList.add('hidden');
+      m.setAttribute('aria-hidden', 'true');
+    }
+  };
+
+  // ESC & overlay click to close
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      if (typeof window.pkgEditClose === 'function') window.pkgEditClose();
+      if (typeof window.pkgCreateClose === 'function') window.pkgCreateClose();
+    }
+  });
+  document.addEventListener('click', function(e){
+    if (e.target && e.target.id === 'pkgEditModalOverlay') {
+      if (typeof window.pkgEditClose === 'function') window.pkgEditClose();
+    }
+    if (e.target && e.target.id === 'pkgCreateModalOverlay') {
+      if (typeof window.pkgCreateClose === 'function') window.pkgCreateClose();
+    }
+  });
+</script>
 
 <?php $this->load->view('admin/layout/footer'); ?>

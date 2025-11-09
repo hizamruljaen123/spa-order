@@ -44,29 +44,29 @@ $isActive = function($patterns) use ($uri) {
   <!-- Sidebar -->
   <aside class="w-64 bg-slate-900 text-slate-100 fixed inset-y-0 left-0 flex flex-col">
     <div class="h-14 flex items-center px-4 border-b border-slate-800">
-      <span class="font-semibold tracking-wide">Spa Admin</span>
+      <span class="font-semibold tracking-wide">Admin Spa</span>
     </div>
 
     <nav class="p-3 space-y-1 text-sm">
       <a href="<?= site_url('admin'); ?>"
          class="block px-3 py-2 rounded-md <?= ($uri === 'admin' || $uri === 'admin/index') ? 'bg-white/10 text-white' : 'text-gray-300 hover:text-white hover:bg-white/10'; ?>">
-        Dashboard
+        Papan Pemuka
       </a>
       <a href="<?= site_url('admin/therapists'); ?>"
          class="block px-3 py-2 rounded-md <?= $isActive(['admin/therapists','admin/therapist']); ?>">
-        Therapists
+        Terapis
       </a>
       <a href="<?= site_url('admin/packages'); ?>"
          class="block px-3 py-2 rounded-md <?= $isActive(['admin/packages','admin/package']); ?>">
-        Packages
+        Pakej
       </a>
       <a href="<?= site_url('admin/schedule'); ?>"
          class="block px-3 py-2 rounded-md <?= $isActive(['admin/schedule']); ?>">
-        Schedule
+        Jadual
       </a>
       <a href="<?= site_url('admin/report'); ?>"
          class="block px-3 py-2 rounded-md <?= $isActive(['admin/report']); ?>">
-        Reports
+        Laporan
       </a>
     </nav>
 
@@ -80,7 +80,7 @@ $isActive = function($patterns) use ($uri) {
     <!-- Topbar -->
     <header class="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-6">
       <h1 class="font-semibold text-gray-900"><?= htmlspecialchars($title); ?></h1>
-      <div class="text-xs text-gray-500">Admin Panel</div>
+      <div class="text-xs text-gray-500">Panel Admin</div>
     </header>
 
     <!-- Main content -->

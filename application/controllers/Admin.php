@@ -515,4 +515,73 @@ class Admin extends CI_Controller
         $this->session->set_flashdata('success', 'Booking dibatalkan.');
         redirect('admin/schedule');
     }
+    
+    // AJAX: Update booking date/time (drag-and-drop or manual edit)
+    public function booking_update_time()
+    {
+        if ($this->input->method(true) !== 'POST') {
+            $this->output
+                ->set_status_header(405)
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['ok' => false, 'error' => 'Method Not Allowed']));
+            return;
+        }
+    
+        $token = $this->input->post('token', true);
+        $date  = $this->input->post('date', true);
+        $time  = $this->input->post('time', true);
+    
+        $id = $token && !ctype_digit((string)$token) ? $this->urlcrypt->decode($token) : (int)$token;
+        if (!$id) {
+            $this->output
+                ->set_status_header(400)
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['ok' => false, 'error' => 'Invalid token']));
+            return;
+        }
+    
+        // Normalize and validate date/time
+        if (preg_match('/^\d{2}:\d{2}$/', (string)$time)) {
+            $time .= ':00';
+        }
+        if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', (string)$date) || !preg_match('/^\d{2}:\d{2}:\d{2}$/', (string)$time)) {
+            $this->output
+                ->set_status_header(422)
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['ok' => false, 'error' => 'Invalid date/time format']));
+            return;
+        }
+    
+        $ok = $this->Booking_model->update((int)$id, ['date' => $date, 'time' => $time]);
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode(['ok' => (bool)$ok]));
+    }
+    
+    // AJAX: Delete booking
+    public function booking_delete()
+    {
+        if ($this->input->method(true) !== 'POST') {
+            $this->output
+                ->set_status_header(405)
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['ok' => false, 'error' => 'Method Not Allowed']));
+            return;
+        }
+    
+        $token = $this->input->post('token', true);
+        $id = $token && !ctype_digit((string)$token) ? $this->urlcrypt->decode($token) : (int)$token;
+        if (!$id) {
+            $this->output
+                ->set_status_header(400)
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['ok' => false, 'error' => 'Invalid token']));
+            return;
+        }
+    
+        $ok = $this->Booking_model->delete((int)$id);
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode(['ok' => (bool)$ok]));
+    }
 }

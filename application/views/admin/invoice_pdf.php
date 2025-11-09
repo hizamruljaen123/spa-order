@@ -36,11 +36,11 @@ if ($invoice && isset($invoice->total) && is_numeric($invoice->total)) {
   <div class="rounded-lg border border-gray-200 bg-white shadow-sm mb-6">
     <div class="px-5 py-4 flex items-start justify-between">
       <div>
-        <h2 class="text-xl font-semibold text-sky-600">SPA Management</h2>
+        <h2 class="text-xl font-semibold text-sky-600">Pengurusan SPA</h2>
         <p class="text-xs text-gray-500 mt-1">Jl. Contoh No. 123, Bandung • +62-812-3456-7890</p>
       </div>
       <div class="text-right">
-        <div class="text-2xl font-bold text-gray-900 tracking-wide">INVOICE</div>
+        <div class="text-2xl font-bold text-gray-900 tracking-wide">INVOIS</div>
         <div class="mt-1 text-sm text-gray-700 font-medium"><?= $safe($invNum); ?></div>
         <div class="mt-2">
           <?php
@@ -55,23 +55,23 @@ if ($invoice && isset($invoice->total) && is_numeric($invoice->total)) {
 
     <div class="px-5 py-4 border-t border-gray-200 grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
-        <div class="text-xs uppercase tracking-wide text-gray-500">Ditagihkan Kepada</div>
+        <div class="text-xs uppercase tracking-wide text-gray-500">Bil Kepada</div>
         <div class="mt-2 text-sm text-gray-800">
           <div class="font-medium"><?= $safe($booking ? $booking->customer_name : null); ?></div>
           <div class="mt-1"><?= nl2br($safe($booking ? $booking->address : null)); ?></div>
         </div>
       </div>
       <div>
-        <div class="text-xs uppercase tracking-wide text-gray-500">Detail Pesanan</div>
+        <div class="text-xs uppercase tracking-wide text-gray-500">Butiran Tempahan</div>
         <div class="mt-2 text-sm text-gray-800">
-          <div>Paket: <span class="font-medium"><?= $safe($booking ? ($booking->package_name ?? null) : null); ?></span></div>
-          <div>Tanggal: <?= $safe($booking ? date('d M Y', strtotime($booking->date)) : null); ?></div>
-          <div>Jam: <?= $safe($booking ? substr($booking->time, 0, 5) : null); ?></div>
+          <div>Pakej: <span class="font-medium"><?= $safe($booking ? ($booking->package_name ?? null) : null); ?></span></div>
+          <div>Tarikh: <?= $safe($booking ? date('d M Y', strtotime($booking->date)) : null); ?></div>
+          <div>Masa: <?= $safe($booking ? substr($booking->time, 0, 5) : null); ?></div>
           <?php if ($booking && isset($booking->call_type)): ?>
-            <div class="mt-1">Jenis Layanan: <?= $booking->call_type === 'OUT' ? 'Luar Premis' : 'Di Premis'; ?></div>
+            <div class="mt-1">Jenis Perkhidmatan: <?= $booking->call_type === 'OUT' ? 'Luar Premis' : 'Di Premis'; ?></div>
           <?php endif; ?>
           <?php if ($booking && isset($booking->therapist_name) && $booking->therapist_name): ?>
-            <div class="mt-1">Therapist: <?= $safe($booking->therapist_name); ?></div>
+            <div class="mt-1">Terapis: <?= $safe($booking->therapist_name); ?></div>
           <?php endif; ?>
         </div>
       </div>
@@ -84,8 +84,8 @@ if ($invoice && isset($invoice->total) && is_numeric($invoice->total)) {
       <table class="min-w-full table-auto">
         <thead class="bg-gray-50">
           <tr class="text-left text-sm text-gray-600">
-            <th class="px-5 py-3">Deskripsi</th>
-            <th class="px-5 py-3 text-center w-28">Qty</th>
+            <th class="px-5 py-3">Keterangan</th>
+            <th class="px-5 py-3 text-center w-28">Kuantiti</th>
             <th class="px-5 py-3 text-right w-40">Harga</th>
             <th class="px-5 py-3 text-right w-40">Jumlah</th>
           </tr>
@@ -93,9 +93,9 @@ if ($invoice && isset($invoice->total) && is_numeric($invoice->total)) {
         <tbody class="divide-y divide-gray-200 text-sm">
           <tr>
             <td class="px-5 py-3 align-top">
-              <?= $safe($booking ? ($booking->package_name ?? 'Paket Spa') : 'Paket Spa'); ?>
+              <?= $safe($booking ? ($booking->package_name ?? 'Pakej Spa') : 'Pakej Spa'); ?>
               <div class="mt-1 text-xs text-gray-500">
-                Therapist: <?= $safe($booking ? ($booking->therapist_name ?: '-') : '-'); ?>
+                Terapis: <?= $safe($booking ? ($booking->therapist_name ?: '-') : '-'); ?>
               </div>
             </td>
             <td class="px-5 py-3 text-center align-top">1</td>
@@ -105,7 +105,7 @@ if ($invoice && isset($invoice->total) && is_numeric($invoice->total)) {
         </tbody>
         <tfoot class="bg-gray-50">
           <tr>
-            <td class="px-5 py-3 text-right font-medium" colspan="3">Total</td>
+            <td class="px-5 py-3 text-right font-medium" colspan="3">Jumlah</td>
             <td class="px-5 py-3 text-right font-bold"><?= $fmt($total); ?></td>
           </tr>
         </tfoot>
@@ -116,11 +116,11 @@ if ($invoice && isset($invoice->total) && is_numeric($invoice->total)) {
   <!-- Notes -->
   <div class="rounded-lg border border-gray-200 bg-white shadow-sm mb-6">
     <div class="px-5 py-4">
-      <div class="text-xs uppercase tracking-wide text-gray-500">Catatan</div>
+      <div class="text-xs uppercase tracking-wide text-gray-500">Nota</div>
       <div class="mt-2 text-sm text-gray-700">
-        <p>- Harap menyertakan nomor invoice saat melakukan konfirmasi pembayaran.</p>
-        <p>- Nomor unik: <code class="text-sky-600"><?= $safe($invNum); ?></code></p>
-        <p>- Terima kasih telah menggunakan layanan kami.</p>
+        <p>- Sila sertakan nombor invois semasa mengesahkan pembayaran.</p>
+        <p>- Nombor unik: <code class="text-sky-600"><?= $safe($invNum); ?></code></p>
+        <p>- Terima kasih kerana menggunakan perkhidmatan kami.</p>
       </div>
     </div>
   </div>
@@ -132,15 +132,15 @@ if ($invoice && isset($invoice->total) && is_numeric($invoice->total)) {
     </button>
     <?php if ($booking): ?>
       <a href="<?= site_url('admin/invoice/generate/' . (isset($booking_token) ? $booking_token : (int)$booking->id)); ?>" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-4 py-2 text-sm hover:bg-gray-50">
-        Unduh (HTML/Backup)
+        Muat Turun (HTML/Sandaran)
       </a>
     <?php endif; ?>
     <a href="<?= site_url('admin'); ?>" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-4 py-2 text-sm hover:bg-gray-50">
-      Kembali ke Dashboard
+      Kembali ke Papan Pemuka
     </a>
   </div>
 
-  <p class="no-print mt-2 text-xs text-gray-500">Gunakan tombol "Cetak" untuk menyimpan sebagai PDF.</p>
+  <p class="no-print mt-2 text-xs text-gray-500">Gunakan butang "Cetak" untuk menyimpan sebagai PDF.</p>
 </div>
 
 <?php

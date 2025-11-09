@@ -1,6 +1,6 @@
 <?php
 // Use modular layout header
-$this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'Admin Dashboard']);
+$this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'Papan Pemuka Admin']);
 
 // Helpers
 $fmtRupiah = function($n) {
@@ -23,21 +23,21 @@ $fmtRupiah = function($n) {
 <!-- Summary Metrics -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
   <div class="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
-    <div class="text-xs uppercase tracking-wide text-sky-600 font-semibold">Total Booking Hari Ini</div>
+    <div class="text-xs uppercase tracking-wide text-sky-600 font-semibold">Jumlah Tempahan Hari Ini</div>
     <div class="mt-2 text-4xl font-bold text-gray-900">
       <?= isset($summary['total_booking_today']) ? (int)$summary['total_booking_today'] : 0; ?>
     </div>
-    <p class="mt-1 text-gray-500 text-sm">Jumlah pesanan yang masuk hari ini.</p>
+    <p class="mt-1 text-gray-500 text-sm">Jumlah tempahan yang masuk hari ini.</p>
   </div>
   <div class="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
-    <div class="text-xs uppercase tracking-wide text-emerald-600 font-semibold">Total Pendapatan Hari Ini</div>
+    <div class="text-xs uppercase tracking-wide text-emerald-600 font-semibold">Jumlah Pendapatan Hari Ini</div>
     <div class="mt-2 text-4xl font-bold text-gray-900">
       <?= $fmtRupiah((float)($summary['total_pendapatan_today'] ?? 0)); ?>
     </div>
-    <p class="mt-1 text-gray-500 text-sm">Akumulasi dari pesanan hari ini.</p>
+    <p class="mt-1 text-gray-500 text-sm">Terkumpul daripada tempahan hari ini.</p>
   </div>
   <div class="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
-    <div class="text-xs uppercase tracking-wide text-indigo-600 font-semibold">Therapist Aktif</div>
+    <div class="text-xs uppercase tracking-wide text-indigo-600 font-semibold">Terapis Aktif</div>
     <div class="mt-2 text-4xl font-bold text-gray-900">
       <?= isset($summary['active_therapists']) ? (int)$summary['active_therapists'] : 0; ?>
     </div>
@@ -48,7 +48,7 @@ $fmtRupiah = function($n) {
 <!-- Popular Packages -->
 <div class="rounded-lg border border-gray-200 bg-white shadow-sm mb-6">
   <div class="px-5 py-3 border-b border-gray-200">
-    <h2 class="text-base font-semibold text-gray-900">Paket Populer (30 Hari Terakhir)</h2>
+    <h2 class="text-base font-semibold text-gray-900">Pakej Popular (30 Hari Lepas)</h2>
   </div>
   <div class="p-0">
     <div class="overflow-x-auto">
@@ -56,9 +56,9 @@ $fmtRupiah = function($n) {
         <thead class="bg-gray-50">
           <tr class="text-left text-sm text-gray-600">
             <th class="px-5 py-3 w-12">#</th>
-            <th class="px-5 py-3">Nama Paket</th>
-            <th class="px-5 py-3 text-center">Total Booking</th>
-            <th class="px-5 py-3 text-right">Total Pendapatan</th>
+            <th class="px-5 py-3">Nama Pakej</th>
+            <th class="px-5 py-3 text-center">Jumlah Tempahan</th>
+            <th class="px-5 py-3 text-right">Jumlah Pendapatan</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-200">
@@ -78,7 +78,7 @@ $fmtRupiah = function($n) {
           <?php endforeach; ?>
         <?php else: ?>
           <tr>
-            <td colspan="4" class="px-5 py-6 text-center text-gray-500">Belum ada data paket populer.</td>
+            <td colspan="4" class="px-5 py-6 text-center text-gray-500">Belum ada data pakej popular.</td>
           </tr>
         <?php endif; ?>
         </tbody>
@@ -90,21 +90,21 @@ $fmtRupiah = function($n) {
 <!-- Quick Actions -->
 <div class="rounded-lg border border-gray-200 bg-white shadow-sm">
   <div class="px-5 py-3 border-b border-gray-200">
-    <h2 class="text-base font-semibold text-gray-900">Aksi Cepat</h2>
+    <h2 class="text-base font-semibold text-gray-900">Tindakan Pantas</h2>
   </div>
   <div class="p-5">
     <div class="flex flex-wrap gap-2">
       <a href="<?= site_url('admin/schedule'); ?>" class="inline-flex items-center gap-2 rounded-md bg-sky-600 text-white px-4 py-2 text-sm hover:bg-sky-700">
-        Lihat Kalender Jadwal
+        Lihat Kalendar Jadual
       </a>
-      <a href <?= site_url('admin/report'); ?> class="inline-flex items-center gap-2 rounded-md bg-emerald-600 text-white px-4 py-2 text-sm hover:bg-emerald-700">
+      <a href="<?= site_url('admin/report'); ?>" class="inline-flex items-center gap-2 rounded-md bg-emerald-600 text-white px-4 py-2 text-sm hover:bg-emerald-700">
         Buka Laporan Pendapatan
       </a>
       <a href="<?= site_url('admin/therapists'); ?>" class="inline-flex items-center gap-2 rounded-md border border-gray-300 bg-white text-gray-700 px-4 py-2 text-sm hover:bg-gray-50">
-        Kelola Therapist
+        Urus Terapis
       </a>
       <a href="<?= site_url('admin/packages'); ?>" class="inline-flex items-center gap-2 rounded-md border border-gray-300 bg-white text-gray-700 px-4 py-2 text-sm hover:bg-gray-50">
-        Kelola Paket Spa
+        Urus Pakej Spa
       </a>
     </div>
   </div>
