@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS booking (
   date DATE NOT NULL,
   time TIME NOT NULL,
   total_price DECIMAL(10,2) NOT NULL,
-  status ENUM('pending','confirmed','completed','canceled') NOT NULL DEFAULT 'pending',
+  status ENUM('pending','accepted','working','rejected','confirmed','completed','canceled') NOT NULL DEFAULT 'pending',
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   INDEX idx_booking_date (date),
   INDEX idx_booking_status (status),
@@ -96,3 +96,22 @@ VALUES ('Cindi Rahayu', 'Jl. Mawar No. 5, Bandung', 1, 1, 'IN', DATE(NOW()), '15
 -- UPDATE booking SET status='confirmed' WHERE id=1;
 INSERT INTO invoice (booking_id, invoice_number, total, payment_status)
 VALUES (1, CONCAT('INV-', DATE_FORMAT(NOW(), '%Y%m%d'), '-0001'), 350000.00, 'DP');
+
+-- Sessions table for CodeIgniter 3 database session driver
+-- Matches CI3's expected schema used by [CI_Session_database_driver](system/libraries/Session/drivers/Session_database_driver.php:50)
+CREATE TABLE IF NOT EXISTS ci_sessions (
+  id varchar(128) NOT NULL,
+  ip_address varchar(45) NOT NULL,
+  timestamp int(10) unsigned NOT NULL DEFAULT 0,
+  data blob NOT NULL,
+  PRIMARY KEY (id),
+  KEY ci_sessions_timestamp (timestamp)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Application settings for storing configuration such as Telegram Bot
+CREATE TABLE IF NOT EXISTS app_settings (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  `key` VARCHAR(100) NOT NULL UNIQUE,
+  `value` TEXT NULL,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

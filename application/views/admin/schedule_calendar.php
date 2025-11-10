@@ -112,6 +112,14 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'K
       <div class="px-5 py-3 border-t border-gray-200 flex items-center justify-end gap-2">
         <button id="editBtn" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-3 py-1.5 text-xs hover:bg-gray-50">Edit Waktu</button>
         <button id="deleteBtn" class="inline-flex items-center rounded-md bg-red-600 text-white px-3 py-1.5 text-xs hover:bg-red-700">Hapus</button>
+
+        <!-- Status Actions -->
+        <button id="statusAcceptBtn"  title="Tandai Diterima"   class="inline-flex items-center rounded-md bg-blue-600 text-white px-3 py-1.5 text-xs hover:bg-blue-700">Terima</button>
+        <button id="statusRejectBtn"  title="Tandai Ditolak"    class="inline-flex items-center rounded-md bg-rose-600 text-white px-3 py-1.5 text-xs hover:bg-rose-700">Tolak</button>
+        <button id="statusWorkingBtn" title="Tandai On Working" class="inline-flex items-center rounded-md bg-amber-500 text-white px-3 py-1.5 text-xs hover:bg-amber-600">On Working</button>
+        <button id="statusCompleteBtn" title="Tandai Selesai"   class="inline-flex items-center rounded-md bg-gray-700 text-white px-3 py-1.5 text-xs hover:bg-gray-800">Selesai</button>
+        <button id="statusCancelBtn"  title="Tandai Dibatalkan" class="inline-flex items-center rounded-md bg-orange-600 text-white px-3 py-1.5 text-xs hover:bg-orange-700">Batalkan</button>
+
         <a href="#" id="bd_invoice_btn" target="_blank" rel="noopener" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-3 py-1.5 text-xs hover:bg-gray-50">Lihat Invois</a>
         <button id="closeModalBtn2" class="inline-flex items-center rounded-md bg-sky-600 text-white px-3 py-1.5 text-xs hover:bg-sky-700">Tutup</button>
       </div>
@@ -140,6 +148,13 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'K
   const editSaveBtn = document.getElementById('editSaveBtn');
   const editCancelBtn = document.getElementById('editCancelBtn');
   const invoiceBtn = document.getElementById('bd_invoice_btn');
+
+  // Status action buttons
+  const statusAcceptBtn  = document.getElementById('statusAcceptBtn');
+  const statusRejectBtn  = document.getElementById('statusRejectBtn');
+  const statusWorkingBtn = document.getElementById('statusWorkingBtn');
+  const statusCompleteBtn= document.getElementById('statusCompleteBtn');
+  const statusCancelBtn  = document.getElementById('statusCancelBtn');
 
   // Current event yang sedang dibuka di modal
   let currentEvent = null;
@@ -265,6 +280,32 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'K
         });
     });
   }
+
+  // Helper: set booking status via Admin API
+  function setStatus(nextStatus) {
+    if (!currentEvent) return;
+    apiPost('<?= site_url('admin/booking/set-status'); ?>', {
+      token: currentEvent.id,
+      status: nextStatus
+    }).then(res => {
+      if (!res || !res.ok) throw new Error(res && res.error ? res.error : 'Gagal mengubah status.');
+      // Tutup modal setelah update dan segarkan kalender untuk pantulkan perubahan warna/status
+      closeModal();
+    }).catch(err => {
+      alert('Gagal mengubah status: ' + err.message);
+    }).finally(() => {
+      if (typeof calendar !== 'undefined') {
+        calendar.refetchEvents();
+      }
+    });
+  }
+
+  // Wire status action buttons
+  if (statusAcceptBtn)   statusAcceptBtn.addEventListener('click',   () => setStatus('accepted'));
+  if (statusRejectBtn)   statusRejectBtn.addEventListener('click',   () => setStatus('rejected'));
+  if (statusWorkingBtn)  statusWorkingBtn.addEventListener('click',  () => setStatus('working'));
+  if (statusCompleteBtn) statusCompleteBtn.addEventListener('click', () => setStatus('completed'));
+  if (statusCancelBtn)   statusCancelBtn.addEventListener('click',   () => setStatus('canceled'));
 
   function computeCounts(events) {
     const map = {};
@@ -465,7 +506,37 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'K
       document.getElementById('bd_customer').textContent = props.customer_name || '-';
       document.getElementById('bd_package').textContent = props.package_name || '-';
       document.getElementById('bd_therapist').textContent = props.therapist_name || '-';
-      document.getElementById('bd_status').textContent = (props.status || '-');
+
+      // Status badge text + color
+      (function() {
+        const bdStatus = document.getElementById('bd_status');
+        const s = String(props.status || '').toLowerCase();
+        bdStatus.textContent = s || '-';
+        const base = 'inline-flex items-center px-2 py-1 rounded text-xs border ';
+        let cls = 'bg-gray-200 text-gray-700 border-gray-300';
+        switch (s) {
+          case 'pending':
+            cls = 'bg-red-100 text-red-700 border-red-300';
+            break;
+          case 'accepted':
+          case 'confirmed':
+            cls = 'bg-blue-100 text-blue-700 border-blue-300';
+            break;
+          case 'working':
+            cls = 'bg-amber-100 text-amber-800 border-amber-300';
+            break;
+          case 'completed':
+            cls = 'bg-gray-300 text-gray-800 border-gray-500';
+            break;
+          case 'rejected':
+            cls = 'bg-rose-100 text-rose-700 border-rose-300';
+            break;
+          case 'canceled':
+            cls = 'bg-orange-100 text-orange-800 border-orange-300';
+            break;
+        }
+        bdStatus.className = base + cls;
+      })();
 
       const dateStr = start ? start.toLocaleDateString('id-ID') : '-';
       const timeStr = start ? start.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', hour12: false }) : '-';

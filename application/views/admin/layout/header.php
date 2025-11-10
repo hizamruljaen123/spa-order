@@ -64,9 +64,17 @@ $isActive = function($patterns) use ($uri) {
          class="block px-3 py-2 rounded-md <?= $isActive(['admin/schedule']); ?>">
         Jadual
       </a>
+      <a href="<?= site_url('admin/bookings'); ?>"
+         class="block px-3 py-2 rounded-md <?= $isActive(['admin/bookings']); ?>">
+        Booking
+      </a>
       <a href="<?= site_url('admin/report'); ?>"
          class="block px-3 py-2 rounded-md <?= $isActive(['admin/report']); ?>">
         Laporan
+      </a>
+      <a href="<?= site_url('admin/settings'); ?>"
+         class="block px-3 py-2 rounded-md <?= $isActive(['admin/settings']); ?>">
+        Pengaturan
       </a>
     </nav>
 

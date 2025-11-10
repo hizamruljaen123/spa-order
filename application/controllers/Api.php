@@ -3,19 +3,27 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 /**
  * @property CI_Input $input
  * @property CI_Output $output
+ * @property Settings_model $Settings_model
  */
 
 class Api extends CI_Controller
 {
-    // TODO: Replace with your real credentials (or move to config)
-    private $botToken = 'YOUR_TELEGRAM_BOT_TOKEN';
-    private $chatId   = 'YOUR_CHAT_ID';
+    // Credentials populated from database settings (app_settings)
+    private $botToken = '';
+    private $chatId   = '';
 
     public function __construct()
     {
         parent::__construct();
         date_default_timezone_set('Asia/Jakarta');
         $this->load->helper('security');
+
+        // Load settings from database for Telegram credentials
+        $this->load->model('Settings_model');
+        $this->Settings_model->ensure_bootstrap();
+        $vals = $this->Settings_model->get_many(['telegram_bot_token','telegram_chat_id']);
+        $this->botToken = !empty($vals['telegram_bot_token']) ? (string)$vals['telegram_bot_token'] : (getenv('TELEGRAM_BOT_TOKEN') ?: '');
+        $this->chatId   = !empty($vals['telegram_chat_id']) ? (string)$vals['telegram_chat_id'] : (getenv('TELEGRAM_CHAT_ID') ?: '');
     }
 
     /**
@@ -35,6 +43,8 @@ class Api extends CI_Controller
                 'package_name'   => $this->input->post('package_name', true),
                 'date'           => $this->input->post('date', true),
                 'time'           => $this->input->post('time', true),
+                // Optional phone number (for WhatsApp link)
+                'phone'          => $this->input->post('phone', true),
             ];
         }
 
@@ -46,13 +56,19 @@ class Api extends CI_Controller
         $date     = $data['date']           ?? '-';
         $time     = $data['time']           ?? '-';
 
-        $message = "📋 *SPA BOOKING REQUEST*\n"
-                 . "👤 Nama: {$customer}\n"
-                 . "🏠 Alamat: {$address}\n"
-                 . "💆‍♀️ Therapist: {$thera}\n"
-                 . "💅 Paket: {$package}\n"
-                 . "📅 Tanggal: {$date}\n"
-                 . "⏰ Jam: {$time}";
+        // Neat Markdown message + WhatsApp link + form URL
+        $formUrl = site_url('booking/form');
+        $phoneRaw = isset($data['phone']) ? (string)$data['phone'] : '';
+        $phoneSan = $phoneRaw ? preg_replace('/\D+/', '', $phoneRaw) : '';
+        $message = "*SPA BOOKING REQUEST*\n\n"
+                 . "👤 *Nama*: {$customer}\n"
+                 . "🏠 *Alamat*: {$address}\n"
+                 . "💅 *Paket*: {$package}\n"
+                 . "‍♀️ *Terapis*: {$thera}\n"
+                 . "📅 *Tanggal*: {$date}\n"
+                 . "⏰ *Jam*: {$time}\n"
+                 . "📞 *Telefon*: " . ($phoneSan ? "[{$phoneRaw}](https://wa.me/{$phoneSan})" : "-") . "\n"
+                 . "\n[📄 Buka Borang Tempahan]({$formUrl})";
 
         $ok = $this->telegram_send($message);
         // If this is an HTTP request, output JSON

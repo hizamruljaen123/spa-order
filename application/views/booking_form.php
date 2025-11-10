@@ -108,6 +108,19 @@
                 <textarea class="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary" id="address" name="address" rows="3" required minlength="5" placeholder="Alamat lengkap"></textarea>
               </div>
 
+              <!-- Optional phone number used for WhatsApp link in Telegram notification -->
+              <div class="mb-4">
+                <label class="block text-sm font-medium text-slate-700" for="phone">No Telefon (opsional)</label>
+                <input
+                  type="tel"
+                  class="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary"
+                  id="phone"
+                  name="phone"
+                  maxlength="20"
+                  placeholder="Contoh: 6281234567890">
+                <p class="mt-1 text-xs text-slate-500">Nomor akan dilampirkan sebagai pautan WhatsApp dalam notifikasi.</p>
+              </div>
+
               <div class="mb-4">
                 <label class="block text-sm font-medium text-slate-700" for="therapist_id">Nama Terapis (pilihan)</label>
                 <select class="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary" id="therapist_id" name="therapist_id">
@@ -129,7 +142,7 @@
                   <option value="">Pilih pakej</option>
                   <?php if (!empty($packages)): ?>
                     <?php foreach ($packages as $p): ?>
-                      <option value="<?= (int)$p->id; ?>">
+                      <option value="<?= (int)$p->id; ?>" <?= (isset($selected_package_id) && (int)$selected_package_id === (int)$p->id) ? 'selected' : ''; ?>>
                         <?php
                           $curr = isset($p->currency) ? $p->currency : 'Rp';
                           $pin  = isset($p->price_in_call) ? (float)$p->price_in_call : (isset($p->price) ? (float)$p->price : 0);

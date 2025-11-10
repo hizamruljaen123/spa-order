@@ -61,7 +61,7 @@ class Booking_model extends CI_Model
      */
     public function get_all(array $filters = [], $limit = null, $offset = null)
     {
-        $this->db->select('b.*, p.name AS package_name, t.name AS therapist_name')
+        $this->db->select('b.*, p.name AS package_name, p.currency AS currency, t.name AS therapist_name')
                  ->from($this->table . ' b')
                  ->join('package p', 'p.id = b.package_id', 'left')
                  ->join('therapist t', 't.id = b.therapist_id', 'left')
@@ -96,7 +96,8 @@ class Booking_model extends CI_Model
      */
     public function mark_confirmed($id)
     {
-        return $this->db->where('id', (int)$id)->update($this->table, ['status' => 'confirmed']);
+        // Backward compatibility: treat "confirmed" as "accepted"
+        return $this->db->where('id', (int)$id)->update($this->table, ['status' => 'accepted']);
     }
 
     /**
@@ -148,13 +149,27 @@ class Booking_model extends CI_Model
             $title = sprintf('%s - %s (%s)', $r->customer_name, $r->package_name, $r->therapist_name ?: 'N/A');
     
             // Determine color: red for pending/confirmed, gray for completed, orange for canceled
-            $color = '#28a745'; // default green (available) not used here
-            if ($r->status === 'pending' || $r->status === 'confirmed') {
-                $color = '#dc3545'; // red - booked
-            } elseif ($r->status === 'completed') {
-                $color = '#6c757d'; // gray
-            } elseif ($r->status === 'canceled') {
-                $color = '#fd7e14'; // orange
+            $color = '#28a745'; // default green (available) not used for booked events
+            switch ($r->status) {
+                case 'pending':
+                    $color = '#dc3545'; // red - new pending
+                    break;
+                case 'accepted':
+                case 'confirmed': // legacy alias
+                    $color = '#0d6efd'; // blue - accepted
+                    break;
+                case 'working':
+                    $color = '#f59e0b'; // amber - in progress
+                    break;
+                case 'completed':
+                    $color = '#6c757d'; // gray - done
+                    break;
+                case 'rejected':
+                    $color = '#e11d48'; // rose - rejected
+                    break;
+                case 'canceled':
+                    $color = '#fd7e14'; // orange - canceled
+                    break;
             }
     
             $ev = [
@@ -224,7 +239,7 @@ class Booking_model extends CI_Model
         $this->db->select('time')
                  ->from($this->table)
                  ->where('date', $date)
-                 ->where_in('status', ['pending', 'confirmed', 'completed']);
+                 ->where_in('status', ['pending', 'accepted', 'working', 'confirmed', 'completed']);
 
         if (!empty($therapist_id)) {
             $this->db->where('therapist_id', (int)$therapist_id);

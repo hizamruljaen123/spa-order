@@ -114,9 +114,29 @@
             Salin Nomor Invoice
           </button>
           <?php
-            $waMessage = rawurlencode('Halo Admin, saya ingin konfirmasi pemesanan. Nomor Invoice: '.($invoice->invoice_number ?? '-'));
+            // Build WhatsApp message from booking details to the provided admin number
+            $waAdmin = '60143218026'; // wa.me requires number without leading '+'
+            $cust   = isset($booking->customer_name) ? $booking->customer_name : '-';
+            $addr   = isset($booking->address) ? $booking->address : '-';
+            $pack   = isset($booking->package_name) ? $booking->package_name : '-';
+            $thera  = (isset($booking->therapist_name) && $booking->therapist_name) ? $booking->therapist_name : 'Tidak ditentukan';
+            $ctype  = (isset($booking->call_type) && $booking->call_type === 'OUT') ? 'Luar Premis' : 'Di Premis';
+            $dateV  = isset($booking->date) ? $booking->date : '-';
+            $timeV  = isset($booking->time) ? substr($booking->time,0,5) : '-';
+            $inv    = isset($invoice->invoice_number) ? $invoice->invoice_number : '-';
+            $waMessage = rawurlencode(
+              "Halo Admin, saya ingin konfirmasi pemesanan:\n"
+              . "Nama: {$cust}\n"
+              . "Alamat: {$addr}\n"
+              . "Paket: {$pack}\n"
+              . "Terapis: {$thera}\n"
+              . "Tipe: {$ctype}\n"
+              . "Tanggal: {$dateV}\n"
+              . "Jam: {$timeV}\n"
+              . "Invoice: {$inv}"
+            );
           ?>
-          <a target="_blank" rel="noopener" href="https://wa.me/6281123332894?text=<?= $waMessage; ?>" class="inline-flex items-center rounded-md border border-slate-300 bg-white px-4 py-2 text-slate-700 font-semibold shadow-sm hover:bg-slate-50">
+          <a target="_blank" rel="noopener" href="https://wa.me/<?= $waAdmin; ?>?text=<?= $waMessage; ?>" class="inline-flex items-center rounded-md border border-slate-300 bg-white px-4 py-2 text-slate-700 font-semibold shadow-sm hover:bg-slate-50">
             Hubungi Admin via WhatsApp
           </a>
           <a href="<?= site_url('booking/form'); ?>" class="inline-flex items-center rounded-md border border-slate-300 bg-white px-4 py-2 text-slate-700 font-semibold shadow-sm hover:bg-slate-50">

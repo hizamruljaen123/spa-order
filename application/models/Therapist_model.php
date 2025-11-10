@@ -56,7 +56,7 @@ class Therapist_model extends CI_Model
                  ->from($this->table . ' t')
                  ->join(
                     'booking b',
-                    "b.therapist_id = t.id AND b.date = " . $this->db->escape($date) . " AND b.time = " . $this->db->escape($time) . " AND b.status IN ('pending','confirmed')",
+                    "b.therapist_id = t.id AND b.date = " . $this->db->escape($date) . " AND b.time = " . $this->db->escape($time) . " AND b.status IN ('pending','accepted','working','confirmed','completed')",
                     'left',
                     false
                  )

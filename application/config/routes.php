@@ -60,6 +60,7 @@ $route['booking/submit'] = 'booking/submit';
 $route['booking/availability'] = 'booking/availability'; // GET: date=YYYY-MM-DD&therapist_id=ID(optional)
 $route['booking/mobile'] = 'booking/mobile';
 $route['booking/invoice/(:any)'] = 'booking/invoice/$1';
+$route['booking/success/(:any)'] = 'booking/success/$1';
 
 /* Admin Dashboard */
 $route['admin'] = 'admin/index';
@@ -74,6 +75,7 @@ $route['admin/package/edit/(:any)'] = 'admin/package_edit/$1';
 $route['admin/package/delete/(:any)'] = 'admin/package_delete/$1';
 
 $route['admin/schedule'] = 'admin/schedule';
+$route['admin/bookings'] = 'admin/bookings';
 $route['admin/report'] = 'admin/report';
 
 /* Invoice */
@@ -86,6 +88,7 @@ $route['admin/booking/complete/(:any)'] = 'admin/booking_complete/$1';
 $route['admin/booking/cancel/(:any)'] = 'admin/booking_cancel/$1';
 $route['admin/booking/update-time'] = 'admin/booking_update_time';
 $route['admin/booking/delete'] = 'admin/booking_delete';
+$route['admin/booking/set-status'] = 'admin/booking_set_status';
 
 /* API (Telegram) */
 $route['api/telegram/send'] = 'api/send_booking_notification';
