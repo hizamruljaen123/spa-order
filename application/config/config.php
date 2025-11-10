@@ -23,7 +23,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost/spa-order/login';
+$base_url = (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] === 'on' || $_SERVER['HTTPS'] == 1) ? 'https' : 'http') . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . '/';
+if (isset($_SERVER['HTTP_HOST']) && in_array($_SERVER['HTTP_HOST'], ['apittmenspahq.com','www.apittmenspahq.com'], true)) {
+    // Production domain
+    $config['base_url'] = 'https://apittmenspahq.com/';
+} elseif (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === 'localhost') {
+    // Local development under /spa-order
+    $config['base_url'] = 'http://localhost/spa-order/';
+} else {
+    // Fallback to detected host
+    $config['base_url'] = $base_url;
+}
 
 /*
 |--------------------------------------------------------------------------
@@ -383,11 +393,11 @@ $config['encryption_key'] = 'd9f2b4a6c8e0f2a4c6e8b0d2f4a6c8e0';
 | except for 'cookie_prefix' and 'cookie_httponly', which are ignored here.
 |
 */
-$config['sess_driver'] = 'files';
+$config['sess_driver'] = 'database';
 $config['sess_cookie_name'] = 'ci_session';
 $config['sess_samesite'] = 'Lax';
 $config['sess_expiration'] = 7200;
-$config['sess_save_path'] = APPPATH.'cache/sessions';
+$config['sess_save_path'] = 'ci_sessions';
 $config['sess_match_ip'] = FALSE;
 $config['sess_time_to_update'] = 300;
 $config['sess_regenerate_destroy'] = FALSE;
