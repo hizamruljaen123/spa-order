@@ -26,7 +26,7 @@ class Booking extends CI_Controller
 public function index()
 {
     $data = [
-        'title'    => 'Spa Home',
+        'title'    => 'Spa Booking',
         'packages' => $this->Package_model->get_all(),
     ];
 
@@ -44,7 +44,7 @@ public function form()
         'validation'  => validation_errors()
     ];
 
-    $this->load->view('booking_form', $data);
+    $this->load->view('booking_home', $data);
 }
 
 
@@ -265,7 +265,7 @@ public function form()
             'validation'  => validation_errors(),
         ];
 
-        $this->load->view('booking_mobile', $data);
+        $this->load->view('booking_home', $data);
     }
 
     /**

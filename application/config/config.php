@@ -148,7 +148,7 @@ $config['subclass_prefix'] = 'MY_';
 | Note: This will NOT disable or override the CodeIgniter-specific
 |	autoloading (application/config/autoload.php)
 */
-$config['composer_autoload'] = FCPATH.'vendor/autoload.php';
+$config['composer_autoload'] = file_exists(FCPATH.'vendor/autoload.php') ? FCPATH.'vendor/autoload.php' : FALSE;
 
 /*
 |--------------------------------------------------------------------------
@@ -235,7 +235,7 @@ $config['allow_get_array'] = TRUE;
 | your log files will fill up very fast.
 |
 */
-$config['log_threshold'] = 0;
+$config['log_threshold'] = 1;
 
 /*
 |--------------------------------------------------------------------------
@@ -246,7 +246,7 @@ $config['log_threshold'] = 0;
 | application/logs/ directory. Use a full server path with trailing slash.
 |
 */
-$config['log_path'] = '';
+$config['log_path'] = APPPATH.'logs/';
 
 /*
 |--------------------------------------------------------------------------
