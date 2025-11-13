@@ -60,6 +60,18 @@ $isActive = function($patterns) use ($uri) {
          class="block px-3 py-2 rounded-md <?= $isActive(['admin/packages','admin/package']); ?>">
         Pakej
       </a>
+      <a href="<?= site_url('admin/addons'); ?>"
+         class="block px-3 py-2 rounded-md <?= $isActive(['admin/addons','admin/addon']); ?>">
+        Add-on
+      </a>
+      <a href="<?= site_url('admin/ad_management'); ?>"
+         class="block px-3 py-2 rounded-md <?= $isActive(['admin/ad_management']); ?>">
+        Iklan
+      </a>
+      <a href="<?= site_url('admin/product_management'); ?>"
+         class="block px-3 py-2 rounded-md <?= $isActive(['admin/product_management']); ?>">
+        Produk
+      </a>
       <a href="<?= site_url('admin/schedule'); ?>"
          class="block px-3 py-2 rounded-md <?= $isActive(['admin/schedule']); ?>">
         Jadual

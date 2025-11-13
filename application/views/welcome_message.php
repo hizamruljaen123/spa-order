@@ -74,9 +74,77 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		border: 1px solid #D0D0D0;
 		box-shadow: 0 0 8px #D0D0D0;
 	}
+
+	/* Modal Styles */
+	.modal {
+		display: none;
+		position: fixed;
+		z-index: 1;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		overflow: auto;
+		background-color: rgba(0,0,0,0.4);
+	}
+
+	.modal-content {
+		background-color: #fefefe;
+		margin: 15% auto;
+		padding: 20px;
+		border: 1px solid #888;
+		width: 80%;
+		max-width: 600px;
+		text-align: center;
+	}
+
+	.modal-content img {
+		max-width: 100%;
+		max-height: 400px;
+	}
+
+	.modal-content a {
+		display: inline-block;
+		margin-top: 15px;
+		padding: 10px 20px;
+		background-color: #003399;
+		color: #fff;
+		text-decoration: none;
+		border-radius: 5px;
+	}
+
+	.modal-content a:hover {
+		background-color: #97310e;
+	}
+
+	.close {
+		color: #aaa;
+		float: right;
+		font-size: 28px;
+		font-weight: bold;
+	}
+
+	.close:hover,
+	.close:focus {
+		color: black;
+		text-decoration: none;
+		cursor: pointer;
+	}
 	</style>
 </head>
 <body>
+
+<!-- Advertisement Modal -->
+<?php if (isset($active_ad) && !empty($active_ad)): ?>
+<div id="adModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <a href="<?php echo $active_ad['link_url']; ?>" target="_blank">
+      <img src="<?php echo base_url($active_ad['image_url']); ?>" alt="<?php echo htmlspecialchars($active_ad['title']); ?>">
+    </a>
+  </div>
+</div>
+<?php endif; ?>
 
 <div id="container">
 	<h1>Welcome to CodeIgniter!</h1>
@@ -95,6 +163,35 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 	<p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds. <?php echo  (ENVIRONMENT === 'development') ?  'CodeIgniter Version <strong>' . CI_VERSION . '</strong>' : '' ?></p>
 </div>
+
+<script>
+// Get the modal
+var modal = document.getElementById("adModal");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the page loads, open the modal
+window.onload = function() {
+    if (modal) {
+        modal.style.display = "block";
+    }
+}
+
+// When the user clicks on <span> (x), close the modal
+if (span) {
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+</script>
 
 </body>
 </html>

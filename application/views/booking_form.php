@@ -157,6 +157,147 @@
                   <?php endif; ?>
                 </select>
               </div>
+              <!-- Add-on selection (optional) -->
+              <div class="mb-4">
+                <label class="block text-sm font-medium text-slate-700">Add-on Tambahan (opsional)</label>
+                <input type="hidden" id="addon_ids" name="addon_ids" value="">
+                <div class="mt-2 flex items-center justify-between gap-3">
+                  <button type="button" onclick="window.aoSelOpen()" class="inline-flex items-center rounded-md bg-emerald-600 text-white px-3 py-2 text-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    Pilih Add-on
+                  </button>
+                  <div id="addon_summary" class="text-xs text-slate-600 ml-3 flex-1 text-right truncate">
+                    Tiada add-on dipilih.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Add-on Modal -->
+              <div id="aoSelOverlay" class="fixed inset-0 z-40 bg-black/40 hidden"></div>
+              <div id="aoSelModal"
+                   role="dialog"
+                   aria-modal="true"
+                   aria-hidden="true"
+                   class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+                <div class="w-full max-w-3xl bg-white rounded-xl shadow-xl ring-1 ring-gray-200">
+                  <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-900">Pilih Add-on</h3>
+                    <button type="button" class="text-gray-400 hover:text-gray-600" onclick="window.aoSelClose()" aria-label="Tutup">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                      </svg>
+                    </button>
+                  </div>
+
+                  <div class="p-6 max-h-[70vh] overflow-y-auto">
+                    <?php if (!empty($addons_grouped)): ?>
+                      <?php foreach ($addons_grouped as $cat => $items): ?>
+                        <div class="mb-6">
+                          <div class="text-sm font-semibold text-slate-800"><?= htmlspecialchars((string)$cat); ?></div>
+                          <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <?php foreach ($items as $it): ?>
+                              <label class="flex items-start gap-3 rounded-lg border border-slate-200 bg-white px-3 py-2 hover:bg-slate-50">
+                                <input type="checkbox"
+                                       class="mt-1 h-4 w-4 text-emerald-600 border-slate-300 rounded ao-item focus:ring-emerald-500"
+                                       data-id="<?= (int)$it->id; ?>"
+                                       data-name="<?= htmlspecialchars((string)($it->name ?? '')); ?>"
+                                       data-price="<?= (float)($it->price ?? 0); ?>"
+                                       data-currency="<?= htmlspecialchars((string)($it->currency ?? 'RM')); ?>"
+                                       />
+                                <div class="min-w-0">
+                                  <div class="text-sm font-medium text-slate-800">
+                                    <?= htmlspecialchars((string)($it->name ?? '-')); ?>
+                                    <span class="text-xs text-slate-500">
+                                      (<?= htmlspecialchars((string)($it->currency ?? 'RM')); ?>
+                                      <?= number_format((float)($it->price ?? 0), 0, ',', '.'); ?>)
+                                    </span>
+                                  </div>
+                                  <?php if (!empty($it->description)): ?>
+                                    <div class="text-xs text-slate-500"><?= htmlspecialchars((string)$it->description); ?></div>
+                                  <?php endif; ?>
+                                </div>
+                              </label>
+                            <?php endforeach; ?>
+                          </div>
+                        </div>
+                      <?php endforeach; ?>
+                    <?php else: ?>
+                      <p class="text-sm text-slate-600">Tiada add-on tersedia saat ini.</p>
+                    <?php endif; ?>
+                  </div>
+
+                  <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-end gap-3">
+                    <button type="button" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-4 py-2 text-sm hover:bg-gray-50" onclick="window.aoSelClose()">Batal</button>
+                    <button type="button" class="inline-flex items-center rounded-md bg-emerald-600 text-white px-4 py-2 text-sm hover:bg-emerald-700" onclick="window.aoSelApply()">Simpan</button>
+                  </div>
+                </div>
+              </div>
+
+              <script>
+                (function(){
+                  var hidden = document.getElementById('addon_ids');
+                  var overlay = document.getElementById('aoSelOverlay');
+                  var modal = document.getElementById('aoSelModal');
+                  var summary = document.getElementById('addon_summary');
+
+                  function openModal() {
+                    if (!modal || !overlay) return;
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                    overlay.classList.remove('hidden');
+                    modal.setAttribute('aria-hidden', 'false');
+                  }
+                  function closeModal() {
+                    if (!modal || !overlay) return;
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                    overlay.classList.add('hidden');
+                    modal.setAttribute('aria-hidden', 'true');
+                  }
+                  function applySelection() {
+                    if (!modal) return;
+                    var boxes = modal.querySelectorAll('.ao-item:checked');
+                    var ids = [];
+                    var names = [];
+                    var total = 0;
+                    var currency = 'RM';
+                    boxes.forEach(function(b){
+                      var id = parseInt(b.getAttribute('data-id') || '0', 10);
+                      if (!isNaN(id) && id > 0) {
+                        ids.push(id);
+                        names.push(b.getAttribute('data-name') || '');
+                        var pr = parseFloat(b.getAttribute('data-price') || '0');
+                        if (!isNaN(pr)) total += pr;
+                        currency = b.getAttribute('data-currency') || currency;
+                      }
+                    });
+                    if (hidden) hidden.value = ids.join(',');
+                    if (summary) {
+                      if (ids.length) {
+                        try {
+                          var fmt = new Intl.NumberFormat('id-ID');
+                          summary.textContent = names.join(', ') + ' • Tambahan: ' + currency + ' ' + fmt.format(Math.round(total));
+                        } catch (e) {
+                          summary.textContent = names.join(', ') + ' • Tambahan: ' + currency + ' ' + Math.round(total);
+                        }
+                      } else {
+                        summary.textContent = 'Tiada add-on dipilih.';
+                      }
+                    }
+                    closeModal();
+                  }
+
+                  window.aoSelOpen = openModal;
+                  window.aoSelClose = closeModal;
+                  window.aoSelApply = applySelection;
+
+                  document.addEventListener('click', function(e){
+                    if (e.target && e.target.id === 'aoSelOverlay') closeModal();
+                  });
+                  document.addEventListener('keydown', function(e){
+                    if (e.key === 'Escape') closeModal();
+                  });
+                })();
+              </script>
 
               <div class="mb-4">
                 <span class="block text-sm font-medium text-slate-700">Tipe Panggilan</span>

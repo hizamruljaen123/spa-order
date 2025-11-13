@@ -6,6 +6,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @property Booking_model $Booking_model
  * @property Invoice_model $Invoice_model
  * @property Settings_model $Settings_model
+ * @property Addon_model $Addon_model
+ * @property Ad_model $Ad_model
+ * @property Product_model $Product_model
  * @property Urlcrypt $urlcrypt
  * @property CI_Session $session
  * @property CI_Form_validation $form_validation
@@ -19,7 +22,7 @@ class Booking extends CI_Controller
     {
         parent::__construct();
         // Load models and libs (most helpers/libs already autoloaded)
-        $this->load->model(['Package_model', 'Therapist_model', 'Booking_model', 'Invoice_model', 'Settings_model']);
+        $this->load->model(['Package_model', 'Therapist_model', 'Booking_model', 'Invoice_model', 'Settings_model', 'Addon_model']);
         // Ensure settings table/keys exist even if admin hasn't opened settings page yet
         $this->Settings_model->ensure_bootstrap();
         $this->load->helper(['url', 'form']);
@@ -28,9 +31,25 @@ class Booking extends CI_Controller
     }
 public function index()
 {
+    // Load models
+    $this->load->model('Ad_model');
+    $this->load->model('Product_model');
+
+    // Get all active ads for slider
+    $active_ads = $this->Ad_model->get_active_ads();
+
+    // Get all active products for grid display
+    $active_products = $this->Product_model->get_active_products();
+
+    // Get slider interval from settings
+    $slider_interval = $this->Settings_model->get('ad_slider_interval', 2); // Default 2 seconds
+
     $data = [
         'title'    => 'Spa Booking',
         'packages' => $this->Package_model->get_all(),
+        'active_ads' => $active_ads,
+        'active_products' => $active_products,
+        'slider_interval' => (int)$slider_interval * 1000, // Convert to milliseconds for JS
     ];
 
     $this->load->view('booking_home', $data);
@@ -52,6 +71,7 @@ public function form()
         'error'                => $this->session->flashdata('error'),
         'validation'           => validation_errors(),
         'selected_package_id'  => $selected_package_id,
+        'addons_grouped'       => $this->Addon_model->get_active_grouped(),
     ];
 
     // Render booking form view
@@ -94,6 +114,28 @@ public function form()
         $call_type_raw = strtoupper($this->input->post('call_type', true));
         $call_type     = ($call_type_raw === 'OUT') ? 'OUT' : 'IN';
 
+        // Parse selected add-ons (CSV of IDs)
+        $addon_ids_csv = (string)$this->input->post('addon_ids', true);
+        $addon_ids = [];
+        if ($addon_ids_csv !== '') {
+            $parts = preg_split('/\s*,\s*/', $addon_ids_csv);
+            foreach ($parts as $pid) {
+                if ($pid !== '' && ctype_digit((string)$pid)) {
+                    $addon_ids[] = (int)$pid;
+                }
+            }
+            $addon_ids = array_values(array_unique($addon_ids));
+        }
+
+        // Compute base price from package + add-ons total
+        $pkg = $this->Package_model->get_by_id($package_id);
+        $base = 0.0;
+        if ($pkg) {
+            $base = ($call_type === 'OUT') ? (float)$pkg->price_out_call : (float)$pkg->price_in_call;
+        }
+        $addons_total = !empty($addon_ids) ? (float)$this->Addon_model->get_total_for_ids($addon_ids) : 0.0;
+        $total_price = round(((float)$base + (float)$addons_total), 2);
+
         // Create booking payload
         $payload = [
             'customer_name' => $customer_name,
@@ -103,8 +145,7 @@ public function form()
             'call_type'     => $call_type,
             'date'          => $date,
             'time'          => strlen($time) === 5 ? ($time . ':00') : $time, // normalize to HH:MM:SS
-            // total_price will be auto-derived by model if null (uses call_type)
-            'total_price'   => null,
+            'total_price'   => $total_price,
             'status'        => 'pending',
             'created_at'    => date('Y-m-d H:i:s'),
         ];
@@ -115,6 +156,11 @@ public function form()
             $this->session->set_flashdata('error', 'Gagal menyimpan pemesanan. Silakan coba lagi.');
             redirect('booking/form');
             return;
+        }
+
+        // Attach add-ons to booking (qty=1 each)
+        if (!empty($addon_ids)) {
+            $this->Addon_model->attach_to_booking((int)$booking_id, $addon_ids);
         }
 
         // Fetch booking detail with joins for message and success view
@@ -146,14 +192,41 @@ public function form()
                 // Construct neat Markdown message with WhatsApp link and form URL
                 $formUrl = site_url('booking/form');
                 $phoneSan = $phone ? preg_replace('/\D+/', '', (string)$phone) : '';
+
+                // Add-ons list for Telegram
+                $addon_text = '-';
+                if (!empty($addon_ids)) {
+                    $rows_map = $this->Addon_model->get_by_ids($addon_ids);
+                    $names = [];
+                    foreach ($addon_ids as $aid) {
+                        if (isset($rows_map[$aid])) {
+                            $r = $rows_map[$aid];
+                            $names[] = ($r->name ?? '-') . ' (' . (($r->currency ?? 'RM')) . ' ' . number_format((float)($r->price ?? 0), 0, ',', '.') . ')';
+                        }
+                    }
+                    if (!empty($names)) {
+                        $addon_text = implode(', ', $names);
+                    }
+                }
+
+                // Totals formatting (use package/booking currency)
+                $currency = isset($booking->currency) ? (string)$booking->currency : 'RM';
+                $addons_total_fmt = $addons_total ? ($currency . ' ' . number_format((float)$addons_total, 0, ',', '.')) : '-';
+                $total_fmt = $currency . ' ' . number_format((float)($booking->total_price ?? $total_price), 0, ',', '.');
+
+                $invNo = ($invoice && isset($invoice->invoice_number)) ? $invoice->invoice_number : '-';
                 $message = "*SPA BOOKING REQUEST*\n\n"
                          . "👤 *Nama*: {$customer}\n\n"
                          . "🏠 *Alamat*: {$address}\n\n"
                          . "💅 *Paket*: {$package}\n\n"
+                         . "➕ *Add-on*\n: {$addon_text}\n\n"
                          . "‍♀️ *Terapis*: {$thera}\n\n"
                          . "🏷️ *Tipe*: {$call_type}\n\n"
                          . "📅 *Tanggal*: {$date}\n\n"
                          . "⏰ *Jam*: {$time}\n\n"
+                         . "🧾 *Invoice*: {$invNo}\n"
+                         . "💵 *Tambahan Add-on*: {$addons_total_fmt}\n"
+                         . "💰 *Total*: {$total_fmt}\n\n"
                          . "📞 *Telefon*: " . ($phoneSan ? "[{$phone}](https://wa.me/{$phoneSan})" : "-") . "\n"
                          . "\n[📄 Buka Borang Tempahan]({$formUrl})";
 

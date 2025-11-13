@@ -24,9 +24,133 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     html, body { font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, 'Helvetica Neue', sans-serif; }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.5);
+    }
+
+    .modal-content {
+      background-color: transparent;
+      margin: 15% auto;
+      padding: 20px;
+      border: none;
+      width: 80%;
+      max-width: 600px;
+      text-align: center;
+      position: relative;
+    }
+
+    .modal-content img {
+      max-width: 100%;
+      max-height: 400px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .modal-content img:hover {
+      transform: scale(1.05);
+    }
+
+    .close {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      color: #fff;
+      font-size: 28px;
+      font-weight: bold;
+      background: rgba(0,0,0,0.7);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10001;
+    }
+
+    .close:hover,
+    .close:focus {
+      background: rgba(0,0,0,0.9);
+    }
+
+    /* Slider styles for multiple ads */
+    .slider {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slider-track {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+
+    .slide {
+      flex: 0 0 100%;
+      width: 100%;
+    }
+
+    .slider-dots {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.5);
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .dot.active {
+      background: rgba(255,255,255,1);
+    }
   </style>
 </head>
 <body class="bg-slate-50">
+
+<!-- Advertisement Modal -->
+<?php if (!empty($active_ads)): ?>
+<div id="adModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <div class="slider">
+      <div class="slider-track" id="sliderTrack">
+        <?php foreach ($active_ads as $ad): ?>
+          <div class="slide">
+            <a href="<?php echo $ad['link_url']; ?>" target="_blank">
+              <img src="<?php echo base_url($ad['image_url']); ?>" alt="<?php echo htmlspecialchars($ad['title']); ?>">
+            </a>
+          </div>
+        <?php endforeach; ?>
+      </div>
+      <?php if (count($active_ads) > 1): ?>
+        <div class="slider-dots" id="sliderDots">
+          <?php for ($i = 0; $i < count($active_ads); $i++): ?>
+            <div class="dot <?php echo $i === 0 ? 'active' : ''; ?>" onclick="goToSlide(<?php echo $i; ?>)"></div>
+          <?php endfor; ?>
+        </div>
+      <?php endif; ?>
+    </div>
+  </div>
+</div>
+<?php endif; ?>
   <!-- App-like top bar -->
   <header class="sticky top-0 z-30 bg-white/90 backdrop-blur border-b border-slate-200">
     <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
@@ -80,7 +204,143 @@
   <!-- Content -->
   <main class="mx-auto max-w-6xl px-4 pb-24 -mt-6 md:-mt-12">
     <!-- Quick info cards -->
-    
+
+    <!-- Products Section -->
+    <section class="mt-8 md:mt-12">
+      <div class="mb-4 md:mb-6 flex items-center justify-between">
+        <h2 class="text-xl md:text-2xl font-bold text-slate-800">Produk & Barang</h2>
+        <div class="flex gap-2">
+          <a href="<?= site_url('products'); ?>" class="hidden sm:inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50">
+            Lihat Semua Produk
+          </a>
+          <a href="<?= site_url('booking/form'); ?>" class="hidden sm:inline-flex items-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600">
+            Tempah Spa
+          </a>
+        </div>
+      </div>
+
+      <div class="space-y-8">
+        <!-- First Row: Products 1-3 -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          <?php
+          // Products are loaded in controller and passed to view
+          $active_products = isset($active_products) ? $active_products : [];
+          // Show first 3 products in first row
+          $first_row_products = array_slice($active_products, 0, 3);
+          ?>
+
+          <?php if (!empty($first_row_products)): ?>
+            <?php foreach ($first_row_products as $product): ?>
+              <div class="group rounded-2xl bg-white overflow-hidden shadow-sm ring-1 ring-slate-200 hover:shadow-md transition">
+                <div class="aspect-square overflow-hidden">
+                  <?php if (!empty($product['image_url'])): ?>
+                    <a href="<?= site_url('product_shop/detail/' . $product['id']); ?>">
+                      <img
+                        src="<?= base_url($product['image_url']); ?>"
+                        alt="<?= htmlspecialchars($product['name']); ?>"
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      >
+                    </a>
+                  <?php else: ?>
+                    <a href="<?= site_url('product_shop/detail/' . $product['id']); ?>" class="w-full h-full bg-slate-200 flex items-center justify-center">
+                      <span class="text-slate-500">No Image</span>
+                    </a>
+                  <?php endif; ?>
+                </div>
+
+                <div class="p-4">
+                  <h3 class="font-semibold text-slate-800 mb-1 line-clamp-1"><?= htmlspecialchars($product['name']); ?></h3>
+                  <?php if (!empty($product['description'])): ?>
+                    <p class="text-sm text-slate-600 line-clamp-2 mb-3"><?= htmlspecialchars($product['description']); ?></p>
+                  <?php endif; ?>
+                  <div class="flex items-center justify-between">
+                    <div class="text-primary font-bold">
+                      <?= htmlspecialchars($product['currency']); ?> <?= number_format($product['price'], 2, ',', '.'); ?>
+                    </div>
+                    <button
+                      onclick="openWhatsApp('<?= htmlspecialchars($product['name']); ?>', '<?= number_format($product['price'], 2); ?>', '<?= htmlspecialchars($product['currency']); ?>')"
+                      class="inline-flex items-center rounded-lg bg-green-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-green-700"
+                    >
+                      <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+                      </svg>
+                      WhatsApp
+                    </button>
+                  </div>
+                </div>
+              </div>
+            <?php endforeach; ?>
+          <?php endif; ?>
+        </div>
+
+        <!-- Second Row: Products 4-6 -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          <?php
+          // Show next 3 products in second row
+          $second_row_products = array_slice($active_products, 3, 3);
+          ?>
+
+          <?php if (!empty($second_row_products)): ?>
+            <?php foreach ($second_row_products as $product): ?>
+            <div class="group rounded-2xl bg-white overflow-hidden shadow-sm ring-1 ring-slate-200 hover:shadow-md transition">
+              <div class="aspect-square overflow-hidden">
+                <?php if (!empty($product['image_url'])): ?>
+                  <a href="<?= site_url('product_shop/detail/' . $product['id']); ?>">
+                    <img
+                      src="<?= base_url($product['image_url']); ?>"
+                      alt="<?= htmlspecialchars($product['name']); ?>"
+                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    >
+                  </a>
+                <?php else: ?>
+                  <a href="<?= site_url('product_shop/detail/' . $product['id']); ?>" class="w-full h-full bg-slate-200 flex items-center justify-center">
+                    <span class="text-slate-500">No Image</span>
+                  </a>
+                <?php endif; ?>
+              </div>
+
+              <div class="p-4">
+                <h3 class="font-semibold text-slate-800 mb-1 line-clamp-1"><?= htmlspecialchars($product['name']); ?></h3>
+                <?php if (!empty($product['description'])): ?>
+                  <p class="text-sm text-slate-600 line-clamp-2 mb-3"><?= htmlspecialchars($product['description']); ?></p>
+                <?php endif; ?>
+                <div class="flex items-center justify-between">
+                  <div class="text-primary font-bold">
+                    <?= htmlspecialchars($product['currency']); ?> <?= number_format($product['price'], 2, ',', '.'); ?>
+                  </div>
+                  <button
+                    onclick="openWhatsApp('<?= htmlspecialchars($product['name']); ?>', '<?= number_format($product['price'], 2); ?>', '<?= htmlspecialchars($product['currency']); ?>')"
+                    class="inline-flex items-center rounded-lg bg-green-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-green-700"
+                  >
+                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+                    </svg>
+                    WhatsApp
+                  </button>
+                </div>
+              </div>
+            </div>
+          <?php endforeach; ?>
+        <?php else: ?>
+          <div class="col-span-full rounded-xl border border-dashed border-slate-300 bg-white p-6 text-center text-slate-600">
+            Produk belum tersedia. Sila kembali lagi nanti.
+          </div>
+        <?php endif; ?>
+      </div>
+    </div>
+
+        <?php if (count($active_products) > 6): ?>
+          <div class="mt-8 text-center">
+            <a href="<?= site_url('products'); ?>" class="inline-flex items-center rounded-lg bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200">
+              Lihat Semua Produk (<?= count($active_products); ?>)
+              <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </a>
+          </div>
+        <?php endif; ?>
+    </section>
+
     <!-- Packages / Services -->
     <section id="packages" class="mt-8 md:mt-12">
       <div class="mb-4 md:mb-6 flex items-center justify-between">
@@ -94,7 +354,7 @@
         <?php if (!empty($packages)): ?>
           <?php foreach ($packages as $p): ?>
             <div class="group rounded-2xl bg-white overflow-hidden shadow-sm ring-1 ring-slate-200 hover:shadow-md transition">
-              
+
               <div class="p-4">
                 <?php if (!empty($p->description)): ?>
                   <p class="text-sm text-slate-600 line-clamp-2 mb-2"><?= htmlspecialchars($p->description); ?></p>
@@ -199,5 +459,77 @@
       </a>
     </div>
   </div>
+<!-- Auto-show modal when page loads -->
+<script>
+  // Get the modal
+  var modal = document.getElementById("adModal");
+
+  // Auto-show modal when page loads
+  window.addEventListener('load', function() {
+      if (modal) {
+          modal.style.display = "block";
+      }
+  });
+
+  // Close modal function
+  function closeModal() {
+      if (modal) {
+          modal.style.display = "none";
+      }
+  }
+
+  // Slider functionality
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.dot');
+  const totalSlides = slides.length;
+
+  function updateSlider() {
+      const sliderTrack = document.getElementById('sliderTrack');
+      if (sliderTrack) {
+          sliderTrack.style.transform = `translateX(-${currentSlide * 100}%)`;
+      }
+
+      // Update dots
+      dots.forEach((dot, index) => {
+          dot.classList.toggle('active', index === currentSlide);
+      });
+  }
+
+  function goToSlide(slideIndex) {
+      currentSlide = slideIndex;
+      updateSlider();
+  }
+
+  // Auto slide with configurable interval if multiple slides exist
+  if (totalSlides > 1) {
+      const interval = <?= isset($slider_interval) ? $slider_interval : 2000; ?>;
+      setInterval(() => {
+          currentSlide = (currentSlide + 1) % totalSlides;
+          updateSlider();
+      }, interval);
+  }
+
+  // Close modal when clicking outside
+  window.onclick = function(event) {
+      if (event.target == modal) {
+          modal.style.display = "none";
+      }
+  }
+
+  // Product grid animation
+  document.addEventListener('DOMContentLoaded', function() {
+    const productCards = document.querySelectorAll('section:first-of-type .group');
+    productCards.forEach((card, index) => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(20px)';
+      setTimeout(() => {
+        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+      }, index * 100);
+    });
+  });
+</script>
 </body>
 </html>

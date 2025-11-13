@@ -1,0 +1,66 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Ad_model extends CI_Model {
+
+    protected $table = 'ads';
+
+    public function __construct() {
+        parent::__construct();
+    }
+
+    // Get all active ads ordered by display_order
+    public function get_active_ads() {
+        $this->db->where('is_active', 1);
+        $this->db->order_by('display_order', 'ASC');
+        $query = $this->db->get($this->table);
+        return $query->result_array();
+    }
+
+    // Get the single most relevant active ad (highest display order)
+    public function get_active_ad() {
+        $this->db->where('is_active', 1);
+        $this->db->order_by('display_order', 'DESC');
+        $this->db->limit(1);
+        $query = $this->db->get($this->table);
+        return $query->row_array();
+    }
+
+    // Get all ads
+    public function get_all_ads() {
+        $this->db->order_by('display_order', 'ASC');
+        $query = $this->db->get($this->table);
+        return $query->result_array();
+    }
+
+    // Get a single ad by its ID
+    public function get_ad_by_id($id) {
+        $this->db->where('id', $id);
+        $query = $this->db->get($this->table);
+        return $query->row_array();
+    }
+
+    // Insert a new ad
+    public function insert_ad($data) {
+        $data['created_at'] = date('Y-m-d H:i:s');
+        $data['updated_at'] = date('Y-m-d H:i:s');
+        $this->db->insert($this->table, $data);
+        return $this->db->insert_id();
+    }
+
+    // Update an existing ad
+    public function update_ad($id, $data) {
+        $data['updated_at'] = date('Y-m-d H:i:s');
+        $this->db->where('id', $id);
+        $this->db->update($this->table, $data);
+        return $this->db->affected_rows();
+    }
+
+    // Delete an ad
+    public function delete_ad($id) {
+        $this->db->where('id', $id);
+        $this->db->delete($this->table);
+        return $this->db->affected_rows();
+    }
+}
+?>

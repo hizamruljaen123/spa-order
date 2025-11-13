@@ -11,9 +11,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @property Booking_model $Booking_model
  * @property Therapist_model $Therapist_model
  * @property Package_model $Package_model
+ * @property Addon_model $Addon_model
  * @property Report_model $Report_model
  * @property Invoice_model $Invoice_model
  * @property Settings_model $Settings_model
+ * @property CI_Upload $upload
  * @property Urlcrypt $urlcrypt
  */
 class Admin extends CI_Controller
@@ -22,7 +24,7 @@ class Admin extends CI_Controller
     {
         parent::__construct();
         date_default_timezone_set('Asia/Jakarta');
-        $this->load->model(['Booking_model', 'Therapist_model', 'Package_model', 'Report_model', 'Invoice_model', 'Settings_model']);
+        $this->load->model(['Booking_model', 'Therapist_model', 'Package_model', 'Addon_model', 'Report_model', 'Invoice_model', 'Settings_model']);
         $this->load->helper(['url', 'form']);
         $this->load->library(['session', 'form_validation', 'urlcrypt']);
         // Bootstrap settings storage table/keys
@@ -98,6 +100,29 @@ class Admin extends CI_Controller
             'phone'  => $this->input->post('phone', true),
             'status' => $this->input->post('status', true),
         ];
+
+        // Handle optional photo upload
+        if (!empty($_FILES['photo']) && !empty($_FILES['photo']['name'])) {
+            $uploadDir = FCPATH . 'assets/uploads/therapists';
+            if (!is_dir($uploadDir)) {
+                @mkdir($uploadDir, 0755, true);
+            }
+            $config = [
+                'upload_path'   => $uploadDir,
+                'allowed_types' => 'gif|jpg|jpeg|png|webp',
+                'max_size'      => 2048, // KB
+                'encrypt_name'  => true,
+            ];
+            $this->load->library('upload', $config);
+            if (!$this->upload->do_upload('photo')) {
+                $this->session->set_flashdata('error', strip_tags($this->upload->display_errors('', '')));
+                redirect('admin/therapists');
+                return;
+            }
+            $up = $this->upload->data();
+            $payload['photo'] = 'assets/uploads/therapists/' . $up['file_name'];
+        }
+
         $this->Therapist_model->create($payload);
         $this->session->set_flashdata('success', 'Therapist berhasil ditambahkan.');
         redirect('admin/therapists');
@@ -130,6 +155,29 @@ class Admin extends CI_Controller
                 'phone'  => $this->input->post('phone', true),
                 'status' => $this->input->post('status', true),
             ];
+
+            // Optional: upload new photo to replace existing
+            if (!empty($_FILES['photo']) && !empty($_FILES['photo']['name'])) {
+                $uploadDir = FCPATH . 'assets/uploads/therapists';
+                if (!is_dir($uploadDir)) {
+                    @mkdir($uploadDir, 0755, true);
+                }
+                $config = [
+                    'upload_path'   => $uploadDir,
+                    'allowed_types' => 'gif|jpg|jpeg|png|webp',
+                    'max_size'      => 2048, // KB
+                    'encrypt_name'  => true,
+                ];
+                $this->load->library('upload', $config);
+                if (!$this->upload->do_upload('photo')) {
+                    $this->session->set_flashdata('error', strip_tags($this->upload->display_errors('', '')));
+                    redirect('admin/therapists');
+                    return;
+                }
+                $up = $this->upload->data();
+                $payload['photo'] = 'assets/uploads/therapists/' . $up['file_name'];
+            }
+
             $this->Therapist_model->update($id, $payload);
             $this->session->set_flashdata('success', 'Therapist berhasil diupdate.');
             redirect('admin/therapists');
@@ -292,6 +340,132 @@ class Admin extends CI_Controller
         $this->Package_model->delete($id);
         $this->session->set_flashdata('success', 'Paket dihapus.');
         redirect('admin/packages');
+    }
+
+    // 3b. Add-ons - List
+    public function addons()
+    {
+        $addons = $this->Addon_model->get_all(false);
+        if (is_array($addons)) {
+            foreach ($addons as $a) {
+                if (is_object($a) && isset($a->id)) {
+                    $a->token = $this->urlcrypt->encode((int)$a->id) ?: (string)$a->id;
+                }
+            }
+        }
+        $data = [
+            'title'   => 'Data Add-on',
+            'addons'  => $addons,
+            'flash'   => [
+                'success' => $this->session->flashdata('success'),
+                'error'   => $this->session->flashdata('error'),
+            ],
+        ];
+        $this->load->view('admin/addon_list', $data);
+    }
+
+    // 3c. Add-on Create (POST)
+    public function addon_create()
+    {
+        if ($this->input->method(true) !== 'POST') {
+            redirect('admin/addons');
+            return;
+        }
+
+        $this->form_validation->set_rules('category', 'Kategori', 'required|trim|min_length[2]');
+        $this->form_validation->set_rules('name', 'Nama Add-on', 'required|trim|min_length[2]');
+        $this->form_validation->set_rules('price', 'Harga', 'required|numeric');
+        $this->form_validation->set_rules('currency', 'Mata Uang', 'trim|max_length[10]');
+        $this->form_validation->set_rules('description', 'Keterangan', 'trim');
+        $this->form_validation->set_rules('is_active', 'Aktif', 'in_list[0,1]');
+
+        if (!$this->form_validation->run()) {
+            $this->session->set_flashdata('error', validation_errors());
+            redirect('admin/addons');
+            return;
+        }
+
+        $payload = [
+            'category'    => $this->input->post('category', true),
+            'name'        => $this->input->post('name', true),
+            'price'       => (float)$this->input->post('price', true),
+            'currency'    => $this->input->post('currency', true) ?: 'RM',
+            'description' => $this->input->post('description', true),
+            'is_active'   => (int)($this->input->post('is_active', true) !== '0'),
+        ];
+        $this->Addon_model->create($payload);
+        $this->session->set_flashdata('success', 'Add-on berhasil ditambahkan.');
+        redirect('admin/addons');
+    }
+
+    // 3d. Add-on Edit (GET/POST)
+    public function addon_edit($token)
+    {
+        $id = ctype_digit((string)$token) ? (int)$token : $this->urlcrypt->decode($token);
+        if (!$id) {
+            $this->session->set_flashdata('error', 'Parameter tidak valid.');
+            redirect('admin/addons');
+            return;
+        }
+
+        if ($this->input->method(true) === 'POST') {
+            $this->form_validation->set_rules('category', 'Kategori', 'required|trim|min_length[2]');
+            $this->form_validation->set_rules('name', 'Nama Add-on', 'required|trim|min_length[2]');
+            $this->form_validation->set_rules('price', 'Harga', 'required|numeric');
+            $this->form_validation->set_rules('currency', 'Mata Uang', 'trim|max_length[10]');
+            $this->form_validation->set_rules('description', 'Keterangan', 'trim');
+            $this->form_validation->set_rules('is_active', 'Aktif', 'in_list[0,1]');
+
+            if (!$this->form_validation->run()) {
+                $this->session->set_flashdata('error', validation_errors());
+                redirect('admin/addons');
+                return;
+            }
+
+            $payload = [
+                'category'    => $this->input->post('category', true),
+                'name'        => $this->input->post('name', true),
+                'price'       => (float)$this->input->post('price', true),
+                'currency'    => $this->input->post('currency', true) ?: 'RM',
+                'description' => $this->input->post('description', true),
+                'is_active'   => (int)($this->input->post('is_active', true) !== '0'),
+            ];
+            $this->Addon_model->update($id, $payload);
+            $this->session->set_flashdata('success', 'Add-on berhasil diupdate.');
+            redirect('admin/addons');
+            return;
+        }
+
+        $addons = $this->Addon_model->get_all(false);
+        $data = [
+            'title'      => 'Data Add-on',
+            'addons'     => $addons,
+            'editItemId' => $id,
+            'editItem'   => $this->Addon_model->get_by_id($id),
+            'flash'      => [
+                'success' => $this->session->flashdata('success'),
+                'error'   => $this->session->flashdata('error'),
+            ],
+        ];
+        $this->load->view('admin/addon_list', $data);
+    }
+
+    // 3e. Add-on Delete
+    public function addon_delete($token)
+    {
+        $id = ctype_digit((string)$token) ? (int)$token : $this->urlcrypt->decode($token);
+        if (!$id) {
+            $this->session->set_flashdata('error', 'Parameter tidak valid.');
+            redirect('admin/addons');
+            return;
+        }
+        // Will fail if referenced by booking_addon due to FK RESTRICT
+        if (!$this->Addon_model->delete($id)) {
+            $this->session->set_flashdata('error', 'Gagal menghapus add-on (mungkin masih dipakai pada booking).');
+        } else {
+            $this->session->set_flashdata('success', 'Add-on dihapus.');
+        }
+        redirect('admin/addons');
     }
 
     // 4. Schedule / Calendar (FullCalendar)
@@ -735,13 +909,14 @@ class Admin extends CI_Controller
             ->set_output(json_encode(['ok' => (bool)$ok]));
     }
 
-    // 8. Settings - Telegram Bot configuration
+    // 8. Settings - Telegram Bot configuration & Ad Slider Interval
     public function settings()
     {
         // POST: save settings
         if ($this->input->method(true) === 'POST') {
             $this->form_validation->set_rules('telegram_bot_token', 'Telegram Bot Token', 'required|trim|min_length[20]');
             $this->form_validation->set_rules('telegram_chat_id', 'Telegram Chat ID', 'required|trim|min_length[3]');
+            $this->form_validation->set_rules('ad_slider_interval', 'Ad Slider Interval', 'required|integer|greater_than[0]');
             if (!$this->form_validation->run()) {
                 $this->session->set_flashdata('error', validation_errors());
                 redirect('admin/settings');
@@ -750,14 +925,16 @@ class Admin extends CI_Controller
 
             $bot  = $this->input->post('telegram_bot_token', true);
             $chat = $this->input->post('telegram_chat_id', true);
+            $slider_interval = (int)$this->input->post('ad_slider_interval', true);
 
             $ok = $this->Settings_model->set_many([
                 'telegram_bot_token' => $bot,
                 'telegram_chat_id'   => $chat,
+                'ad_slider_interval' => $slider_interval,
             ]);
 
             if ($ok) {
-                $this->session->set_flashdata('success', 'Pengaturan Telegram tersimpan.');
+                $this->session->set_flashdata('success', 'Pengaturan tersimpan.');
             } else {
                 $this->session->set_flashdata('error', 'Gagal menyimpan pengaturan.');
             }
@@ -766,7 +943,11 @@ class Admin extends CI_Controller
         }
 
         // GET: render settings page
-        $vals = $this->Settings_model->get_many(['telegram_bot_token','telegram_chat_id']);
+        $vals = $this->Settings_model->get_many(['telegram_bot_token','telegram_chat_id', 'ad_slider_interval']);
+        // Set default slider interval if not set
+        if (!isset($vals['ad_slider_interval']) || $vals['ad_slider_interval'] === null) {
+            $vals['ad_slider_interval'] = 2; // Default 2 seconds
+        }
         $data = [
             'title'    => 'Pengaturan Sistem',
             'settings' => $vals,

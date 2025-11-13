@@ -74,6 +74,28 @@ $route['admin/package/create'] = 'admin/package_create';
 $route['admin/package/edit/(:any)'] = 'admin/package_edit/$1';
 $route['admin/package/delete/(:any)'] = 'admin/package_delete/$1';
 
+$route['admin/addons'] = 'admin/addons';
+$route['admin/addon/create'] = 'admin/addon_create';
+$route['admin/addon/edit/(:any)'] = 'admin/addon_edit/$1';
+$route['admin/addon/delete/(:any)'] = 'admin/addon_delete/$1';
+
+/* Advertisement Management */
+$route['admin/ad_management'] = 'ad_management/index';
+$route['admin/ad_management/create'] = 'ad_management/create';
+$route['admin/ad_management/store'] = 'ad_management/store';
+$route['admin/ad_management/edit/(:any)'] = 'ad_management/edit/$1';
+$route['admin/ad_management/update/(:any)'] = 'ad_management/update/$1';
+$route['admin/ad_management/delete/(:any)'] = 'ad_management/delete/$1';
+
+/* Product Management */
+$route['products'] = 'product_shop/index';
+$route['admin/product_management'] = 'product_management/index';
+$route['admin/product_management/create'] = 'product_management/create';
+$route['admin/product_management/store'] = 'product_management/store';
+$route['admin/product_management/edit/(:any)'] = 'product_management/edit/$1';
+$route['admin/product_management/update/(:any)'] = 'product_management/update/$1';
+$route['admin/product_management/delete/(:any)'] = 'product_management/delete/$1';
+
 $route['admin/schedule'] = 'admin/schedule';
 $route['admin/bookings'] = 'admin/bookings';
 $route['admin/report'] = 'admin/report';

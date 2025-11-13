@@ -69,7 +69,7 @@ class Therapist_model extends CI_Model
 
     private function filter_fillable(array $data)
     {
-        $fillable = ['name', 'phone', 'status', 'created_at'];
+        $fillable = ['name', 'phone', 'photo', 'status', 'created_at'];
         return array_intersect_key($data, array_flip($fillable));
     }
 }

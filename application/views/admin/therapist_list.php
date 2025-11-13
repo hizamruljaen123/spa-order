@@ -29,6 +29,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
         <thead class="bg-gray-50">
           <tr class="text-left text-sm text-gray-600">
             <th class="px-5 py-3 w-12">#</th>
+            <th class="px-5 py-3 w-20">Foto</th>
             <th class="px-5 py-3">Nama</th>
             <th class="px-5 py-3">No. Telefon</th>
             <th class="px-5 py-3 w-40">Status</th>
@@ -41,6 +42,13 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
               <?php $isEdit = false; ?>
               <tr class="text-sm">
                 <td class="px-5 py-3"><?= $i++; ?></td>
+                <td class="px-5 py-3">
+                  <?php if (!empty($t->photo)): ?>
+                    <img src="<?= base_url($t->photo); ?>" alt="<?= htmlspecialchars($t->name); ?>" class="h-12 w-12 rounded object-cover border border-gray-200">
+                  <?php else: ?>
+                    <div class="h-12 w-12 rounded bg-gray-100 border border-gray-200 flex items-center justify-center text-xs text-gray-500">No Photo</div>
+                  <?php endif; ?>
+                </td>
                 <td class="px-5 py-3">
                   <?php if ($isEdit): ?>
                     <form method="post" action="<?= site_url('admin/therapist/edit/' . (isset($t->token) ? $t->token : (int)$t->id)); ?>" class="grid grid-cols-1 md:grid-cols-2 gap-2 items-center">
@@ -86,7 +94,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
             <?php endforeach; ?>
           <?php else: ?>
             <tr>
-              <td colspan="5" class="px-5 py-6 text-center text-gray-500">Belum ada data terapis.</td>
+              <td colspan="6" class="px-5 py-6 text-center text-gray-500">Belum ada data terapis.</td>
             </tr>
           <?php endif; ?>
         </tbody>
@@ -128,7 +136,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
 
     <div class="p-6">
       <?php if ($hasEdit && isset($editItem)): ?>
-        <form method="post" action="<?= site_url('admin/therapist/edit/' . $editToken); ?>" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <form method="post" action="<?= site_url('admin/therapist/edit/' . $editToken); ?>" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="md:col-span-2">
             <label for="edit_name" class="block text-sm font-medium text-gray-700">Nama</label>
             <input id="edit_name" name="name" type="text" value="<?= htmlspecialchars($editItem->name ?? ''); ?>" required minlength="2"
@@ -148,6 +156,18 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
               <option value="busy" <?= ($editItem->status ?? '') === 'busy' ? 'selected' : ''; ?>>busy</option>
               <option value="off" <?= ($editItem->status ?? '') === 'off' ? 'selected' : ''; ?>>off</option>
             </select>
+          </div>
+
+          <div class="md:col-span-2">
+            <label for="edit_photo" class="block text-sm font-medium text-gray-700">Foto (opsional)</label>
+            <?php if (!empty($editItem->photo)): ?>
+              <div class="flex items-center gap-3 mt-1">
+                <img src="<?= base_url($editItem->photo); ?>" alt="Foto" class="h-16 w-16 rounded object-cover border border-gray-200">
+                <span class="text-xs text-gray-500 truncate"><?= htmlspecialchars($editItem->photo); ?></span>
+              </div>
+            <?php endif; ?>
+            <input id="edit_photo" name="photo" type="file" accept="image/*" class="mt-2 block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100">
+            <p class="mt-1 text-xs text-gray-500">Format: jpg, jpeg, png, webp, gif. Maks 2MB.</p>
           </div>
 
           <div class="md:col-span-2 flex justify-end gap-3 mt-2">
@@ -180,7 +200,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
     </div>
 
     <div class="p-6">
-      <form method="post" action="<?= site_url('admin/therapist/create'); ?>" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <form method="post" action="<?= site_url('admin/therapist/create'); ?>" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="md:col-span-2">
           <label for="create_name" class="block text-sm font-medium text-gray-700">Nama</label>
           <input id="create_name" name="name" type="text" required minlength="2" placeholder="Nama terapis"
@@ -200,6 +220,12 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
             <option value="busy">busy</option>
             <option value="off">off</option>
           </select>
+        </div>
+
+        <div class="md:col-span-2">
+          <label for="create_photo" class="block text-sm font-medium text-gray-700">Foto</label>
+          <input id="create_photo" name="photo" type="file" accept="image/*" class="mt-1 block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100">
+          <p class="mt-1 text-xs text-gray-500">Format: jpg, jpeg, png, webp, gif. Maks 2MB.</p>
         </div>
 
         <div class="md:col-span-2 flex justify-end gap-3 mt-2">

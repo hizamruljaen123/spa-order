@@ -10,17 +10,23 @@ class Settings_model extends CI_Model
      */
     public function ensure_bootstrap()
     {
-        $sql = "CREATE TABLE IF NOT EXISTS `app_settings` (
-          `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-          `key` VARCHAR(100) NOT NULL UNIQUE,
-          `value` TEXT NULL,
-          `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;";
-        $this->db->query($sql);
+        // Avoid attempting CREATE TABLE on every request,
+        // which can fail on production if the DB user lacks CREATE privilege.
+        if (!$this->db->table_exists($this->table)) {
+            $sql = "CREATE TABLE IF NOT EXISTS `app_settings` (
+              `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+              `key` VARCHAR(100) NOT NULL UNIQUE,
+              `value` TEXT NULL,
+              `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;";
+            $this->db->query($sql);
+        }
 
-        // Ensure required keys exist
-        $this->ensure_key('telegram_bot_token', '');
-        $this->ensure_key('telegram_chat_id', '');
+        // Only proceed to ensure keys if the table is present
+        if ($this->db->table_exists($this->table)) {
+            $this->ensure_key('telegram_bot_token', '');
+            $this->ensure_key('telegram_chat_id', '');
+        }
     }
 
     private function ensure_key($key, $default = '')
