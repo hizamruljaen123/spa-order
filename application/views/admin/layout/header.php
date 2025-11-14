@@ -64,6 +64,10 @@ $isActive = function($patterns) use ($uri) {
          class="block px-3 py-2 rounded-md <?= $isActive(['admin/addons','admin/addon']); ?>">
         Add-on
       </a>
+      <a href="<?= site_url('admin/exclusive_treatments'); ?>"
+         class="block px-3 py-2 rounded-md <?= $isActive(['admin/exclusive_treatments','admin/exclusive_treatment']); ?>">
+        Rawatan Eksklusif
+      </a>
       <a href="<?= site_url('admin/ad_management'); ?>"
          class="block px-3 py-2 rounded-md <?= $isActive(['admin/ad_management']); ?>">
         Iklan

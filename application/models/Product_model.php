@@ -29,6 +29,16 @@ class Product_model extends CI_Model {
         return $query->result_array();
     }
 
+    // Get related products (excluding current product)
+    public function get_related_products($current_product_id, $limit = 4) {
+        $this->db->where('id !=', $current_product_id);
+        $this->db->where('is_active', 1);
+        $this->db->order_by('display_order', 'ASC');
+        $this->db->limit($limit);
+        $query = $this->db->get($this->table);
+        return $query->result_array();
+    }
+
     // Get a single product by its ID
     public function get_product_by_id($id) {
         $this->db->where('id', $id);

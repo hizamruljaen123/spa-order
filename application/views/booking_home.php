@@ -220,13 +220,13 @@
       </div>
 
       <div class="space-y-8">
-        <!-- First Row: Products 1-3 -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+        <!-- First Row: Products 1-4 (2x2 grid) -->
+        <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           <?php
           // Products are loaded in controller and passed to view
           $active_products = isset($active_products) ? $active_products : [];
-          // Show first 3 products in first row
-          $first_row_products = array_slice($active_products, 0, 3);
+          // Show first 4 products in first row (2x2 grid)
+          $first_row_products = array_slice($active_products, 0, 4);
           ?>
 
           <?php if (!empty($first_row_products)): ?>
@@ -253,19 +253,10 @@
                   <?php if (!empty($product['description'])): ?>
                     <p class="text-sm text-slate-600 line-clamp-2 mb-3"><?= htmlspecialchars($product['description']); ?></p>
                   <?php endif; ?>
-                  <div class="flex items-center justify-between">
-                    <div class="text-primary font-bold">
+                  <div class="text-center">
+                    <div class="text-primary font-bold mb-2">
                       <?= htmlspecialchars($product['currency']); ?> <?= number_format($product['price'], 2, ',', '.'); ?>
                     </div>
-                    <button
-                      onclick="openWhatsApp('<?= htmlspecialchars($product['name']); ?>', '<?= number_format($product['price'], 2); ?>', '<?= htmlspecialchars($product['currency']); ?>')"
-                      class="inline-flex items-center rounded-lg bg-green-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-green-700"
-                    >
-                      <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
-                      </svg>
-                      WhatsApp
-                    </button>
                   </div>
                 </div>
               </div>
@@ -273,11 +264,11 @@
           <?php endif; ?>
         </div>
 
-        <!-- Second Row: Products 4-6 -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+        <!-- Second Row: Products 5-8 (2x2 grid) -->
+        <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           <?php
-          // Show next 3 products in second row
-          $second_row_products = array_slice($active_products, 3, 3);
+          // Show next 4 products in second row (2x2 grid)
+          $second_row_products = array_slice($active_products, 4, 4);
           ?>
 
           <?php if (!empty($second_row_products)): ?>
@@ -304,32 +295,19 @@
                 <?php if (!empty($product['description'])): ?>
                   <p class="text-sm text-slate-600 line-clamp-2 mb-3"><?= htmlspecialchars($product['description']); ?></p>
                 <?php endif; ?>
-                <div class="flex items-center justify-between">
-                  <div class="text-primary font-bold">
+                <div class="text-center">
+                  <div class="text-primary font-bold mb-2">
                     <?= htmlspecialchars($product['currency']); ?> <?= number_format($product['price'], 2, ',', '.'); ?>
                   </div>
-                  <button
-                    onclick="openWhatsApp('<?= htmlspecialchars($product['name']); ?>', '<?= number_format($product['price'], 2); ?>', '<?= htmlspecialchars($product['currency']); ?>')"
-                    class="inline-flex items-center rounded-lg bg-green-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-green-700"
-                  >
-                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
-                    </svg>
-                    WhatsApp
-                  </button>
                 </div>
               </div>
             </div>
           <?php endforeach; ?>
-        <?php else: ?>
-          <div class="col-span-full rounded-xl border border-dashed border-slate-300 bg-white p-6 text-center text-slate-600">
-            Produk belum tersedia. Sila kembali lagi nanti.
-          </div>
         <?php endif; ?>
       </div>
     </div>
 
-        <?php if (count($active_products) > 6): ?>
+        <?php if (count($active_products) > 8): ?>
           <div class="mt-8 text-center">
             <a href="<?= site_url('products'); ?>" class="inline-flex items-center rounded-lg bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200">
               Lihat Semua Produk (<?= count($active_products); ?>)
@@ -340,6 +318,50 @@
           </div>
         <?php endif; ?>
     </section>
+
+    <!-- Exclusive Treatments Section -->
+    <?php if (!empty($exclusive_treatments_grouped)): ?>
+    <section class="mt-8 md:mt-12">
+      <div class="mb-4 md:mb-6 flex items-center justify-between">
+        <h2 class="text-xl md:text-2xl font-bold text-slate-800">Rawatan Eksklusif</h2>
+      </div>
+
+      <?php foreach ($exclusive_treatments_grouped as $category => $treatments): ?>
+        <div class="mb-8">
+          <h3 class="text-lg md:text-xl font-semibold text-slate-800 mb-4 capitalize">
+            <?= htmlspecialchars($category); ?>
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            <?php foreach ($treatments as $treatment): ?>
+              <div class="group rounded-2xl bg-white overflow-hidden shadow-sm ring-1 ring-slate-200 hover:shadow-md transition">
+                <div class="p-4">
+                  <div class="mb-3">
+                    <h4 class="font-semibold text-slate-800 mb-1 line-clamp-2">
+                      <?= htmlspecialchars($treatment['name']); ?>
+                    </h4>
+                    <?php if (!empty($treatment['description'])): ?>
+                      <p class="text-sm text-slate-600 line-clamp-2">
+                        <?= htmlspecialchars($treatment['description']); ?>
+                      </p>
+                    <?php endif; ?>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <div class="text-primary font-bold">
+                      <?= htmlspecialchars($treatment['currency']); ?> <?= number_format($treatment['price'], 2, ',', '.'); ?>
+                    </div>
+                    <a href="<?= site_url('booking/form'); ?>" class="inline-flex items-center rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-white hover:bg-sky-600">
+                      Tempah Sekarang
+                    </a>
+                  </div>
+                </div>
+              </div>
+            <?php endforeach; ?>
+          </div>
+        </div>
+      <?php endforeach; ?>
+
+    </section>
+    <?php endif; ?>
 
     <!-- Packages / Services -->
     <section id="packages" class="mt-8 md:mt-12">

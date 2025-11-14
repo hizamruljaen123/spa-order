@@ -130,6 +130,14 @@
     .product-image:hover {
       transform: scale(1.05);
     }
+
+    /* Line clamp utility */
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
   </style>
 </head>
 <body class="bg-slate-50">
@@ -186,17 +194,17 @@
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
         <!-- Product Image -->
         <div class="bg-white rounded-2xl overflow-hidden shadow-sm ring-1 ring-slate-200">
-          <div class="aspect-square overflow-hidden">
+          <div class="w-full overflow-hidden">
             <?php if (!empty($product['image_url'])): ?>
               <img
                 src="<?= base_url($product['image_url']); ?>"
                 alt="<?= htmlspecialchars($product['name']); ?>"
-                class="w-full h-full object-cover product-image cursor-pointer"
+                class="w-full h-auto object-contain product-image cursor-pointer"
                 onclick="openWhatsApp('<?= htmlspecialchars($product['name']); ?>', '<?= number_format($product['price'], 2); ?>', '<?= htmlspecialchars($product['currency']); ?>')"
               >
             <?php else: ?>
-              <div class="w-full h-full bg-slate-200 flex items-center justify-center cursor-pointer" onclick="openWhatsApp('<?= htmlspecialchars($product['name']); ?>', '<?= number_format($product['price'], 2); ?>', '<?= htmlspecialchars($product['currency']); ?>')">
-                <span class="text-slate-500 text-lg">No Image</span>
+              <div class="w-full h-64 bg-slate-200 flex items-center justify-center cursor-pointer" onclick="openWhatsApp('<?= htmlspecialchars($product['name']); ?>', '<?= number_format($product['price'], 2); ?>', '<?= htmlspecialchars($product['currency']); ?>')">
+                <span class="text-slate-500">No Image</span>
               </div>
             <?php endif; ?>
           </div>
@@ -235,37 +243,10 @@
               </svg>
               WhatsApp Inquiry
             </button>
-            <a
-              href="<?= site_url('booking/form'); ?>"
-              class="flex-1 inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-white hover:bg-sky-600 transition-colors"
-            >
-              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-              </svg>
-              Book Appointment
-            </a>
           </div>
         </div>
       </div>
 
-      <!-- Related Products Section -->
-      <section class="mb-12">
-        <div class="text-center mb-8">
-          <h2 class="text-2xl font-bold text-slate-800 mb-2">Produk Lain Yang Menarik</h2>
-          <p class="text-slate-600">Terokai produk lain yang mungkin anda minati</p>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <!-- This would be populated with related products in a real implementation -->
-          <!-- For now, just show a placeholder -->
-          <div class="bg-white rounded-xl p-4 shadow-sm ring-1 ring-slate-200 text-center">
-            <div class="w-full h-32 bg-slate-200 rounded-lg mb-3 flex items-center justify-center">
-              <span class="text-slate-500">Coming Soon</span>
-            </div>
-            <h3 class="font-semibold text-slate-800 mb-1">Produk Lain</h3>
-            <p class="text-sm text-slate-600">Akan datang...</p>
-          </div>
-        </div>
-      </section>
 
     <?php else: ?>
       <!-- Product Not Found -->
@@ -319,7 +300,7 @@
         `Harga: ${currency} ${price}\n\n` +
         `Boleh saya dapat maklumat lanjut?`
       );
-      const phoneNumber = '+60123456789'; // Replace with actual WhatsApp number
+      const phoneNumber = '<?= $whatsapp_phone; ?>'; // From settings
       window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
     }
   </script>

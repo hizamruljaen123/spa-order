@@ -52,17 +52,25 @@ class Product_shop extends CI_Controller {
             show_404();
         }
 
+        // Get related products (excluding current product)
+        $related_products = $this->Product_model->get_related_products($id, 4);
+
         // Get active ads for modal (same as other pages)
         $active_ads = $this->Ad_model->get_active_ads();
 
         // Get slider interval from settings
         $slider_interval = $this->Settings_model->get('ad_slider_interval', 2); // Default 2 seconds
 
+        // Get WhatsApp phone from settings
+        $whatsapp_phone = $this->Settings_model->get('whatsapp_phone', '+60143218026');
+
         $data = [
             'title' => htmlspecialchars($product['name']) . ' - Product Detail',
             'product' => $product,
+            'related_products' => $related_products,
             'active_ads' => $active_ads,
             'slider_interval' => (int)$slider_interval * 1000, // Convert to milliseconds for JS
+            'whatsapp_phone' => $whatsapp_phone,
         ];
 
         $this->load->view('product_detail', $data);

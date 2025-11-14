@@ -330,128 +330,22 @@
               </div>
 
               <div class="mb-4">
-                <span class="required block text-sm font-medium text-slate-700">Pilih Jam</span>
-
-                <!-- Nilai jam yang akan dikirim -->
-                <input type="hidden" id="time" name="time" required>
-
-                <!-- Slot jam akan dirender di sini -->
-                <div id="slots" class="mt-2 grid grid-cols-3 sm:grid-cols-4 gap-2">
-                  <!-- contoh tombol akan di-inject lewat JS -->
-                </div>
-                <div id="slots_help" class="mt-2 text-xs text-slate-500">Pilih jam yang tersedia (warna hijau).</div>
-                <div id="slots_error" class="mt-2 hidden rounded bg-red-50 text-red-700 text-sm px-3 py-2"></div>
+                <label class="required block text-sm font-medium text-slate-700" for="time">Pilih Jam</label>
+                <select class="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary" id="time" name="time" required>
+                  <option value="">Pilih jam</option>
+                  <?php
+                  $start = strtotime('09:00');
+                  $end = strtotime('21:00');
+                  for ($t = $start; $t <= $end; $t += 3600) { // hourly
+                      $time_option = date('H:i', $t);
+                      echo '<option value="' . $time_option . ':00">' . $time_option . '</option>';
+                  }
+                  ?>
+                </select>
+                <p class="mt-1 text-xs text-slate-500">Pilih jam yang tersedia. Jika jam sudah dipesan, akan diberitahu saat submit.</p>
               </div>
 
-              <script>
-                // Render slot jam yang mudah dipahami untuk orang tua:
-                // 1) Pilih tanggal
-                // 2) Slot jam tampil (jam yang sudah terisi dinonaktifkan)
-                // 3) Klik jam untuk memilih (akan disorot), kemudian kirim
-                window.addEventListener('load', function () {
-                  const therapistSel = document.getElementById('therapist_id');
-                  const dateInput    = document.getElementById('date');
-                  const timeInput    = document.getElementById('time');
-                  const slotsWrap    = document.getElementById('slots');
-                  const slotsError   = document.getElementById('slots_error');
-                  const submitBtn    = document.querySelector('button[type="submit"]');
-
-                  const ENDPOINT = '<?= site_url('booking/availability'); ?>';
-
-                  let selected = null;
-
-                  function renderLoading() {
-                    slotsWrap.innerHTML = '';
-                    for (let i = 0; i < 6; i++) {
-                      const s = document.createElement('div');
-                      s.className = 'h-10 rounded-md bg-slate-200 animate-pulse';
-                      slotsWrap.appendChild(s);
-                    }
-                  }
-
-                  function setSubmitEnabled(enabled) {
-                    if (!submitBtn) return;
-                    submitBtn.disabled = !enabled;
-                    if (enabled) {
-                      submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-                    } else {
-                      submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
-                    }
-                  }
-
-                  function renderSlots(data) {
-                    slotsWrap.innerHTML = '';
-                    slotsError.classList.add('hidden');
-                    const booked = new Set(data.booked || []);
-                    (data.slots || []).forEach(function (t) {
-                      const btn = document.createElement('button');
-                      const isBooked = booked.has(t);
-                      btn.type = 'button';
-                      btn.textContent = t;
-                      btn.className =
-                        'h-10 rounded-md text-sm font-medium border px-3 ' +
-                        (isBooked
-                          ? 'bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed line-through'
-                          : 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100 focus:outline-none focus:ring-2 focus:ring-emerald-400');
-                      btn.disabled = isBooked;
-
-                      if (!isBooked) {
-                        btn.addEventListener('click', function () {
-                          selected = t;
-                          // Backend menerima HH:MM atau HH:MM:SS; normalisasi ke HH:MM:SS
-                          timeInput.value = t.length === 5 ? (t + ':00') : t;
-                          // Sorot tombol terpilih
-                          Array.prototype.forEach.call(slotsWrap.querySelectorAll('button'), function (b) {
-                            b.classList.remove('ring-2', 'ring-emerald-500', 'bg-emerald-200');
-                          });
-                          btn.classList.add('ring-2', 'ring-emerald-500', 'bg-emerald-200');
-                          // Aktifkan tombol submit
-                          setSubmitEnabled(true);
-                        });
-                      }
-                      slotsWrap.appendChild(btn);
-                    });
-
-                    // Jika belum pilih jam, nonaktifkan submit
-                    if (!timeInput.value) {
-                      setSubmitEnabled(false);
-                    }
-                  }
-
-                  async function fetchSlots() {
-                    const date = dateInput ? dateInput.value : '';
-                    selected = null;
-                    timeInput.value = '';
-                    setSubmitEnabled(false);
-
-                    if (!date) {
-                      slotsWrap.innerHTML = '<div class="text-sm text-slate-500">Pilih tanggal untuk melihat jam tersedia.</div>';
-                      return;
-                    }
-
-                    renderLoading();
-                    const th = therapistSel ? therapistSel.value : '';
-                    const url = ENDPOINT + '?date=' + encodeURIComponent(date) + (th ? '&therapist_id=' + encodeURIComponent(th) : '');
-                    try {
-                      const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
-                      if (!res.ok) throw new Error('HTTP ' + res.status);
-                      const data = await res.json();
-                      renderSlots(data);
-                    } catch (e) {
-                      slotsWrap.innerHTML = '';
-                      slotsError.textContent = 'Gagal memuat ketersediaan. Coba lagi.';
-                      slotsError.classList.remove('hidden');
-                    }
-                  }
-
-                  if (dateInput)  dateInput.addEventListener('change', fetchSlots);
-                  if (therapistSel) therapistSel.addEventListener('change', fetchSlots);
-
-                  // Tampilkan pesan awal
-                  slotsWrap.innerHTML = '<div class="text-sm text-slate-500">Pilih tanggal untuk melihat jam tersedia.</div>';
-                  setSubmitEnabled(false);
-                });
-              </script>
+              <!-- No dynamic slot loading needed anymore -->
 
               <div class="mt-6">
                 <button type="submit" class="inline-flex w-full items-center justify-center rounded-md bg-primary px-4 py-3 text-base font-semibold text-white shadow-sm transition hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-primary">

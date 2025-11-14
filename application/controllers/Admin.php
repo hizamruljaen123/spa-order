@@ -13,6 +13,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @property Package_model $Package_model
  * @property Addon_model $Addon_model
  * @property Report_model $Report_model
+ * @property Exclusive_treatment_model $Exclusive_treatment_model
  * @property Invoice_model $Invoice_model
  * @property Settings_model $Settings_model
  * @property CI_Upload $upload
@@ -25,11 +26,12 @@ class Admin extends CI_Controller
         parent::__construct();
         date_default_timezone_set('Asia/Jakarta');
         $this->load->model(['Booking_model', 'Therapist_model', 'Package_model', 'Addon_model', 'Report_model', 'Invoice_model', 'Settings_model']);
+        // Load Exclusive_treatment_model when needed
         $this->load->helper(['url', 'form']);
         $this->load->library(['session', 'form_validation', 'urlcrypt']);
         // Bootstrap settings storage table/keys
         $this->Settings_model->ensure_bootstrap();
-    
+
         // Require admin login for all Admin routes
         if (!$this->session->userdata('admin_logged_in')) {
             redirect('login');
@@ -909,7 +911,136 @@ class Admin extends CI_Controller
             ->set_output(json_encode(['ok' => (bool)$ok]));
     }
 
-    // 8. Settings - Telegram Bot configuration & Ad Slider Interval
+    // 9. Exclusive Treatments - List
+    public function exclusive_treatments()
+    {
+        $this->load->model('Exclusive_treatment_model');
+        $treatments = $this->Exclusive_treatment_model->get_all_treatments();
+        if (is_array($treatments)) {
+            foreach ($treatments as $t) {
+                if (is_array($t) && isset($t['id'])) {
+                    $t['token'] = $this->urlcrypt->encode((int)$t['id']) ?: (string)$t['id'];
+                }
+            }
+        }
+        $data = [
+            'title'      => 'Data Rawatan Eksklusif',
+            'treatments' => $treatments,
+            'flash'      => [
+                'success' => $this->session->flashdata('success'),
+                'error'   => $this->session->flashdata('error'),
+            ],
+        ];
+        $this->load->view('admin/exclusive_treatments_list', $data);
+    }
+
+    // 9a. Exclusive Treatment Create (POST)
+    public function exclusive_treatment_create()
+    {
+        if ($this->input->method(true) !== 'POST') {
+            redirect('admin/exclusive_treatments');
+            return;
+        }
+
+        $this->load->model('Exclusive_treatment_model');
+        $this->form_validation->set_rules('name', 'Nama Rawatan', 'required|trim|min_length[2]');
+        $this->form_validation->set_rules('price', 'Harga', 'required|numeric');
+        $this->form_validation->set_rules('currency', 'Mata Uang', 'trim|max_length[10]');
+        $this->form_validation->set_rules('category', 'Kategori', 'required|trim');
+        $this->form_validation->set_rules('description', 'Keterangan', 'trim');
+
+        if (!$this->form_validation->run()) {
+            $this->session->set_flashdata('error', validation_errors());
+            redirect('admin/exclusive_treatments');
+            return;
+        }
+
+        $payload = [
+            'name'        => $this->input->post('name', true),
+            'description' => $this->input->post('description', true),
+            'price'       => (float)$this->input->post('price', true),
+            'currency'    => $this->input->post('currency', true) ?: 'RM',
+            'category'    => $this->input->post('category', true),
+            'is_add_on'   => (int)($this->input->post('is_add_on', true) === '1'),
+            'is_active'   => (int)($this->input->post('is_active', true) !== '0'),
+            'display_order' => (int)$this->input->post('display_order', true) ?: 0,
+        ];
+        $this->Exclusive_treatment_model->insert_treatment($payload);
+        $this->session->set_flashdata('success', 'Rawatan eksklusif berhasil ditambahkan.');
+        redirect('admin/exclusive_treatments');
+    }
+
+    // 9b. Exclusive Treatment Edit (GET shows in list via query, POST saves)
+    public function exclusive_treatment_edit($token)
+    {
+        $this->load->model('Exclusive_treatment_model');
+        $id = ctype_digit((string)$token) ? (int)$token : $this->urlcrypt->decode($token);
+        if (!$id) {
+            $this->session->set_flashdata('error', 'Parameter tidak valid.');
+            redirect('admin/exclusive_treatments');
+            return;
+        }
+
+        if ($this->input->method(true) === 'POST') {
+            $this->form_validation->set_rules('name', 'Nama Rawatan', 'required|trim|min_length[2]');
+            $this->form_validation->set_rules('price', 'Harga', 'required|numeric');
+            $this->form_validation->set_rules('currency', 'Mata Uang', 'trim|max_length[10]');
+            $this->form_validation->set_rules('category', 'Kategori', 'required|trim');
+            $this->form_validation->set_rules('description', 'Keterangan', 'trim');
+
+            if (!$this->form_validation->run()) {
+                $this->session->set_flashdata('error', validation_errors());
+                redirect('admin/exclusive_treatments');
+                return;
+            }
+
+            $payload = [
+                'name'        => $this->input->post('name', true),
+                'description' => $this->input->post('description', true),
+                'price'       => (float)$this->input->post('price', true),
+                'currency'    => $this->input->post('currency', true) ?: 'RM',
+                'category'    => $this->input->post('category', true),
+                'is_add_on'   => (int)($this->input->post('is_add_on', true) === '1'),
+                'is_active'   => (int)($this->input->post('is_active', true) !== '0'),
+                'display_order' => (int)$this->input->post('display_order', true) ?: 0,
+            ];
+            $this->Exclusive_treatment_model->update_treatment($id, $payload);
+            $this->session->set_flashdata('success', 'Rawatan eksklusif berhasil diupdate.');
+            redirect('admin/exclusive_treatments');
+            return;
+        }
+
+        // GET: Render list with edit target id (view can handle inline edit)
+        $treatments = $this->Exclusive_treatment_model->get_all_treatments();
+        $data = [
+            'title'        => 'Data Rawatan Eksklusif',
+            'treatments'   => $treatments,
+            'editItemId'   => $id,
+            'editItem'     => $this->Exclusive_treatment_model->get_treatment_by_id($id),
+            'flash'        => [
+                'success' => $this->session->flashdata('success'),
+                'error'   => $this->session->flashdata('error'),
+            ],
+        ];
+        $this->load->view('admin/exclusive_treatments_list', $data);
+    }
+
+    // 9c. Exclusive Treatment Delete
+    public function exclusive_treatment_delete($token)
+    {
+        $this->load->model('Exclusive_treatment_model');
+        $id = ctype_digit((string)$token) ? (int)$token : $this->urlcrypt->decode($token);
+        if (!$id) {
+            $this->session->set_flashdata('error', 'Parameter tidak valid.');
+            redirect('admin/exclusive_treatments');
+            return;
+        }
+        $this->Exclusive_treatment_model->delete_treatment($id);
+        $this->session->set_flashdata('success', 'Rawatan eksklusif dihapus.');
+        redirect('admin/exclusive_treatments');
+    }
+
+    // 10. Settings - Telegram Bot configuration & Ad Slider Interval
     public function settings()
     {
         // POST: save settings
@@ -917,6 +1048,7 @@ class Admin extends CI_Controller
             $this->form_validation->set_rules('telegram_bot_token', 'Telegram Bot Token', 'required|trim|min_length[20]');
             $this->form_validation->set_rules('telegram_chat_id', 'Telegram Chat ID', 'required|trim|min_length[3]');
             $this->form_validation->set_rules('ad_slider_interval', 'Ad Slider Interval', 'required|integer|greater_than[0]');
+            $this->form_validation->set_rules('whatsapp_phone', 'WhatsApp Phone', 'trim|max_length[20]');
             if (!$this->form_validation->run()) {
                 $this->session->set_flashdata('error', validation_errors());
                 redirect('admin/settings');
@@ -926,11 +1058,13 @@ class Admin extends CI_Controller
             $bot  = $this->input->post('telegram_bot_token', true);
             $chat = $this->input->post('telegram_chat_id', true);
             $slider_interval = (int)$this->input->post('ad_slider_interval', true);
+            $whatsapp_phone = $this->input->post('whatsapp_phone', true);
 
             $ok = $this->Settings_model->set_many([
                 'telegram_bot_token' => $bot,
                 'telegram_chat_id'   => $chat,
                 'ad_slider_interval' => $slider_interval,
+                'whatsapp_phone'     => $whatsapp_phone,
             ]);
 
             if ($ok) {
@@ -943,10 +1077,14 @@ class Admin extends CI_Controller
         }
 
         // GET: render settings page
-        $vals = $this->Settings_model->get_many(['telegram_bot_token','telegram_chat_id', 'ad_slider_interval']);
+        $vals = $this->Settings_model->get_many(['telegram_bot_token','telegram_chat_id', 'ad_slider_interval', 'whatsapp_phone']);
         // Set default slider interval if not set
         if (!isset($vals['ad_slider_interval']) || $vals['ad_slider_interval'] === null) {
             $vals['ad_slider_interval'] = 2; // Default 2 seconds
+        }
+        // Set default WhatsApp phone if not set
+        if (!isset($vals['whatsapp_phone']) || $vals['whatsapp_phone'] === null) {
+            $vals['whatsapp_phone'] = '+60143218026'; // Default WhatsApp number
         }
         $data = [
             'title'    => 'Pengaturan Sistem',

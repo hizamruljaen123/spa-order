@@ -6,6 +6,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'P
 $bot  = isset($settings['telegram_bot_token']) ? (string)$settings['telegram_bot_token'] : '';
 $chat = isset($settings['telegram_chat_id']) ? (string)$settings['telegram_chat_id'] : '';
 $slider_interval = isset($settings['ad_slider_interval']) ? (int)$settings['ad_slider_interval'] : 2;
+$whatsapp_phone = isset($settings['whatsapp_phone']) ? (string)$settings['whatsapp_phone'] : '+60143218026';
 ?>
 
 <!-- Flash messages -->
@@ -74,6 +75,20 @@ $slider_interval = isset($settings['ad_slider_interval']) ? (int)$settings['ad_s
           max="60"
         />
         <p class="mt-1 text-xs text-gray-500">Interval waktu perpindahan gambar iklan dalam detik (1-60 detik).</p>
+      </div>
+
+      <div>
+        <label for="whatsapp_phone" class="block text-sm font-medium text-gray-700">Nomor WhatsApp</label>
+        <input
+          type="text"
+          id="whatsapp_phone"
+          name="whatsapp_phone"
+          value="<?= htmlspecialchars($whatsapp_phone); ?>"
+          class="mt-1 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500"
+          placeholder="+60123456789"
+          maxlength="20"
+        />
+        <p class="mt-1 text-xs text-gray-500">Nomor WhatsApp untuk inquiry produk (gunakan format internasional, contoh: +60143218026).</p>
       </div>
 
       <div class="pt-2">

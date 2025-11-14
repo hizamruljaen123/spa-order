@@ -12,6 +12,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @property Urlcrypt $urlcrypt
  * @property CI_Session $session
  * @property CI_Form_validation $form_validation
+ * @property Exclusive_treatment_model $Exclusive_treatment_model
  * @property CI_Input $input
  * @property CI_Output $output
  */
@@ -22,7 +23,7 @@ class Booking extends CI_Controller
     {
         parent::__construct();
         // Load models and libs (most helpers/libs already autoloaded)
-        $this->load->model(['Package_model', 'Therapist_model', 'Booking_model', 'Invoice_model', 'Settings_model', 'Addon_model']);
+        $this->load->model(['Package_model', 'Therapist_model', 'Booking_model', 'Invoice_model', 'Settings_model', 'Addon_model', 'Exclusive_treatment_model']);
         // Ensure settings table/keys exist even if admin hasn't opened settings page yet
         $this->Settings_model->ensure_bootstrap();
         $this->load->helper(['url', 'form']);
@@ -49,6 +50,7 @@ public function index()
         'packages' => $this->Package_model->get_all(),
         'active_ads' => $active_ads,
         'active_products' => $active_products,
+        'exclusive_treatments_grouped' => $this->Exclusive_treatment_model->get_treatments_grouped(),
         'slider_interval' => (int)$slider_interval * 1000, // Convert to milliseconds for JS
     ];
 
@@ -63,15 +65,46 @@ public function form()
         ? (int)$selected_param
         : null;
 
+    // Load models
+    $this->load->model('Exclusive_treatment_model');
+
+    // Get packages from both sources: regular packages and exclusive treatments
+    $regular_packages = $this->Package_model->get_all();
+    $exclusive_treatments = $this->Exclusive_treatment_model->get_main_treatments_as_packages();
+    $combined_packages = array_merge($regular_packages, $exclusive_treatments);
+
+    // Get add-ons from both sources: regular add-ons and exclusive add-ons
+    $regular_addons = $this->Addon_model->get_active_grouped();
+    $exclusive_addons = $this->Exclusive_treatment_model->get_addon_treatments();
+
+    // Group exclusive add-ons by category
+    $exclusive_addons_grouped = [];
+    foreach ($exclusive_addons as $addon) {
+        $category = $addon->category;
+        if (!isset($exclusive_addons_grouped[$category])) {
+            $exclusive_addons_grouped[$category] = [];
+        }
+        $exclusive_addons_grouped[$category][] = $addon;
+    }
+
+    // Combine regular and exclusive add-ons
+    $addons_grouped = $regular_addons;
+    foreach ($exclusive_addons_grouped as $category => $items) {
+        if (!isset($addons_grouped[$category])) {
+            $addons_grouped[$category] = [];
+        }
+        $addons_grouped[$category] = array_merge($addons_grouped[$category], $items);
+    }
+
     $data = [
         'title'                => 'Spa Booking',
-        'packages'             => $this->Package_model->get_all(),
+        'packages'             => $combined_packages,
         'therapists'           => $this->Therapist_model->get_all(true),
         'success'              => $this->session->flashdata('success'),
         'error'                => $this->session->flashdata('error'),
         'validation'           => validation_errors(),
         'selected_package_id'  => $selected_package_id,
-        'addons_grouped'       => $this->Addon_model->get_active_grouped(),
+        'addons_grouped'       => $addons_grouped,
     ];
 
     // Render booking form view
@@ -106,13 +139,22 @@ public function form()
         $address       = $this->input->post('address', true);
         $package_id    = (int)$this->input->post('package_id', true);
         $date          = $this->input->post('date', true); // YYYY-MM-DD
-        $time          = $this->input->post('time', true); // HH:MM or HH:MM:SS
+        $time          = $this->input->post('time', true); // HH:MM:SS
         $therapist_id  = ($therapist_id_post === null || $therapist_id_post === '') ? null : (int)$therapist_id_post;
         // Optional phone (not stored) for WhatsApp link in notification
         $phone         = $this->input->post('phone', true);
         // Normalize call type (IN/OUT)
         $call_type_raw = strtoupper($this->input->post('call_type', true));
         $call_type     = ($call_type_raw === 'OUT') ? 'OUT' : 'IN';
+
+        // Check availability before proceeding
+        $time_hhmm = substr($time, 0, 5); // Extract HH:MM from HH:MM:SS
+        $booked_times = $this->Booking_model->get_booked_times($date, $therapist_id);
+        if (in_array($time_hhmm, $booked_times)) {
+            $this->session->set_flashdata('error', 'Jam yang dipilih sudah dipesan. Silakan pilih jam lain.');
+            redirect('booking/form');
+            return;
+        }
 
         // Parse selected add-ons (CSV of IDs)
         $addon_ids_csv = (string)$this->input->post('addon_ids', true);
@@ -127,13 +169,61 @@ public function form()
             $addon_ids = array_values(array_unique($addon_ids));
         }
 
-        // Compute base price from package + add-ons total
-        $pkg = $this->Package_model->get_by_id($package_id);
+        // Load models for handling exclusive treatments
+        $this->load->model('Exclusive_treatment_model');
+
+        // Handle package selection - check if it's an exclusive treatment or regular package
         $base = 0.0;
-        if ($pkg) {
-            $base = ($call_type === 'OUT') ? (float)$pkg->price_out_call : (float)$pkg->price_in_call;
+        $pkg = null;
+        $treatment = null;
+
+        if (strpos($package_id, 'treatment_') === 0) {
+            // This is an exclusive treatment
+            $treatment_id = str_replace('treatment_', '', $package_id);
+            $treatment = $this->Exclusive_treatment_model->get_treatment_by_id($treatment_id);
+            if ($treatment) {
+                $base = (float)$treatment['price'];
+            }
+        } else {
+            // This is a regular package
+            $pkg = $this->Package_model->get_by_id($package_id);
+            if ($pkg) {
+                $base = ($call_type === 'OUT') ? (float)$pkg->price_out_call : (float)$pkg->price_in_call;
+            }
         }
-        $addons_total = !empty($addon_ids) ? (float)$this->Addon_model->get_total_for_ids($addon_ids) : 0.0;
+
+        // Compute add-ons total
+        $addons_total = 0.0;
+        $regular_addon_ids = [];
+        $exclusive_addon_ids = [];
+
+        if (!empty($addon_ids)) {
+            foreach ($addon_ids as $addon_id) {
+                if (strpos($addon_id, 'treatment_') === 0) {
+                    // Exclusive addon
+                    $exclusive_addon_ids[] = str_replace('treatment_', '', $addon_id);
+                } else {
+                    // Regular addon
+                    $regular_addon_ids[] = $addon_id;
+                }
+            }
+
+            // Get total for regular add-ons
+            if (!empty($regular_addon_ids)) {
+                $addons_total += (float)$this->Addon_model->get_total_for_ids($regular_addon_ids);
+            }
+
+            // Get total for exclusive add-ons
+            if (!empty($exclusive_addon_ids)) {
+                foreach ($exclusive_addon_ids as $ex_id) {
+                    $ex_addon = $this->Exclusive_treatment_model->get_treatment_by_id($ex_id);
+                    if ($ex_addon) {
+                        $addons_total += (float)$ex_addon['price'];
+                    }
+                }
+            }
+        }
+
         $total_price = round(((float)$base + (float)$addons_total), 2);
 
         // Create booking payload
@@ -193,17 +283,41 @@ public function form()
                 $formUrl = site_url('booking/form');
                 $phoneSan = $phone ? preg_replace('/\D+/', '', (string)$phone) : '';
 
-                // Add-ons list for Telegram
+                // Package/Treatment name - handle exclusive treatments
+                if (strpos($payload['package_id'], 'treatment_') === 0) {
+                    $treatment_id = str_replace('treatment_', '', $payload['package_id']);
+                    $ex_treatment = $this->Exclusive_treatment_model->get_treatment_by_id($treatment_id);
+                    $package = $ex_treatment ? $ex_treatment['name'] : '-';
+                } else {
+                    $package = isset($booking->package_name) && $booking->package_name ? $booking->package_name : '-';
+                }
+
+                // Add-ons list for Telegram (handle both regular and exclusive add-ons)
                 $addon_text = '-';
+                $exclusive_addon_details = [];
+
                 if (!empty($addon_ids)) {
-                    $rows_map = $this->Addon_model->get_by_ids($addon_ids);
+                    $rows_map = $this->Addon_model->get_by_ids($regular_addon_ids); // Only regular add-ons for display
                     $names = [];
-                    foreach ($addon_ids as $aid) {
+
+                    // Add regular add-ons
+                    foreach ($regular_addon_ids as $aid) {
                         if (isset($rows_map[$aid])) {
                             $r = $rows_map[$aid];
                             $names[] = ($r->name ?? '-') . ' (' . (($r->currency ?? 'RM')) . ' ' . number_format((float)($r->price ?? 0), 0, ',', '.') . ')';
                         }
                     }
+
+                    // Add exclusive add-ons and collect details
+                    foreach ($exclusive_addon_ids as $ex_id) {
+                        $ex_addon = $this->Exclusive_treatment_model->get_treatment_by_id($ex_id);
+                        if ($ex_addon) {
+                            $addon_name = ($ex_addon['name'] ?? '-') . ' (' . (($ex_addon['currency'] ?? 'RM')) . ' ' . number_format((float)($ex_addon['price'] ?? 0), 0, ',', '.') . ')';
+                            $names[] = $addon_name;
+                            $exclusive_addon_details[] = $ex_addon;
+                        }
+                    }
+
                     if (!empty($names)) {
                         $addon_text = implode(', ', $names);
                     }
@@ -215,18 +329,27 @@ public function form()
                 $total_fmt = $currency . ' ' . number_format((float)($booking->total_price ?? $total_price), 0, ',', '.');
 
                 $invNo = ($invoice && isset($invoice->invoice_number)) ? $invoice->invoice_number : '-';
+                // Add exclusive treatment and add-on details if any
+                $exclusive_info = "";
+                if (strpos($payload['package_id'], 'treatment_') === 0) {
+                    $exclusive_info .= "\n🔸 *Rawatan Eksklusif*: Ya";
+                }
+                if (!empty($exclusive_addon_details)) {
+                    $exclusive_info .= "\n🔸 *Add-on Eksklusif*: " . count($exclusive_addon_details) . " item";
+                }
+
                 $message = "*SPA BOOKING REQUEST*\n\n"
                          . "👤 *Nama*: {$customer}\n\n"
                          . "🏠 *Alamat*: {$address}\n\n"
                          . "💅 *Paket*: {$package}\n\n"
-                         . "➕ *Add-on*\n: {$addon_text}\n\n"
+                         . "➕ *Add-on*: {$addon_text}\n\n"
                          . "‍♀️ *Terapis*: {$thera}\n\n"
                          . "🏷️ *Tipe*: {$call_type}\n\n"
                          . "📅 *Tanggal*: {$date}\n\n"
                          . "⏰ *Jam*: {$time}\n\n"
                          . "🧾 *Invoice*: {$invNo}\n"
                          . "💵 *Tambahan Add-on*: {$addons_total_fmt}\n"
-                         . "💰 *Total*: {$total_fmt}\n\n"
+                         . "💰 *Total*: {$total_fmt}\n{$exclusive_info}\n\n"
                          . "📞 *Telefon*: " . ($phoneSan ? "[{$phone}](https://wa.me/{$phoneSan})" : "-") . "\n"
                          . "\n[📄 Buka Borang Tempahan]({$formUrl})";
 
@@ -398,12 +521,26 @@ public function form()
         $expires_at = date('Y-m-d H:i:s', strtotime($invoice->created_at.' +1 hour'));
         $expired    = (time() > strtotime($expires_at));
 
+        // Get package/therapy name based on booking
+        $package_name = isset($booking->package_name) ? $booking->package_name : '-';
+   
+        // If it's an exclusive treatment, get the name from the model
+        if ($booking && isset($booking->package_id) && strpos($booking->package_id, 'treatment_') === 0) {
+            $this->load->model('Exclusive_treatment_model');
+            $treatment_id = str_replace('treatment_', '', $booking->package_id);
+            $treatment = $this->Exclusive_treatment_model->get_treatment_by_id($treatment_id);
+            if ($treatment) {
+                $package_name = $treatment['name'];
+            }
+        }
+   
         $data = [
             'title'      => 'Bukti Pemesanan',
             'booking'    => $booking,
             'invoice'    => $invoice,
             'expires_at' => $expires_at,
             'expired'    => $expired,
+            'package_name' => $package_name,
             'success'    => $this->session->flashdata('success'),
             'error'      => $this->session->flashdata('error'),
         ];
@@ -440,12 +577,26 @@ public function form()
             return;
         }
 
+        // Get package/therapy name based on booking
+        $package_name = isset($booking->package_name) ? $booking->package_name : '-';
+   
+        // If it's an exclusive treatment, get the name from the model
+        if ($booking && isset($booking->package_id) && strpos($booking->package_id, 'treatment_') === 0) {
+            $this->load->model('Exclusive_treatment_model');
+            $treatment_id = str_replace('treatment_', '', $booking->package_id);
+            $treatment = $this->Exclusive_treatment_model->get_treatment_by_id($treatment_id);
+            if ($treatment) {
+                $package_name = $treatment['name'];
+            }
+        }
+   
         $tokenEnc = $this->urlcrypt->encode($id) ?: (string)$id;
-
+   
         $data = [
             'title'     => 'Pemesanan Berhasil',
             'booking'   => $booking,
             'invoice'   => $invoice,
+            'package_name' => $package_name,
             'tokenEnc'  => $tokenEnc,
             'success'   => $this->session->flashdata('success'),
             'error'     => $this->session->flashdata('error'),

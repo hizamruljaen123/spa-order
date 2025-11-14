@@ -26,6 +26,7 @@ class Settings_model extends CI_Model
         if ($this->db->table_exists($this->table)) {
             $this->ensure_key('telegram_bot_token', '');
             $this->ensure_key('telegram_chat_id', '');
+            $this->ensure_key('whatsapp_phone', '+60143218026');
         }
     }
 

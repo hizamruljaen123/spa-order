@@ -106,6 +106,9 @@ $fmtRupiah = function($n) {
       <a href="<?= site_url('admin/packages'); ?>" class="inline-flex items-center gap-2 rounded-md border border-gray-300 bg-white text-gray-700 px-4 py-2 text-sm hover:bg-gray-50">
         Urus Pakej Spa
       </a>
+      <a href="<?= site_url('admin/exclusive_treatments'); ?>" class="inline-flex items-center gap-2 rounded-md border border-gray-300 bg-white text-gray-700 px-4 py-2 text-sm hover:bg-gray-50">
+        Urus Rawatan Eksklusif
+      </a>
     </div>
   </div>
 </div>
