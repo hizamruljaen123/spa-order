@@ -122,18 +122,87 @@
               </div>
 
               <div class="mb-4">
-                <label class="block text-sm font-medium text-slate-700" for="therapist_id">Therapist Name (optional)</label>
-                <select class="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary" id="therapist_id" name="therapist_id">
-                  <option value="">Choose therapist (optional)</option>
-                  <?php if (!empty($therapists)): ?>
-                    <?php foreach ($therapists as $t): ?>
-                      <option value="<?= (int)$t->id; ?>">
-                        <?= htmlspecialchars($t->name); ?> <?= !empty($t->status) ? '(' . htmlspecialchars($t->status) . ')' : ''; ?>
-                      </option>
-                    <?php endforeach; ?>
-                  <?php endif; ?>
-                </select>
-                <p class="mt-1 text-xs text-slate-500">Leave blank if not selecting a therapist.</p>
+                <label class="block text-sm font-medium text-slate-700">Therapist Selection (optional)</label>
+                <input type="hidden" id="therapist_id" name="therapist_id" value="">
+                <div class="mt-2 flex items-center justify-between gap-3">
+                  <button type="button" onclick="window.therapistModalOpen()" class="inline-flex items-center rounded-md bg-teal-600 text-white px-3 py-2 text-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                    Choose Therapist
+                  </button>
+                  <div id="therapist_summary" class="text-xs text-slate-600 ml-3 flex-1 text-right truncate">
+                    No therapist selected.
+                  </div>
+                </div>
+                <p class="mt-1 text-xs text-slate-500">Click to view and select from available therapists.</p>
+              </div>
+
+              <!-- Therapist Selection Modal -->
+              <div id="therapistModalOverlay" class="fixed inset-0 z-40 bg-black/40 hidden"></div>
+              <div id="therapistModal"
+                   role="dialog"
+                   aria-modal="true"
+                   aria-hidden="true"
+                   class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+                <div class="w-full max-w-4xl bg-white rounded-xl shadow-xl ring-1 ring-gray-200">
+                  <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-900">Choose Your Therapist</h3>
+                    <button type="button" class="text-gray-400 hover:text-gray-600" onclick="window.therapistModalClose()" aria-label="Close">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                      </svg>
+                    </button>
+                  </div>
+
+                  <div class="p-6 max-h-[70vh] overflow-y-auto">
+                    <?php if (!empty($therapists)): ?>
+                      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <?php foreach ($therapists as $t): ?>
+                          <div class="therapist-card cursor-pointer border-2 border-transparent rounded-lg p-4 hover:border-teal-300 hover:bg-teal-50 transition-colors"
+                               data-therapist-id="<?= (int)$t->id; ?>"
+                               data-therapist-name="<?= htmlspecialchars($t->name); ?>"
+                               data-therapist-status="<?= htmlspecialchars($t->status); ?>">
+                            <div class="text-center">
+                              <div class="mb-3">
+                                <?php if (!empty($t->photo)): ?>
+                                  <img src="<?= base_url($t->photo); ?>"
+                                       alt="<?= htmlspecialchars($t->name); ?>"
+                                       class="w-24 h-24 mx-auto rounded-full object-cover border-2 border-gray-200">
+                                <?php else: ?>
+                                  <div class="w-24 h-24 mx-auto rounded-full bg-gray-200 flex items-center justify-center border-2 border-gray-300">
+                                    <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                    </svg>
+                                  </div>
+                                <?php endif; ?>
+                              </div>
+                              <div class="text-sm font-medium text-slate-800"><?= htmlspecialchars($t->name); ?></div>
+                              <?php if (!empty($t->status)): ?>
+                                <?php
+                                  $statusClass = 'bg-gray-100 text-gray-700';
+                                  if ($t->status === 'available') $statusClass = 'bg-green-100 text-green-700';
+                                  elseif ($t->status === 'busy') $statusClass = 'bg-amber-100 text-amber-700';
+                                  elseif ($t->status === 'off') $statusClass = 'bg-gray-100 text-gray-600';
+                                ?>
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium <?= $statusClass; ?>">
+                                  <?= htmlspecialchars($t->status); ?>
+                                </span>
+                              <?php endif; ?>
+                              <?php if (!empty($t->phone)): ?>
+                                <div class="text-xs text-slate-500 mt-1"><?= htmlspecialchars($t->phone); ?></div>
+                              <?php endif; ?>
+                            </div>
+                          </div>
+                        <?php endforeach; ?>
+                      </div>
+                    <?php else: ?>
+                      <p class="text-sm text-slate-600 text-center py-8">No therapists currently available.</p>
+                    <?php endif; ?>
+                  </div>
+
+                  <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-end gap-3">
+                    <button type="button" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-4 py-2 text-sm hover:bg-gray-50" onclick="window.therapistModalClose()">Cancel</button>
+                    <button type="button" class="inline-flex items-center rounded-md bg-teal-600 text-white px-4 py-2 text-sm hover:bg-teal-700" onclick="window.therapistModalClear()">Clear Selection</button>
+                  </div>
+                </div>
               </div>
 
               <div class="mb-4">
@@ -234,28 +303,36 @@
 
               <script>
                 (function(){
-                  var hidden = document.getElementById('addon_ids');
-                  var overlay = document.getElementById('aoSelOverlay');
-                  var modal = document.getElementById('aoSelModal');
-                  var summary = document.getElementById('addon_summary');
+                  // Add-on modal elements
+                  var addonHidden = document.getElementById('addon_ids');
+                  var addonOverlay = document.getElementById('aoSelOverlay');
+                  var addonModal = document.getElementById('aoSelModal');
+                  var addonSummary = document.getElementById('addon_summary');
 
-                  function openModal() {
-                    if (!modal || !overlay) return;
-                    modal.classList.remove('hidden');
-                    modal.classList.add('flex');
-                    overlay.classList.remove('hidden');
-                    modal.setAttribute('aria-hidden', 'false');
+                  // Therapist modal elements
+                  var therapistHidden = document.getElementById('therapist_id');
+                  var therapistOverlay = document.getElementById('therapistModalOverlay');
+                  var therapistModal = document.getElementById('therapistModal');
+                  var therapistSummary = document.getElementById('therapist_summary');
+
+                  // Add-on modal functions
+                  function openAddonModal() {
+                    if (!addonModal || !addonOverlay) return;
+                    addonModal.classList.remove('hidden');
+                    addonModal.classList.add('flex');
+                    addonOverlay.classList.remove('hidden');
+                    addonModal.setAttribute('aria-hidden', 'false');
                   }
-                  function closeModal() {
-                    if (!modal || !overlay) return;
-                    modal.classList.add('hidden');
-                    modal.classList.remove('flex');
-                    overlay.classList.add('hidden');
-                    modal.setAttribute('aria-hidden', 'true');
+                  function closeAddonModal() {
+                    if (!addonModal || !addonOverlay) return;
+                    addonModal.classList.add('hidden');
+                    addonModal.classList.remove('flex');
+                    addonOverlay.classList.add('hidden');
+                    addonModal.setAttribute('aria-hidden', 'true');
                   }
-                  function applySelection() {
-                    if (!modal) return;
-                    var boxes = modal.querySelectorAll('.ao-item:checked');
+                  function applyAddonSelection() {
+                    if (!addonModal) return;
+                    var boxes = addonModal.querySelectorAll('.ao-item:checked');
                     var ids = [];
                     var names = [];
                     var total = 0;
@@ -270,32 +347,215 @@
                         currency = b.getAttribute('data-currency') || currency;
                       }
                     });
-                    if (hidden) hidden.value = ids.join(',');
-                    if (summary) {
+                    if (addonHidden) addonHidden.value = ids.join(',');
+                    if (addonSummary) {
                       if (ids.length) {
                         try {
                           var fmt = new Intl.NumberFormat('id-ID');
-                          summary.textContent = names.join(', ') + ' • Add-on: ' + currency + ' ' + fmt.format(Math.round(total));
+                          addonSummary.textContent = names.join(', ') + ' • Add-on: ' + currency + ' ' + fmt.format(Math.round(total));
                         } catch (e) {
-                          summary.textContent = names.join(', ') + ' • Add-on: ' + currency + ' ' + Math.round(total);
+                          addonSummary.textContent = names.join(', ') + ' • Add-on: ' + currency + ' ' + Math.round(total);
                         }
                       } else {
-                        summary.textContent = 'No add-on selected.';
+                        addonSummary.textContent = 'No add-on selected.';
                       }
                     }
-                    closeModal();
+                    closeAddonModal();
                   }
 
-                  window.aoSelOpen = openModal;
-                  window.aoSelClose = closeModal;
-                  window.aoSelApply = applySelection;
+                  // Therapist modal functions
+                  function openTherapistModal() {
+                    if (!therapistModal || !therapistOverlay) return;
+                    therapistModal.classList.remove('hidden');
+                    therapistModal.classList.add('flex');
+                    therapistOverlay.classList.remove('hidden');
+                    therapistModal.setAttribute('aria-hidden', 'false');
+                  }
+                  function closeTherapistModal() {
+                    if (!therapistModal || !therapistOverlay) return;
+                    therapistModal.classList.add('hidden');
+                    therapistModal.classList.remove('flex');
+                    therapistOverlay.classList.add('hidden');
+                    therapistModal.setAttribute('aria-hidden', 'true');
+                  }
+                  function clearTherapistSelection() {
+                    if (therapistHidden) therapistHidden.value = '';
+                    if (therapistSummary) therapistSummary.textContent = 'No therapist selected.';
+                    
+                    // Remove selection styling from all cards
+                    var cards = therapistModal.querySelectorAll('.therapist-card');
+                    cards.forEach(function(card) {
+                      card.classList.remove('border-teal-500', 'bg-teal-50');
+                      card.classList.add('border-transparent');
+                    });
+                  }
+                  function selectTherapist(card) {
+                    var therapistId = card.getAttribute('data-therapist-id');
+                    var therapistName = card.getAttribute('data-therapist-name');
+                    var therapistStatus = card.getAttribute('data-therapist-status');
+                    
+                    if (therapistHidden) therapistHidden.value = therapistId;
+                    if (therapistSummary) therapistSummary.textContent = therapistName + ' (' + therapistStatus + ')';
+                    
+                    // Remove selection styling from all cards
+                    var cards = therapistModal.querySelectorAll('.therapist-card');
+                    cards.forEach(function(c) {
+                      c.classList.remove('border-teal-500', 'bg-teal-50');
+                      c.classList.add('border-transparent');
+                    });
+                    
+                    // Add selection styling to selected card
+                    card.classList.remove('border-transparent');
+                    card.classList.add('border-teal-500', 'bg-teal-50');
+                    
+                    // Close modal after selection
+                    closeTherapistModal();
+                  }
 
+                  // Global functions
+                  window.aoSelOpen = openAddonModal;
+                  window.aoSelClose = closeAddonModal;
+                  window.aoSelApply = applyAddonSelection;
+                  window.therapistModalOpen = openTherapistModal;
+                  window.therapistModalClose = closeTherapistModal;
+                  window.therapistModalClear = clearTherapistSelection;
+
+                  // Add-on modal event listeners
                   document.addEventListener('click', function(e){
-                    if (e.target && e.target.id === 'aoSelOverlay') closeModal();
+                    if (e.target && e.target.id === 'aoSelOverlay') closeAddonModal();
                   });
                   document.addEventListener('keydown', function(e){
-                    if (e.key === 'Escape') closeModal();
+                    if (e.key === 'Escape') closeAddonModal();
                   });
+
+                  // Therapist modal event listeners
+                  document.addEventListener('click', function(e){
+                    if (e.target && e.target.id === 'therapistModalOverlay') closeTherapistModal();
+                    
+                    // Handle therapist card clicks
+                    if (e.target.closest('.therapist-card')) {
+                      var card = e.target.closest('.therapist-card');
+                      selectTherapist(card);
+                    }
+                    
+                    // Handle time slot clicks
+                    if (e.target.closest('.time-slot') && !e.target.closest('.time-slot').classList.contains('booked')) {
+                      var slot = e.target.closest('.time-slot');
+                      selectTimeSlot(slot);
+                    }
+                  });
+                  document.addEventListener('keydown', function(e){
+                    if (e.key === 'Escape') closeTherapistModal();
+                  });
+
+                  // Time availability checking
+                  var bookedTimes = [];
+                  
+                  function checkTimeAvailability() {
+                    var dateInput = document.getElementById('date');
+                    if (!dateInput || !dateInput.value) return;
+                    
+                    var selectedDate = dateInput.value;
+                    var message = document.getElementById('timeSlotMessage');
+                    
+                    // Show loading state
+                    if (message) {
+                      message.innerHTML = '<div class="text-blue-600">Checking availability...</div>';
+                    }
+                    
+                    // Fetch availability from backend
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('GET', '<?= site_url('booking/availability'); ?>?date=' + encodeURIComponent(selectedDate), true);
+                    xhr.onreadystatechange = function() {
+                      if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
+                          try {
+                            var response = JSON.parse(xhr.responseText);
+                            bookedTimes = response.booked || [];
+                            updateAvailabilityMessage();
+                          } catch (e) {
+                            console.error('Error parsing availability response:', e);
+                            showTimeMessage('Error checking availability. Please try again.', 'error');
+                          }
+                        } else {
+                          console.error('Error fetching availability:', xhr.status);
+                          showTimeMessage('Error checking availability. Please try again.', 'error');
+                        }
+                      }
+                    };
+                    xhr.send();
+                  }
+                  
+                  function validateTimeSelection() {
+                    var timeInput = document.getElementById('time');
+                    if (!timeInput || !timeInput.value) return;
+                    
+                    var selectedTime = timeInput.value; // Format: HH:MM
+                    var isBooked = bookedTimes.indexOf(selectedTime) !== -1;
+                    
+                    if (isBooked) {
+                      alert('This time slot is already booked. Please select another time.');
+                      timeInput.value = '';
+                      showTimeMessage('Selected time is not available. Please choose another time.', 'error');
+                    } else {
+                      showTimeMessage('Selected time: ' + selectedTime + ' - Available', 'success');
+                    }
+                  }
+                  
+                  function updateAvailabilityMessage() {
+                    var message = document.getElementById('timeSlotMessage');
+                    if (!message) return;
+                    
+                    if (bookedTimes.length > 0) {
+                      var bookedList = bookedTimes.join(', ');
+                      showTimeMessage('Booked times: ' + bookedList + '. Please choose an available time.', 'warning');
+                    } else {
+                      showTimeMessage('All time slots are available for this date.', 'success');
+                    }
+                  }
+                  
+                  function showTimeMessage(text, type) {
+                    var message = document.getElementById('timeSlotMessage');
+                    if (!message) return;
+                    
+                    var className = '';
+                    switch (type) {
+                      case 'success':
+                        className = 'text-green-600';
+                        break;
+                      case 'error':
+                        className = 'text-red-600';
+                        break;
+                      case 'warning':
+                        className = 'text-amber-600';
+                        break;
+                      default:
+                        className = 'text-slate-600';
+                    }
+                    
+                    message.innerHTML = '<div class="' + className + '">' + text + '</div>';
+                  }
+                  
+                  // Add date change listener
+                  var dateInput = document.getElementById('date');
+                  if (dateInput) {
+                    dateInput.addEventListener('change', function() {
+                      // Clear time selection when date changes
+                      var timeInput = document.getElementById('time');
+                      if (timeInput) timeInput.value = '';
+                      
+                      // Check availability for new date
+                      checkTimeAvailability();
+                    });
+                  }
+                  
+                  // Add time change listener for validation
+                  var timeInput = document.getElementById('time');
+                  if (timeInput) {
+                    timeInput.addEventListener('change', function() {
+                      validateTimeSelection();
+                    });
+                  }
                 })();
               </script>
 
@@ -331,18 +591,18 @@
 
               <div class="mb-4">
                 <label class="required block text-sm font-medium text-slate-700" for="time">Select Time</label>
-                <select class="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary" id="time" name="time" required>
-                  <option value="">Select time</option>
-                  <?php
-                  $start = strtotime('09:00');
-                  $end = strtotime('21:00');
-                  for ($t = $start; $t <= $end; $t += 3600) { // hourly
-                      $time_option = date('H:i', $t);
-                      echo '<option value="' . $time_option . ':00">' . $time_option . '</option>';
-                  }
-                  ?>
-                </select>
-                <p class="mt-1 text-xs text-slate-500">Select available time. If the time is already booked, it will be informed upon submission.</p>
+                <input
+                  type="time"
+                  class="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary"
+                  id="time"
+                  name="time"
+                  required
+                  step="3600"
+                  min="09:00"
+                  max="21:00"
+                >
+                <div id="timeSlotMessage" class="mt-3 text-sm"></div>
+                <p class="mt-1 text-xs text-slate-500">Select a time. If the time is already booked, you will be alerted.</p>
               </div>
 
               <!-- No dynamic slot loading needed anymore -->
