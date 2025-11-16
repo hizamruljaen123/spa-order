@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <title><?= isset($title) ? htmlspecialchars($title) : 'Success Booking'; ?></title>
@@ -16,8 +16,8 @@
 <body class="bg-slate-50">
   <div class="max-w-3xl mx-auto px-4 py-8">
     <header class="mb-6">
-      <h1 class="text-2xl md:text-3xl font-bold text-slate-800">Pemesanan Berhasil</h1>
-      <p class="text-slate-600 mt-1">Terima kasih. Gunakan tombol WhatsApp di bawah untuk menghubungi admin. Halaman ini akan otomatis mengarahkan ke WhatsApp dalam 5 menit.</p>
+      <h1 class="text-2xl md:text-3xl font-bold text-slate-800">Booking Successful</h1>
+      <p class="text-slate-600 mt-1">Thank you. Use the WhatsApp button below to contact admin. This page will automatically redirect to WhatsApp in 5 minutes.</p>
     </header>
 
     <?php if (!empty($error)): ?>
@@ -36,7 +36,7 @@
       <div class="p-6 md:p-8">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="rounded-lg border border-slate-200 p-4">
-            <div class="text-sm text-slate-500">Nomor Invoice</div>
+            <div class="text-sm text-slate-500">Invoice Number</div>
             <div class="mt-1 font-semibold text-slate-800"><?= htmlspecialchars($invoice->invoice_number ?? '-'); ?></div>
           </div>
           <div class="rounded-lg border border-slate-200 p-4">
@@ -53,27 +53,27 @@
 
         <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="rounded-lg border border-slate-200 p-4">
-            <div class="text-sm text-slate-500">Detail Pemesan</div>
+            <div class="text-sm text-slate-500">Customer Details</div>
             <div class="mt-1 text-slate-800">
               <div><?= htmlspecialchars($booking->customer_name ?? '-'); ?></div>
               <div class="text-sm text-slate-600"><?= htmlspecialchars($booking->address ?? '-'); ?></div>
             </div>
           </div>
           <div class="rounded-lg border border-slate-200 p-4">
-            <div class="text-sm text-slate-500">Detail Jadwal</div>
+            <div class="text-sm text-slate-500">Schedule Details</div>
             <div class="mt-1 text-slate-800">
-              <div>Tanggal: <?= htmlspecialchars($booking->date ?? '-'); ?></div>
-              <div>Jam: <?= isset($booking->time) ? htmlspecialchars(substr($booking->time,0,5)) : '-'; ?></div>
-              <div>Tipe: <?= (isset($booking->call_type) && $booking->call_type === 'OUT') ? 'Luar Premis' : 'Di Premis'; ?></div>
+              <div>Date: <?= htmlspecialchars($booking->date ?? '-'); ?></div>
+              <div>Time: <?= isset($booking->time) ? htmlspecialchars(substr($booking->time,0,5)) : '-'; ?></div>
+              <div>Type: <?= (isset($booking->call_type) && $booking->call_type === 'OUT') ? 'Out Premise' : 'At Premise'; ?></div>
             </div>
           </div>
         </div>
 
         <div class="mt-6 rounded-lg border border-slate-200 p-4">
-          <div class="text-sm text-slate-500">Paket</div>
+          <div class="text-sm text-slate-500">Package</div>
           <div class="mt-1 text-slate-800">
             <div><?= htmlspecialchars($booking->package_name ?? '-'); ?></div>
-            <div class="text-sm text-slate-600">Terapis: <?= htmlspecialchars($booking->therapist_name ?? 'Tidak ditentukan'); ?></div>
+            <div class="text-sm text-slate-600">Therapist: <?= htmlspecialchars($booking->therapist_name ?? 'Not specified'); ?></div>
           </div>
         </div>
 
@@ -83,35 +83,35 @@
             $cust   = isset($booking->customer_name) ? $booking->customer_name : '-';
             $addr   = isset($booking->address) ? $booking->address : '-';
             $pack   = isset($booking->package_name) ? $booking->package_name : '-';
-            $thera  = (isset($booking->therapist_name) && $booking->therapist_name) ? $booking->therapist_name : 'Tidak ditentukan';
-            $ctype  = (isset($booking->call_type) && $booking->call_type === 'OUT') ? 'Luar Premis' : 'Di Premis';
+            $thera  = (isset($booking->therapist_name) && $booking->therapist_name) ? $booking->therapist_name : 'Not specified';
+            $ctype  = (isset($booking->call_type) && $booking->call_type === 'OUT') ? 'Out Premise' : 'At Premise';
             $dateV  = isset($booking->date) ? $booking->date : '-';
             $timeV  = isset($booking->time) ? substr($booking->time,0,5) : '-';
             $inv    = isset($invoice->invoice_number) ? $invoice->invoice_number : '-';
             $waMessage = rawurlencode(
-              "Halo Admin, saya ingin konfirmasi pemesanan:\n"
-              . "Nama: {$cust}\n"
-              . "Alamat: {$addr}\n"
-              . "Paket: {$pack}\n"
-              . "Terapis: {$thera}\n"
-              . "Tipe: {$ctype}\n"
-              . "Tanggal: {$dateV}\n"
-              . "Jam: {$timeV}\n"
+              "Hello Admin, I want to confirm my booking:\n"
+              . "Name: {$cust}\n"
+              . "Address: {$addr}\n"
+              . "Package: {$pack}\n"
+              . "Therapist: {$thera}\n"
+              . "Type: {$ctype}\n"
+              . "Date: {$dateV}\n"
+              . "Time: {$timeV}\n"
               . "Invoice: {$inv}"
             );
           ?>
           <a target="_blank" rel="noopener" href="https://wa.me/<?= $waAdmin; ?>?text=<?= $waMessage; ?>" class="inline-flex items-center rounded-md bg-green-600 px-4 py-2 text-white font-semibold shadow-sm hover:bg-green-700">
-            Hubungi Admin via WhatsApp
+            Contact Admin via WhatsApp
           </a>
           <?php if (!empty($tokenEnc)): ?>
             <a href="<?= site_url('booking/invoice/'.$tokenEnc); ?>" class="inline-flex items-center rounded-md border border-slate-300 bg-white px-4 py-2 text-slate-700 font-semibold shadow-sm hover:bg-slate-50">
-              Lihat Bukti Pemesanan
+              View Order Proof
             </a>
           <?php endif; ?>
         </div>
 
         <div class="mt-4 text-xs text-slate-500">
-          Halaman ini akan otomatis mengarahkan ke WhatsApp dalam 5 menit untuk memudahkan konfirmasi.
+          This page will automatically redirect to WhatsApp in 5 minutes for easy confirmation.
         </div>
       </div>
     </section>

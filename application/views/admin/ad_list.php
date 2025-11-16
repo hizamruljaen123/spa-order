@@ -1,5 +1,5 @@
 <?php
-$this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'Kelola Iklan']);
+$this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'Manage Ads']);
 ?>
 
 <?php if (!empty($flash['success'])): ?>
@@ -13,15 +13,15 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'K
   </div>
 <?php endif; ?>
 
-<!-- Toolbar: Tambah Iklan -->
+<!-- Toolbar: Add Ad -->
 <div class="mb-4 flex justify-end">
-  <a href="<?= site_url('admin/ad_management/create'); ?>" class="inline-flex items-center rounded-md bg-sky-600 text-white px-4 py-2 text-sm hover:bg-sky-700">Tambah Iklan</a>
+  <a href="<?= site_url('admin/ad_management/create'); ?>" class="inline-flex items-center rounded-md bg-sky-600 text-white px-4 py-2 text-sm hover:bg-sky-700">Add Ad</a>
 </div>
 
 <!-- List Advertisements -->
 <div class="rounded-lg border border-gray-200 bg-white shadow-sm">
   <div class="px-5 py-3 border-b border-gray-200">
-    <h2 class="text-base font-semibold text-gray-900">Senarai Iklan</h2>
+    <h2 class="text-base font-semibold text-gray-900">Ad List</h2>
   </div>
   <div class="p-0">
     <div class="overflow-x-auto">
@@ -29,12 +29,12 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'K
         <thead class="bg-gray-50">
           <tr class="text-left text-sm text-gray-600">
             <th class="px-5 py-3 w-12">#</th>
-            <th class="px-5 py-3">Tajuk</th>
-            <th class="px-5 py-3 w-32">Imej</th>
-            <th class="px-5 py-3">Pautan</th>
+            <th class="px-5 py-3">Title</th>
+            <th class="px-5 py-3 w-32">Image</th>
+            <th class="px-5 py-3">Link</th>
             <th class="px-5 py-3 w-24">Status</th>
-            <th class="px-5 py-3 w-16">Tertib</th>
-            <th class="px-5 py-3 w-40 text-right">Tindakan</th>
+            <th class="px-5 py-3 w-16">Order</th>
+            <th class="px-5 py-3 w-40 text-right">Actions</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-200">
@@ -64,7 +64,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'K
                     else $badgeClass = 'bg-gray-400';
                   ?>
                   <span class="inline-flex items-center px-2 py-1 rounded text-white text-xs <?= $badgeClass; ?>">
-                    <?= $ad['is_active'] ? 'Aktif' : 'Tidak Aktif'; ?>
+                    <?= $ad['is_active'] ? 'Active' : 'Inactive'; ?>
                   </span>
                 </td>
                 <td class="px-5 py-3">
@@ -73,14 +73,14 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'K
                   </span>
                 </td>
                 <td class="px-5 py-3 text-right">
-                  <a class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-3 py-1.5 text-xs hover:bg-gray-50" href="<?= site_url('admin/ad_management/edit/' . $ad['id']); ?>">Sunting</a>
-                  <a class="inline-flex items-center rounded-md border border-red-300 bg-white text-red-600 px-3 py-1.5 text-xs hover:bg-red-50" href="<?= site_url('admin/ad_management/delete/' . $ad['id']); ?>" onclick="return confirm('Padam iklan ini?');">Padam</a>
+                  <a class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-3 py-1.5 text-xs hover:bg-gray-50" href="<?= site_url('admin/ad_management/edit/' . $ad['id']); ?>">Edit</a>
+                  <a class="inline-flex items-center rounded-md border border-red-300 bg-white text-red-600 px-3 py-1.5 text-xs hover:bg-red-50" href="<?= site_url('admin/ad_management/delete/' . $ad['id']); ?>" onclick="return confirm('Delete this ad?');">Delete</a>
                 </td>
               </tr>
             <?php endforeach; ?>
           <?php else: ?>
             <tr>
-              <td colspan="7" class="px-5 py-6 text-center text-gray-500">Belum ada data iklan.</td>
+              <td colspan="7" class="px-5 py-6 text-center text-gray-500">No ad data available.</td>
             </tr>
           <?php endif; ?>
         </tbody>

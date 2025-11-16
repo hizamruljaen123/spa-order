@@ -1,14 +1,14 @@
 <?php
-$this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'Laporan Pendapatan']);
+$this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'Revenue Report']);
 ?>
 <!-- Filters -->
 <div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
   <div>
-    <h2 class="text-base font-semibold text-gray-900">Laporan Pendapatan</h2>
-    <p class="text-sm text-gray-600">Analisis pendapatan bulanan dan jumlah tempahan.</p>
+    <h2 class="text-base font-semibold text-gray-900">Revenue Report</h2>
+    <p class="text-sm text-gray-600">Monthly revenue analysis and total bookings.</p>
   </div>
   <div class="flex items-center gap-3">
-    <label for="yearSelect" class="text-sm text-gray-700">Tahun</label>
+    <label for="yearSelect" class="text-sm text-gray-700">Year</label>
     <select id="yearSelect" class="rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-sm">
       <?php
       $currentYear = isset($year) ? (int)$year : (int)date('Y');
@@ -17,31 +17,31 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'L
         <option value="<?= $y; ?>" <?= $y === $currentYear ? 'selected' : ''; ?>><?= $y; ?></option>
       <?php endfor; ?>
     </select>
-    <button id="refreshBtn" class="inline-flex items-center rounded-md bg-sky-600 text-white px-3 py-2 text-sm hover:bg-sky-700">Segar semula</button>
+    <button id="refreshBtn" class="inline-flex items-center rounded-md bg-sky-600 text-white px-3 py-2 text-sm hover:bg-sky-700">Refresh</button>
   </div>
 </div>
 
 <!-- Summary cards -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
   <div class="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
-    <div class="text-xs uppercase tracking-wide text-emerald-600 font-semibold">Jumlah Pendapatan Tahun Ini</div>
-    <div id="sumRevenue" class="mt-2 text-4xl font-bold text-gray-900">Rp 0</div>
-    <p class="mt-1 text-gray-500 text-sm">Total dari semua bulan pada tahun terpilih.</p>
+    <div class="text-xs uppercase tracking-wide text-emerald-600 font-semibold">Total Revenue This Year</div>
+    <div id="sumRevenue" class="mt-2 text-4xl font-bold text-gray-900">RM 0</div>
+    <p class="mt-1 text-gray-500 text-sm">Total from all months in selected year.</p>
   </div>
   <div class="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
-    <div class="text-xs uppercase tracking-wide text-sky-600 font-semibold">Jumlah Tempahan Tahun Ini</div>
+    <div class="text-xs uppercase tracking-wide text-sky-600 font-semibold">Total Bookings This Year</div>
     <div id="sumBooking" class="mt-2 text-4xl font-bold text-gray-900">0</div>
-    <p class="mt-1 text-gray-500 text-sm">Jumlah tempahan sepanjang tahun.</p>
+    <p class="mt-1 text-gray-500 text-sm">Total bookings throughout the year.</p>
   </div>
 </div>
 
 <!-- Chart -->
 <div class="rounded-lg border border-gray-200 bg-white shadow-sm mb-6">
   <div class="px-5 py-3 border-b border-gray-200 flex items-center justify-between">
-    <span class="text-sm font-medium text-gray-900">Grafik Pendapatan Bulanan</span>
+    <span class="text-sm font-medium text-gray-900">Monthly Revenue Chart</span>
     <label class="inline-flex items-center gap-2 text-sm text-gray-700">
       <input type="checkbox" id="toggleBooking" class="rounded border-gray-300 text-sky-600 focus:ring-sky-500" checked>
-      Tunjukkan Jumlah Tempahan
+      Show Total Bookings
     </label>
   </div>
   <div class="p-5">
@@ -52,16 +52,16 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'L
 <!-- Table data -->
 <div class="rounded-lg border border-gray-200 bg-white shadow-sm">
   <div class="px-5 py-3 border-b border-gray-200">
-    <h3 class="text-sm font-medium text-gray-900">Perincian Bulanan</h3>
+    <h3 class="text-sm font-medium text-gray-900">Monthly Details</h3>
   </div>
   <div class="p-0">
     <div class="overflow-x-auto">
       <table class="min-w-full table-auto" id="detailTable">
         <thead class="bg-gray-50">
           <tr class="text-left text-sm text-gray-600">
-            <th class="px-5 py-3 w-20">Bulan</th>
-            <th class="px-5 py-3 text-right w-56">Pendapatan</th>
-            <th class="px-5 py-3 text-center w-40">Tempahan</th>
+            <th class="px-5 py-3 w-20">Month</th>
+            <th class="px-5 py-3 text-right w-56">Revenue</th>
+            <th class="px-5 py-3 text-center w-40">Bookings</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-200"><!-- dynamic --></tbody>
@@ -128,7 +128,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'L
         datasets: [
           {
             type: 'bar',
-            label: 'Pendapatan (RM)',
+            label: 'Revenue (RM)',
             data: revenue,
             backgroundColor: 'rgba(16, 185, 129, 0.6)',  // emerald-500
             borderColor: 'rgba(16, 185, 129, 1)',
@@ -137,7 +137,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'L
           },
           {
             type: 'line',
-            label: 'Jumlah Booking',
+            label: 'Total Bookings',
             data: booking,
             backgroundColor: 'rgba(14, 165, 233, 0.4)', // sky-500
             borderColor: 'rgba(14, 165, 233, 1)',
@@ -157,7 +157,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'L
           tooltip: {
             callbacks: {
               label: function(ctx) {
-                if (ctx.dataset.label.includes('Pendapatan')) {
+                if (ctx.dataset.label.includes('Revenue')) {
                   return ctx.dataset.label + ': ' + formatRupiah(ctx.parsed.y);
                 }
                 return ctx.dataset.label + ': ' + ctx.parsed.y;
@@ -201,8 +201,8 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'L
         renderChart(labels, revenue, booking);
       })
       .catch(err => {
-        console.error('Gagal memuatkan data laporan:', err);
-        alert('Gagal memuatkan data laporan. Cuba lagi.');
+        console.error('Failed to load report data:', err);
+        alert('Failed to load report data. Please try again.');
       });
   }
 
@@ -219,17 +219,17 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'L
 })();
 </script>
 
-<!-- Tambahan Analitik: Jam/Hari Tersibuk, Heatmap, Top Terapis & Pakej -->
+<!-- Additional Analytics: Peak Hours/Days, Heatmap, Top Therapists & Packages -->
 <div class="mt-6 grid grid-cols-1 md:grid-cols-12 gap-6">
-  <!-- Jam tersibuk (rata-rata tahunan) -->
+  <!-- Peak hours (annual average) -->
   <div class="rounded-lg md:col-span-6 border border-gray-200 bg-white shadow-sm">
     <div class="px-5 py-3 border-b border-gray-200 flex items-center justify-between">
       <div>
-        <h3 class="text-sm font-medium text-gray-900">Distribusi Pesanan per Jam</h3>
-        <p class="text-xs text-gray-500">Rata-rata jumlah pesanan per jam sepanjang tahun terpilih.</p>
+        <h3 class="text-sm font-medium text-gray-900">Order Distribution per Hour</h3>
+        <p class="text-xs text-gray-500">Average number of orders per hour throughout the selected year.</p>
       </div>
       <div class="text-xs">
-        <span class="text-gray-600">Jam Tersibuk:</span>
+        <span class="text-gray-600">Peak Hour:</span>
         <span id="busiestHourLabel" class="ml-2 inline-flex items-center rounded bg-amber-100 px-2 py-1 font-semibold text-amber-800">-</span>
       </div>
     </div>
@@ -239,8 +239,8 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'L
         <table class="min-w-full table-auto text-sm" id="hourTable">
           <thead class="bg-gray-50">
             <tr class="text-left text-gray-600">
-              <th class="px-5 py-3 w-32">Jam</th>
-              <th class="px-5 py-3 text-center w-40">Jumlah Pesanan</th>
+              <th class="px-5 py-3 w-32">Hour</th>
+              <th class="px-5 py-3 text-center w-40">Total Orders</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-200"></tbody>
@@ -249,15 +249,15 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'L
     </div>
   </div>
 
-  <!-- Hari paling banyak order -->
+  <!-- Peak order day -->
   <div class="rounded-lg md:col-span-6 border border-gray-200 bg-white shadow-sm">
     <div class="px-5 py-3 border-b border-gray-200 flex items-center justify-between">
       <div>
-        <h3 class="text-sm font-medium text-gray-900">Distribusi Pesanan per Hari</h3>
-        <p class="text-xs text-gray-500">Jumlah pesanan per hari (Isnin s/d Ahad) sepanjang tahun terpilih.</p>
+        <h3 class="text-sm font-medium text-gray-900">Order Distribution per Day</h3>
+        <p class="text-xs text-gray-500">Number of orders per day (Monday to Sunday) throughout the selected year.</p>
       </div>
       <div class="text-xs">
-        <span class="text-gray-600">Hari Tersibuk:</span>
+        <span class="text-gray-600">Peak Day:</span>
         <span id="busiestDayLabel" class="ml-2 inline-flex items-center rounded bg-emerald-100 px-2 py-1 font-semibold text-emerald-800">-</span>
       </div>
     </div>
@@ -267,8 +267,8 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'L
         <table class="min-w-full table-auto text-sm" id="weekdayTable">
           <thead class="bg-gray-50">
             <tr class="text-left text-gray-600">
-              <th class="px-5 py-3 w-48">Hari</th>
-              <th class="px-5 py-3 text-center w-40">Jumlah Pesanan</th>
+              <th class="px-5 py-3 w-48">Day</th>
+              <th class="px-5 py-3 text-center w-40">Total Orders</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-200"></tbody>
@@ -277,28 +277,28 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'L
     </div>
   </div>
 
-  <!-- Heatmap Hari x Jam -->
+  <!-- Day x Hour Heatmap -->
   <div class="rounded-lg md:col-span-12 border border-gray-200 bg-white shadow-sm">
     <div class="px-5 py-3 border-b border-gray-200 flex items-center justify-between">
       <div>
-        <h3 class="text-sm font-medium text-gray-900">Heatmap Hari x Jam</h3>
-        <p class="text-xs text-gray-500">Kepekatan pesanan pada setiap kombinasi hari dan jam.</p>
+        <h3 class="text-sm font-medium text-gray-900">Day x Hour Heatmap</h3>
+        <p class="text-xs text-gray-500">Order density for each day and hour combination.</p>
       </div>
       <div class="text-xs">
-        <span class="text-gray-600">Slot Tersibuk:</span>
+        <span class="text-gray-600">Peak Slot:</span>
         <span id="busiestSlotLabel" class="ml-2 inline-flex items-center rounded bg-rose-100 px-2 py-1 font-semibold text-rose-800">-</span>
       </div>
     </div>
     <div class="p-5">
       <div id="heatmapContainer" class="overflow-x-auto"></div>
-      <p class="mt-2 text-[11px] text-gray-500">Semakin gelap warna, semakin tinggi jumlah pesanan pada slot tersebut.</p>
+      <p class="mt-2 text-[11px] text-gray-500">Darker colors indicate higher order volume for that time slot.</p>
     </div>
   </div>
 
-  <!-- Top Terapis -->
+  <!-- Top Therapists -->
   <div class="rounded-lg md:col-span-6 border border-gray-200 bg-white shadow-sm">
     <div class="px-5 py-3 border-b border-gray-200">
-      <h3 class="text-sm font-medium text-gray-900">Terapis dengan Pesanan Terbanyak</h3>
+      <h3 class="text-sm font-medium text-gray-900">Top Therapists by Orders</h3>
     </div>
     <div class="p-5 grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
@@ -308,8 +308,8 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'L
         <table class="min-w-full table-auto text-sm" id="topTherapistTable">
           <thead class="bg-gray-50">
             <tr class="text-left text-gray-600">
-              <th class="px-5 py-3">Terapis</th>
-              <th class="px-5 py-3 text-center w-40">Jumlah Pesanan</th>
+              <th class="px-5 py-3">Therapist</th>
+              <th class="px-5 py-3 text-center w-40">Total Orders</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-200"></tbody>
@@ -318,10 +318,10 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'L
     </div>
   </div>
 
-  <!-- Top Pakej -->
+  <!-- Top Packages -->
   <div class="rounded-lg md:col-span-6 border border-gray-200 bg-white shadow-sm">
     <div class="px-5 py-3 border-b border-gray-200">
-      <h3 class="text-sm font-medium text-gray-900">Pakej dengan Pesanan Terbanyak</h3>
+      <h3 class="text-sm font-medium text-gray-900">Top Packages by Orders</h3>
     </div>
     <div class="p-5 grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
@@ -331,8 +331,8 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'L
         <table class="min-w-full table-auto text-sm" id="topPackageTable">
           <thead class="bg-gray-50">
             <tr class="text-left text-gray-600">
-              <th class="px-5 py-3">Pakej</th>
-              <th class="px-5 py-3 text-center w-40">Jumlah Pesanan</th>
+              <th class="px-5 py-3">Package</th>
+              <th class="px-5 py-3 text-center w-40">Total Orders</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-200"></tbody>
@@ -407,18 +407,18 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'L
       .then(payload => {
         const labels = payload.labels || [];
         const data = payload.total_booking || [];
-        // Jam tersibuk
+        // Peak hour
         let maxIdx = 0, maxVal = -1;
         data.forEach((v, i) => { if (Number(v) > maxVal) { maxVal = Number(v); maxIdx = i; } });
         const busiestHourEl = document.getElementById('busiestHourLabel');
-        if (busiestHourEl) busiestHourEl.textContent = (labels[maxIdx] || '-') + ':00 (' + (maxVal || 0) + ' pesanan)';
+        if (busiestHourEl) busiestHourEl.textContent = (labels[maxIdx] || '-') + ':00 (' + (maxVal || 0) + ' orders)';
 
         // Chart
         const ctx = document.getElementById('hourChart');
         if (hourChartInst) hourChartInst.destroy();
-        hourChartInst = barChart(ctx, labels, data, 'Jumlah Pesanan', { bg: 'rgba(14,165,233,0.6)', border: 'rgba(14,165,233,1)' });
+        hourChartInst = barChart(ctx, labels, data, 'Total Orders', { bg: 'rgba(14,165,233,0.6)', border: 'rgba(14,165,233,1)' });
 
-        // Table (top 10 jam)
+        // Table (top 10 hours)
         const pairs = labels.map((l, i) => ({ label: l + ':00', val: Number(data[i] || 0) }));
         pairs.sort((a,b) => b.val - a.val);
         const top = pairs.slice(0, 10);
@@ -437,20 +437,20 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'L
     return fetch(url, { headers: { 'Accept': 'application/json' }, credentials: 'same-origin' })
       .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
       .then(payload => {
-        const labels = payload.labels || ['Isnin','Selasa','Rabu','Khamis','Jumaat','Sabtu','Ahad'];
+        const labels = payload.labels || ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
         const data = payload.total_booking || [];
-        // Hari tersibuk
+        // Peak day
         let maxIdx = 0, maxVal = -1;
         data.forEach((v, i) => { if (Number(v) > maxVal) { maxVal = Number(v); maxIdx = i; } });
         const busiestDayEl = document.getElementById('busiestDayLabel');
-        if (busiestDayEl) busiestDayEl.textContent = (labels[maxIdx] || '-') + ' (' + (maxVal || 0) + ' pesanan)';
+        if (busiestDayEl) busiestDayEl.textContent = (labels[maxIdx] || '-') + ' (' + (maxVal || 0) + ' orders)';
 
         // Chart
         const ctx = document.getElementById('weekdayChart');
         if (weekdayChartInst) weekdayChartInst.destroy();
-        weekdayChartInst = barChart(ctx, labels, data, 'Jumlah Pesanan', { bg: 'rgba(16,185,129,0.6)', border: 'rgba(16,185,129,1)' });
+        weekdayChartInst = barChart(ctx, labels, data, 'Total Orders', { bg: 'rgba(16,185,129,0.6)', border: 'rgba(16,185,129,1)' });
 
-        // Table (urut menurun)
+        // Table (descending order)
         const pairs = labels.map((l, i) => ({ label: l, val: Number(data[i] || 0) }));
         pairs.sort((a,b) => b.val - a.val);
         const tbody = document.querySelector('#weekdayTable tbody');
@@ -468,7 +468,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'L
     return fetch(url, { headers: { 'Accept': 'application/json' }, credentials: 'same-origin' })
       .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
       .then(payload => {
-        const days = payload.days || ['Isnin','Selasa','Rabu','Khamis','Jumaat','Sabtu','Ahad'];
+        const days = payload.days || ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
         const hours = payload.hours || Array.from({length:24}, (_,i)=>String(i).padStart(2,'0'));
         const matrix = payload.matrix || [];
         const busiest = payload.busiest || null;
@@ -476,7 +476,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'L
         // Update label
         if (busiest) {
           const lbl = document.getElementById('busiestSlotLabel');
-          if (lbl) lbl.textContent = `${busiest.day} ${busiest.hour}:00 (${busiest.count} pesanan)`;
+          if (lbl) lbl.textContent = `${busiest.day} ${busiest.hour}:00 (${busiest.count} orders)`;
         }
 
         // Find max for scaling
@@ -494,7 +494,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'L
         // THEAD
         const thead = document.createElement('thead');
         const htr = document.createElement('tr');
-        htr.innerHTML = ['<th class="p-1 text-gray-500">Hari/Jam</th>']
+        htr.innerHTML = ['<th class="p-1 text-gray-500">Day/Hour</th>']
           .concat(hours.map(h => `<th class="px-1 py-1 text-gray-600">${h}</th>`))
           .join('');
         thead.appendChild(htr);
@@ -532,7 +532,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'L
         // Chart
         const ctx = document.getElementById('topTherapistChart');
         if (topTherChartInst) topTherChartInst.destroy();
-        topTherChartInst = barChart(ctx, labels, data, 'Jumlah Pesanan', { bg: 'rgba(99,102,241,0.6)', border: 'rgba(99,102,241,1)' });
+        topTherChartInst = barChart(ctx, labels, data, 'Total Orders', { bg: 'rgba(99,102,241,0.6)', border: 'rgba(99,102,241,1)' });
         // Table
         const tbody = document.querySelector('#topTherapistTable tbody');
         const rows = labels.map((l, i) => ({ label: l, val: Number(data[i] || 0) }))
@@ -557,7 +557,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'L
         // Chart
         const ctx = document.getElementById('topPackageChart');
         if (topPackChartInst) topPackChartInst.destroy();
-        topPackChartInst = barChart(ctx, labels, data, 'Jumlah Pesanan', { bg: 'rgba(244,114,182,0.6)', border: 'rgba(244,114,182,1)' });
+        topPackChartInst = barChart(ctx, labels, data, 'Total Orders', { bg: 'rgba(244,114,182,0.6)', border: 'rgba(244,114,182,1)' });
         // Table
         const tbody = document.querySelector('#topPackageTable tbody');
         const rows = labels.map((l, i) => ({ label: l, val: Number(data[i] || 0) }))

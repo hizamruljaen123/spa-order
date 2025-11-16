@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <title><?= isset($title) ? htmlspecialchars($title) : 'Spa Booking (Mobile)'; ?></title>
@@ -30,8 +30,8 @@
   <div class="mx-auto max-w-md min-h-screen bg-white">
     <header class="sticky top-0 z-10 bg-white/95 backdrop-blur border-b border-slate-200">
       <div class="px-4 py-3">
-        <h1 class="text-2xl font-bold text-slate-800">Tempah Spa</h1>
-        <p class="text-sm text-slate-500">Versi mudah (mobile).</p>
+        <h1 class="text-2xl font-bold text-slate-800">Book Spa</h1>
+        <p class="text-sm text-slate-500">Easy version (mobile).</p>
       </div>
     </header>
 
@@ -56,11 +56,11 @@
 
       <form method="post" action="<?= site_url('booking/submit'); ?>" novalidate class="space-y-5">
 
-        <!-- Step 1: Paket -->
+        <!-- Step 1: Package -->
         <div>
-          <label class="required block text-sm font-semibold text-slate-700" for="package_id">Pakej</label>
+          <label class="required block text-sm font-semibold text-slate-700" for="package_id">Package</label>
           <select id="package_id" name="package_id" required class="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-3 text-slate-900 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary">
-            <option value="">Pilih pakej</option>
+            <option value="">Select package</option>
             <?php if (!empty($packages)): ?>
               <?php foreach ($packages as $p): ?>
                 <option value="<?= (int)$p->id; ?>">
@@ -70,7 +70,7 @@
                     $pout = isset($p->price_out_call) ? (float)$p->price_out_call : null;
                   ?>
                   <?= htmlspecialchars($p->name); ?>
-                  <?php if (isset($p->duration)): ?> - <?= (int)$p->duration; ?> minit<?php endif; ?>
+                  <?php if (isset($p->duration)): ?> - <?= (int)$p->duration; ?> minutes<?php endif; ?>
                   <?php if ($pin): ?> - IN: <?= htmlspecialchars($curr); ?> <?= number_format($pin, 0, ',', '.'); ?><?php endif; ?>
                   <?php if ($pout): ?> / OUT: <?= htmlspecialchars($curr); ?> <?= number_format($pout, 0, ',', '.'); ?><?php endif; ?>
                 </option>
@@ -79,11 +79,11 @@
           </select>
         </div>
 
-        <!-- Step 2: Terapis (opsional) -->
+        <!-- Step 2: Therapist (optional) -->
         <div>
-          <label class="block text-sm font-semibold text-slate-700" for="therapist_id">Terapis (opsional)</label>
+          <label class="block text-sm font-semibold text-slate-700" for="therapist_id">Therapist (optional)</label>
           <select id="therapist_id" name="therapist_id" class="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-3 text-slate-900 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary">
-            <option value="">Pilih terapis (opsional)</option>
+            <option value="">Choose therapist (optional)</option>
             <?php if (!empty($therapists)): ?>
               <?php foreach ($therapists as $t): ?>
               <option value="<?= (int)$t->id; ?>">
@@ -92,49 +92,49 @@
               <?php endforeach; ?>
             <?php endif; ?>
           </select>
-          <p class="mt-1 text-xs text-slate-500">Ketersediaan jam akan menyesuaikan terapis terpilih.</p>
+          <p class="mt-1 text-xs text-slate-500">Time availability will adjust to selected therapist.</p>
         </div>
 
-        <!-- Step 3: Tipe Panggilan -->
+        <!-- Step 3: Call Type -->
         <div>
-          <span class="required block text-sm font-semibold text-slate-700">Tipe Panggilan</span>
+          <span class="required block text-sm font-semibold text-slate-700">Call Type</span>
           <div class="mt-2 grid grid-cols-2 gap-2 segmented">
             <input type="radio" id="call_in" name="call_type" value="IN" checked>
             <label for="call_in">In Call</label>
             <input type="radio" id="call_out" name="call_type" value="OUT">
             <label for="call_out">Out Call</label>
           </div>
-          <p class="mt-1 text-xs text-slate-500">Harga mengikuti tipe panggilan.</p>
+          <p class="mt-1 text-xs text-slate-500">Price follows call type.</p>
         </div>
 
-        <!-- Step 4: Tanggal -->
+        <!-- Step 4: Date -->
         <div>
-          <label class="required block text-sm font-semibold text-slate-700" for="date">Tanggal</label>
+          <label class="required block text-sm font-semibold text-slate-700" for="date">Date</label>
           <input type="date" id="date" name="date" required min="<?= date('Y-m-d'); ?>" class="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-3 text-slate-900 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary">
-          <p class="mt-1 text-xs text-slate-500">Pilih tanggal terlebih dahulu.</p>
+          <p class="mt-1 text-xs text-slate-500">Please select a date first.</p>
         </div>
 
-        <!-- Step 5: Jam (berdasarkan ketersediaan) -->
+        <!-- Step 5: Time (based on availability) -->
         <div>
-          <span class="required block text-sm font-semibold text-slate-700">Pilih Jam</span>
+          <span class="required block text-sm font-semibold text-slate-700">Select Time</span>
           <input type="hidden" id="time" name="time" required>
           <div id="slots" class="mt-2 grid grid-cols-3 sm:grid-cols-4 gap-2"></div>
-          <div id="slots_help" class="mt-2 text-xs text-slate-500">Jam tersedia berwarna hijau.</div>
+          <div id="slots_help" class="mt-2 text-xs text-slate-500">Available times are in green.</div>
           <div id="slots_error" class="mt-2 hidden rounded bg-red-50 text-red-700 text-sm px-3 py-2"></div>
         </div>
 
-        <!-- Step 6: Data Pemesan -->
+        <!-- Step 6: Customer Data -->
         <div>
-          <label class="required block text-sm font-semibold text-slate-700" for="customer_name">Nama</label>
-          <input type="text" id="customer_name" name="customer_name" required minlength="2" placeholder="Nama lengkap" class="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-3 text-slate-900 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary">
+          <label class="required block text-sm font-semibold text-slate-700" for="customer_name">Name</label>
+          <input type="text" id="customer_name" name="customer_name" required minlength="2" placeholder="Full name" class="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-3 text-slate-900 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary">
         </div>
         <div>
-          <label class="required block text-sm font-semibold text-slate-700" for="address">Alamat</label>
-          <textarea id="address" name="address" rows="3" required minlength="5" placeholder="Alamat lengkap" class="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-3 text-slate-900 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary"></textarea>
+          <label class="required block text-sm font-semibold text-slate-700" for="address">Address</label>
+          <textarea id="address" name="address" rows="3" required minlength="5" placeholder="Full address" class="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-3 text-slate-900 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary"></textarea>
         </div>
 
         <div class="pt-2">
-          <button type="submit" class="w-full rounded-xl bg-primary px-4 py-4 text-base font-semibold text-white shadow-sm transition hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed">Kirim Pemesanan</button>
+          <button type="submit" class="w-full rounded-xl bg-primary px-4 py-4 text-base font-semibold text-white shadow-sm transition hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed">Send Booking</button>
         </div>
 
       </form>
@@ -205,7 +205,7 @@
       setSubmitEnabled(false);
 
       if (!date) {
-        slotsWrap.innerHTML = '<div class="text-sm text-slate-500">Pilih tanggal untuk melihat jam tersedia.</div>';
+        slotsWrap.innerHTML = '<div class="text-sm text-slate-500">Select a date to see available times.</div>';
         return;
       }
 
@@ -219,7 +219,7 @@
         renderSlots(data);
       } catch (e) {
         slotsWrap.innerHTML = '';
-        slotsError.textContent = 'Gagal memuat ketersediaan. Coba lagi.';
+        slotsError.textContent = 'Failed to load availability. Try again.';
         slotsError.classList.remove('hidden');
       }
     }
@@ -227,11 +227,11 @@
     if (dateInput) dateInput.addEventListener('change', fetchSlots);
     if (therapistSel) therapistSel.addEventListener('change', fetchSlots);
 
-    // Pesan awal untuk pengguna
-    slotsWrap.innerHTML = '<div class="text-sm text-slate-500">Pilih tanggal untuk melihat jam tersedia.</div>';
+    // Initial message for users
+    slotsWrap.innerHTML = '<div class="text-sm text-slate-500">Select a date to see available times.</div>';
     setSubmitEnabled(false);
 
-    // Jika tanggal telah terisi (misal browser restore), muat slot
+    // If date is already filled (e.g. browser restore), load slots
     if (dateInput && dateInput.value) fetchSlots();
   });
   </script>

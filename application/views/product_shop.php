@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <title><?= isset($title) ? htmlspecialchars($title) : 'Product Shop'; ?></title>
@@ -190,9 +190,9 @@
     <!-- Content -->
     <div class="mx-auto max-w-6xl px-4 py-24 md:py-32">
       <div class="max-w-xl text-white">
-        <h1 class="text-3xl md:text-5xl font-bold">Produk & Barang Terbaik</h1>
+        <h1 class="text-3xl md:text-5xl font-bold">Best Products & Items</h1>
         <p class="mt-4 text-white/90">
-          Temukan produk berkualitas tinggi untuk kebutuhan spa dan relaksasi Anda. Klik gambar untuk hubungi kami via WhatsApp.
+          Find high-quality products for your spa and relaxation needs. Click the image to contact us via WhatsApp.
         </p>
       </div>
     </div>
@@ -203,8 +203,8 @@
     <!-- Products Section -->
     <section class="mt-8 md:mt-12">
       <div class="mb-4 md:mb-6">
-        <h2 class="text-xl md:text-2xl font-bold text-slate-800">Katalog Produk</h2>
-        <p class="text-slate-600 mt-1">Produk berkualitas untuk kebutuhan spa dan kesehatan Anda</p>
+        <h2 class="text-xl md:text-2xl font-bold text-slate-800">Product Catalog</h2>
+        <p class="text-slate-600 mt-1">Quality products for your spa and health needs</p>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
@@ -251,7 +251,7 @@
           <?php endforeach; ?>
         <?php else: ?>
           <div class="col-span-full rounded-xl border border-dashed border-slate-300 bg-white p-6 text-center text-slate-600">
-            Produk belum tersedia. Sila kembali lagi nanti.
+            Products not available yet. Please check back later.
           </div>
         <?php endif; ?>
       </div>
@@ -259,18 +259,18 @@
 
     <!-- Contact Section -->
     <section class="mt-10 md:mt-14">
-      <h2 class="text-xl md:text-2xl font-bold text-slate-800 mb-4 md:mb-6">Hubungi Kami</h2>
+      <h2 class="text-xl md:text-2xl font-bold text-slate-800 mb-4 md:mb-6">Contact Us</h2>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
         <!-- Contact Info -->
         <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
           <div class="text-slate-700">
-            <div class="font-semibold text-slate-800">Alamat</div>
+            <div class="font-semibold text-slate-800">Address</div>
             <p class="text-sm text-slate-600 mt-1">21-1, Jalan Abadi 2/1</p>
             <p class="text-sm text-slate-600">Abadi Heights, Puchong, Selangor 71420</p>
             <p class="text-sm text-slate-600">Malaysia</p>
 
-            <div class="mt-4 font-semibold text-slate-800">Kontak</div>
+            <div class="mt-4 font-semibold text-slate-800">Contact</div>
             <p class="text-sm text-slate-600 mt-1">
               Tel:
               <a href="tel:+60380619349" class="text-blue-600 hover:underline">+603 8061 9349</a> /
@@ -293,17 +293,17 @@
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
               </svg>
             </div>
-            <h3 class="font-semibold text-slate-800 mb-2">Pesan via WhatsApp</h3>
-            <p class="text-sm text-slate-600 mb-4">Untuk informasi produk dan pemesanan</p>
+            <h3 class="font-semibold text-slate-800 mb-2">Message via WhatsApp</h3>
+            <p class="text-sm text-slate-600 mb-4">For product information and ordering</p>
             <a
-              href="https://wa.me/601123332894?text=Hai,%20saya%20tertarik%20dengan%20produk%20Anda"
+              href="https://wa.me/601123332894?text=Hi,%20I'm%20interested%20in%20your%20products"
               target="_blank"
               class="inline-flex items-center rounded-lg bg-green-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-700"
             >
               <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
               </svg>
-              Hubungi WhatsApp
+              Contact WhatsApp
             </a>
           </div>
         </div>
@@ -371,7 +371,7 @@
 
     // WhatsApp function
     function openWhatsApp(productName, price, currency) {
-        const message = `Hai, saya tertarik dengan produk: ${productName} - ${currency} ${price}. Bisa minta informasi lebih detail?`;
+        const message = `Hi, I'm interested in the product: ${productName} - ${currency} ${price}. Can I get more detailed information?`;
         const encodedMessage = encodeURIComponent(message);
         const whatsappUrl = `https://wa.me/601123332894?text=${encodedMessage}`;
         window.open(whatsappUrl, '_blank');

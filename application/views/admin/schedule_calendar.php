@@ -1,16 +1,16 @@
 <?php
-$this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'Kalendar Jadual']);
+$this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'Schedule Calendar']);
 ?>
 <!-- Page: Schedule Calendar -->
 <div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
   <div>
-    <h2 class="text-base font-semibold text-gray-900">Kalendar Jadual</h2>
-    <p class="text-sm text-gray-600">Pantau dan urus jadual tempahan menggunakan kalendar interaktif.</p>
+    <h2 class="text-base font-semibold text-gray-900">Schedule Calendar</h2>
+    <p class="text-sm text-gray-600">Monitor and manage booking schedules using an interactive calendar.</p>
   </div>
   <div class="flex items-center gap-3">
-    <label for="therapistFilter" class="text-sm text-gray-700">Tapis Terapis</label>
+    <label for="therapistFilter" class="text-sm text-gray-700">Filter Therapist</label>
     <select id="therapistFilter" class="rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-sm">
-      <option value="">Semua Terapis</option>
+      <option value="">All Therapists</option>
       <?php if (!empty($therapists)): ?>
         <?php foreach ($therapists as $t): ?>
           <option value="<?= (int)$t->id; ?>"><?= htmlspecialchars($t->name); ?></option>
@@ -20,10 +20,10 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'K
   </div>
 </div>
 
-<!-- Ringkasan Bulanan -->
+<!-- Monthly Summary -->
 <div id="monthSummary" class="mb-3 rounded-lg border border-gray-200 bg-white px-4 py-3 shadow-sm">
   <div class="flex items-center justify-between">
-    <div class="text-sm text-gray-500">Jumlah pesanan pada bulan ini</div>
+    <div class="text-sm text-gray-500">Total orders this month</div>
     <div class="text-xl md:text-3xl font-extrabold tracking-tight"><span id="monthTotal">0</span> Orders</div>
   </div>
 </div>
@@ -31,26 +31,26 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'K
 <!-- Calendar container -->
 <div id="calendar" class="rounded-lg border border-gray-200 bg-white p-3 shadow-sm"></div>
 
-<!-- Legend: Kepadatan Jadual -->
+<!-- Legend: Schedule Density -->
 <div class="mt-3 rounded-lg border border-gray-200 bg-white p-3 shadow-sm">
   <div class="flex flex-wrap items-center gap-3 text-xs">
-    <span class="font-medium text-gray-700">Legenda Kepadatan Jadual:</span>
+    <span class="font-medium text-gray-700">Schedule Density Legend:</span>
     <span class="inline-flex items-center gap-2">
       <span class="inline-flex items-center gap-1">
-        <span class="h-3 w-3 rounded bg-green-300 border border-green-500"></span><span>1–2 Orders (Rendah)</span>
+        <span class="h-3 w-3 rounded bg-green-300 border border-green-500"></span><span>1–2 Orders (Low)</span>
       </span>
       <span class="inline-flex items-center gap-1">
-        <span class="h-3 w-3 rounded bg-yellow-300 border border-yellow-500"></span><span>3–5 Orders (Sederhana)</span>
+        <span class="h-3 w-3 rounded bg-yellow-300 border border-yellow-500"></span><span>3–5 Orders (Medium)</span>
       </span>
       <span class="inline-flex items-center gap-1">
-        <span class="h-3 w-3 rounded bg-orange-300 border border-orange-500"></span><span>6–8 Orders (Tinggi)</span>
+        <span class="h-3 w-3 rounded bg-orange-300 border border-orange-500"></span><span>6–8 Orders (High)</span>
       </span>
       <span class="inline-flex items-center gap-1">
-        <span class="h-3 w-3 rounded bg-red-400 border border-red-600"></span><span>9+ Orders (Sangat Padat)</span>
+        <span class="h-3 w-3 rounded bg-red-400 border border-red-600"></span><span>9+ Orders (Very High)</span>
       </span>
     </span>
   </div>
-  <p class="mt-2 text-[11px] text-gray-500">Semakin padat jadual, warna akan berubah dari hijau → kuning → jingga → merah.</p>
+  <p class="mt-2 text-[11px] text-gray-500">The denser the schedule, the color changes from green → yellow → orange → red.</p>
 </div>
 
 <!-- Tailwind modal (details) -->
@@ -59,29 +59,29 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'K
   <div class="absolute inset-0 flex items-center justify-center p-4">
     <div class="w-full max-w-md rounded-lg bg-white shadow-lg">
       <div class="px-5 py-3 border-b border-gray-200 flex items-center justify-between">
-        <h3 class="text-sm font-medium text-gray-900">Butiran Tempahan</h3>
-        <button id="closeModalBtn" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-2 py-1 text-xs hover:bg-gray-50">Tutup</button>
+        <h3 class="text-sm font-medium text-gray-900">Booking Details</h3>
+        <button id="closeModalBtn" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-2 py-1 text-xs hover:bg-gray-50">Close</button>
       </div>
       <div class="p-5">
         <dl class="text-sm text-gray-800 space-y-2">
           <div class="flex">
-            <dt class="w-32 text-gray-600">Pelanggan</dt>
+            <dt class="w-32 text-gray-600">Customer</dt>
             <dd id="bd_customer" class="flex-1">-</dd>
           </div>
           <div class="flex">
-            <dt class="w-32 text-gray-600">Pakej</dt>
+            <dt class="w-32 text-gray-600">Package</dt>
             <dd id="bd_package" class="flex-1">-</dd>
           </div>
           <div class="flex">
-            <dt class="w-32 text-gray-600">Terapis</dt>
+            <dt class="w-32 text-gray-600">Therapist</dt>
             <dd id="bd_therapist" class="flex-1">-</dd>
           </div>
           <div class="flex">
-            <dt class="w-32 text-gray-600">Tarikh</dt>
+            <dt class="w-32 text-gray-600">Date</dt>
             <dd id="bd_date" class="flex-1">-</dd>
           </div>
           <div class="flex">
-            <dt class="w-32 text-gray-600">Masa</dt>
+            <dt class="w-32 text-gray-600">Time</dt>
             <dd id="bd_time" class="flex-1">-</dd>
           </div>
           <div class="flex">
@@ -91,37 +91,37 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'K
         </dl>
       </div>
 
-      <!-- Seksi Edit Waktu (disembunyikan secara default) -->
+      <!-- Edit Time Section (hidden by default) -->
       <div id="editSection" class="px-5 py-3 border-t border-gray-100 hidden">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label for="edit_date" class="block text-xs font-medium text-gray-700">Tarikh</label>
+            <label for="edit_date" class="block text-xs font-medium text-gray-700">Date</label>
             <input type="date" id="edit_date" class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-sm">
           </div>
           <div>
-            <label for="edit_time" class="block text-xs font-medium text-gray-700">Masa</label>
+            <label for="edit_time" class="block text-xs font-medium text-gray-700">Time</label>
             <input type="time" id="edit_time" step="60" class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-sm">
           </div>
         </div>
         <div class="mt-3 flex items-center justify-end gap-2">
-          <button id="editCancelBtn" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-3 py-1.5 text-xs hover:bg-gray-50">Batal</button>
-          <button id="editSaveBtn" class="inline-flex items-center rounded-md bg-sky-600 text-white px-3 py-1.5 text-xs hover:bg-sky-700">Simpan</button>
+          <button id="editCancelBtn" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-3 py-1.5 text-xs hover:bg-gray-50">Cancel</button>
+          <button id="editSaveBtn" class="inline-flex items-center rounded-md bg-sky-600 text-white px-3 py-1.5 text-xs hover:bg-sky-700">Save</button>
         </div>
       </div>
 
       <div class="px-5 py-3 border-t border-gray-200 flex items-center justify-end gap-2">
-        <button id="editBtn" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-3 py-1.5 text-xs hover:bg-gray-50">Edit Waktu</button>
-        <button id="deleteBtn" class="inline-flex items-center rounded-md bg-red-600 text-white px-3 py-1.5 text-xs hover:bg-red-700">Hapus</button>
+        <button id="editBtn" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-3 py-1.5 text-xs hover:bg-gray-50">Edit Time</button>
+        <button id="deleteBtn" class="inline-flex items-center rounded-md bg-red-600 text-white px-3 py-1.5 text-xs hover:bg-red-700">Delete</button>
 
         <!-- Status Actions -->
-        <button id="statusAcceptBtn"  title="Tandai Diterima"   class="inline-flex items-center rounded-md bg-blue-600 text-white px-3 py-1.5 text-xs hover:bg-blue-700">Terima</button>
-        <button id="statusRejectBtn"  title="Tandai Ditolak"    class="inline-flex items-center rounded-md bg-rose-600 text-white px-3 py-1.5 text-xs hover:bg-rose-700">Tolak</button>
-        <button id="statusWorkingBtn" title="Tandai On Working" class="inline-flex items-center rounded-md bg-amber-500 text-white px-3 py-1.5 text-xs hover:bg-amber-600">On Working</button>
-        <button id="statusCompleteBtn" title="Tandai Selesai"   class="inline-flex items-center rounded-md bg-gray-700 text-white px-3 py-1.5 text-xs hover:bg-gray-800">Selesai</button>
-        <button id="statusCancelBtn"  title="Tandai Dibatalkan" class="inline-flex items-center rounded-md bg-orange-600 text-white px-3 py-1.5 text-xs hover:bg-orange-700">Batalkan</button>
+        <button id="statusAcceptBtn"  title="Mark as Accepted"   class="inline-flex items-center rounded-md bg-blue-600 text-white px-3 py-1.5 text-xs hover:bg-blue-700">Accept</button>
+        <button id="statusRejectBtn"  title="Mark as Rejected"    class="inline-flex items-center rounded-md bg-rose-600 text-white px-3 py-1.5 text-xs hover:bg-rose-700">Reject</button>
+        <button id="statusWorkingBtn" title="Mark as Working" class="inline-flex items-center rounded-md bg-amber-500 text-white px-3 py-1.5 text-xs hover:bg-amber-600">On Working</button>
+        <button id="statusCompleteBtn" title="Mark as Completed"   class="inline-flex items-center rounded-md bg-gray-700 text-white px-3 py-1.5 text-xs hover:bg-gray-800">Complete</button>
+        <button id="statusCancelBtn"  title="Mark as Canceled" class="inline-flex items-center rounded-md bg-orange-600 text-white px-3 py-1.5 text-xs hover:bg-orange-700">Cancel</button>
 
-        <a href="#" id="bd_invoice_btn" target="_blank" rel="noopener" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-3 py-1.5 text-xs hover:bg-gray-50">Lihat Invois</a>
-        <button id="closeModalBtn2" class="inline-flex items-center rounded-md bg-sky-600 text-white px-3 py-1.5 text-xs hover:bg-sky-700">Tutup</button>
+        <a href="#" id="bd_invoice_btn" target="_blank" rel="noopener" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-3 py-1.5 text-xs hover:bg-gray-50">View Invoice</a>
+        <button id="closeModalBtn2" class="inline-flex items-center rounded-md bg-sky-600 text-white px-3 py-1.5 text-xs hover:bg-sky-700">Close</button>
       </div>
     </div>
   </div>
@@ -235,7 +235,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'K
       const d = (editDateInput.value || '').trim();
       const t = (editTimeInput.value || '').trim();
       if (!d || !t) {
-        alert('Tarikh dan masa wajib diisi.');
+        alert('Date and time are required.');
         return;
       }
       apiPost('<?= site_url('admin/booking/update-time'); ?>', {
@@ -243,16 +243,16 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'K
         date: d,
         time: t
       }).then(res => {
-        if (!res || !res.ok) throw new Error(res && res.error ? res.error : 'Gagal menyimpan perubahan.');
-        // Update posisi event secara lokal
+        if (!res || !res.ok) throw new Error(res && res.error ? res.error : 'Failed to save changes.');
+        // Update event position locally
         const newStart = new Date(d + 'T' + t + ':00');
         currentEvent.setStart(newStart);
         toggleEditSection(false);
         closeModal();
       }).catch(err => {
-        alert('Gagal mengubah waktu: ' + err.message);
+        alert('Failed to change time: ' + err.message);
       }).finally(() => {
-        // Segarkan data agar konsisten
+        // Refresh data for consistency
         if (typeof calendar !== 'undefined') {
           calendar.refetchEvents();
         }
@@ -262,16 +262,16 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'K
   if (deleteBtn) {
     deleteBtn.addEventListener('click', function() {
       if (!currentEvent) return;
-      if (!confirm('Yakin ingin menghapus booking ini?')) return;
+      if (!confirm('Are you sure you want to delete this booking?')) return;
       apiPost('<?= site_url('admin/booking/delete'); ?>', { token: currentEvent.id })
         .then(res => {
-          if (!res || !res.ok) throw new Error(res && res.error ? res.error : 'Gagal menghapus.');
-          // Hapus dari kalendar secara lokal
+          if (!res || !res.ok) throw new Error(res && res.error ? res.error : 'Failed to delete.');
+          // Remove from calendar locally
           currentEvent.remove();
           closeModal();
         })
         .catch(err => {
-          alert('Gagal menghapus: ' + err.message);
+          alert('Failed to delete: ' + err.message);
         })
         .finally(() => {
           if (typeof calendar !== 'undefined') {
@@ -288,11 +288,11 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'K
       token: currentEvent.id,
       status: nextStatus
     }).then(res => {
-      if (!res || !res.ok) throw new Error(res && res.error ? res.error : 'Gagal mengubah status.');
-      // Tutup modal setelah update dan segarkan kalender untuk pantulkan perubahan warna/status
+      if (!res || !res.ok) throw new Error(res && res.error ? res.error : 'Failed to change status.');
+      // Close modal after update and refresh calendar to reflect color/status changes
       closeModal();
     }).catch(err => {
-      alert('Gagal mengubah status: ' + err.message);
+      alert('Failed to change status: ' + err.message);
     }).finally(() => {
       if (typeof calendar !== 'undefined') {
         calendar.refetchEvents();
@@ -322,7 +322,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'K
     return map;
   }
 
-  // Mapping warna berdasarkan jumlah (heatmap)
+  // Color mapping based on count (heatmap)
   function getHeatClasses(count) {
     if (count >= 9) return { bg: 'bg-red-200', text: 'text-red-900' };
     if (count >= 6) return { bg: 'bg-orange-200', text: 'text-orange-900' };
@@ -331,7 +331,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'K
     return { bg: 'bg-gray-50', text: 'text-gray-400' };
   }
 
-  // Render heatmap + tulisan besar "X Orders" di setiap sel hari (month view sahaja)
+  // Render heatmap + large text "X Orders" in each day cell (month view only)
   function renderDensityCells() {
     if (!calendar) return;
     const isMonth = calendar.view.type === 'dayGridMonth';
@@ -345,7 +345,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'K
       topEl.classList.add('relative', 'z-10');
       topEl.classList.add('relative', 'z-10');
 
-      // Bersihkan elemen overlay sebelumnya
+      // Clear previous overlay elements
       const oldOverlay = frame.querySelector('.order-density-overlay');
       if (oldOverlay) oldOverlay.remove();
       const oldLabel = frame.querySelector('.order-density-label');
@@ -357,12 +357,12 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'K
       const count = (date && countsByDate[date]) ? countsByDate[date] : 0;
       const { bg, text } = getHeatClasses(count);
 
-      // Overlay warna (heatmap) — berada di bawah konten tanggal
+      // Color overlay (heatmap) — below date content
       const overlay = document.createElement('div');
       overlay.className = 'order-density-overlay pointer-events-none absolute inset-0 z-0 rounded-sm ' + bg + ' opacity-60';
       frame.appendChild(overlay);
 
-      // Tulisan besar "X Orders" — berada di atas overlay
+      // Large text "X Orders" — above overlay
       const label = document.createElement('div');
       label.className = 'order-density-label pointer-events-none absolute inset-0 z-20 flex items-center justify-center text-center font-extrabold ' + text + ' select-none text-base md:text-2xl';
       label.textContent = count > 0 ? (count + ' Orders') : '';
@@ -394,7 +394,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'K
   function closeModal() {
     modalEl.classList.add('hidden');
     modalEl.setAttribute('aria-hidden', 'true');
-    // Reset state edit + event
+    // Reset edit state + event
     if (typeof editSection !== 'undefined' && editSection) {
       editSection.classList.add('hidden');
     }
@@ -418,9 +418,9 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'K
     height: 'auto',
     nowIndicator: true,
     eventTimeFormat: { hour: '2-digit', minute: '2-digit', hour12: false },
-    editable: false,               // akan diaktifkan hanya pada paparan harian
-    eventDurationEditable: false,  // tidak izinkan resize (DB hanya simpan start)
-    // Sembunyikan event di paparan bulan, hanya tunjuk jumlah order per hari
+    editable: false,               // will be enabled only on daily view
+    eventDurationEditable: false,  // don't allow resize (DB only stores start)
+    // Hide events in month view, only show order count per day
     views: {
       dayGridMonth: {
         eventDisplay: 'none'
@@ -428,15 +428,15 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'K
     },
     navLinks: true,
     dateClick: function(info) {
-      // Tukar ke paparan hari apabila tarikh diklik dan tampilkan jadwal (events)
+      // Switch to day view when date is clicked and show schedule (events)
       if (calendar) {
         calendar.changeView('timeGridDay', info.dateStr);
         calendar.refetchEvents();
       }
     },
-    // Kemas kini heatmap + tulisan jumlah bila tukar bulan / view
+    // Update heatmap + count text when changing month/view
     datesSet: function() {
-      // Toggle drag-n-drop hanya pada paparan harian
+      // Toggle drag-n-drop only on daily view
       const isDay = calendar.view.type === 'timeGridDay';
       calendar.setOption('editable', isDay);
       setTimeout(renderDensityCells, 0);
@@ -459,23 +459,23 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'K
         return resp.json();
       })
       .then(data => {
-        // Kira jumlah tempahan per hari dan simpan
+        // Count orders per day and store
         countsByDate = computeCounts(data);
-        // Pada paparan bulan, jangan tampilkan event pada cell tanggal
+        // In month view, don't show events in date cells
         if (calendar.view.type === 'dayGridMonth') {
-          successCallback([]); // kosongkan event di grid bulan
+          successCallback([]); // clear events in month grid
           setTimeout(renderDensityCells, 0);
         } else {
-          // Selain paparan bulan (mingguan/harian), tampilkan event seperti biasa
+          // Besides month view (weekly/daily), show events normally
           successCallback(data);
         }
-        // Kemas kini ringkasan jumlah bulanan
+        // Update monthly count summary
         updateMonthSummary();
       })
       .catch(err => failureCallback(err));
     },
 
-    // Drag & drop untuk ubah waktu (harian sahaja)
+    // Drag & drop to change time (daily only)
     eventDrop: function(info) {
       const ev = info.event;
       const newDate = toYMD(ev.start);
@@ -485,12 +485,12 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'K
         date: newDate,
         time: newTime
       }).then(res => {
-        if (!res || !res.ok) throw new Error(res && res.error ? res.error : 'Gagal menyimpan perubahan.');
+        if (!res || !res.ok) throw new Error(res && res.error ? res.error : 'Failed to save changes.');
       }).catch(err => {
-        alert('Gagal mengubah jadwal: ' + err.message);
+        alert('Failed to change schedule: ' + err.message);
         info.revert();
       }).finally(() => {
-        // Segarkan untuk konsistensi ringkasan/overlay bila perlu
+        // Refresh for consistency of summary/overlay if needed
         calendar.refetchEvents();
       });
     },
@@ -500,7 +500,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'K
       const props = ev.extendedProps || {};
       const start = ev.start;
 
-      // Simpan event aktif
+      // Save active event
       currentEvent = ev;
 
       document.getElementById('bd_customer').textContent = props.customer_name || '-';
@@ -538,8 +538,8 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'K
         bdStatus.className = base + cls;
       })();
 
-      const dateStr = start ? start.toLocaleDateString('id-ID') : '-';
-      const timeStr = start ? start.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', hour12: false }) : '-';
+      const dateStr = start ? start.toLocaleDateString('en-US') : '-';
+      const timeStr = start ? start.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }) : '-';
       document.getElementById('bd_date').textContent = dateStr;
       document.getElementById('bd_time').textContent = timeStr;
 
@@ -553,7 +553,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'K
         }
       }
 
-      // Prefill form edit (disembunyikan dulu)
+      // Prefill edit form (hidden initially)
       if (editDateInput && editTimeInput) {
         editDateInput.value = toYMD(start) || '';
         editTimeInput.value = toHM(start) || '';

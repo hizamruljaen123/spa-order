@@ -1,5 +1,5 @@
 <?php
-$this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'Data Terapis']);
+$this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'Therapist Data']);
 ?>
 
 <?php if (!empty($flash['success'])): ?>
@@ -13,15 +13,15 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
   </div>
 <?php endif; ?>
 
-<!-- Toolbar: Tambah Terapis (gunakan modal) -->
+<!-- Toolbar: Add Therapist (use modal) -->
 <div class="mb-4 flex justify-end">
-  <button type="button" onclick="window.thrCreateOpen()" class="inline-flex items-center rounded-md bg-sky-600 text-white px-4 py-2 text-sm hover:bg-sky-700">Tambah Terapis</button>
+  <button type="button" onclick="window.thrCreateOpen()" class="inline-flex items-center rounded-md bg-sky-600 text-white px-4 py-2 text-sm hover:bg-sky-700">Add Therapist</button>
 </div>
 
-<!-- List Therapist -->
+<!-- Therapist List -->
 <div class="rounded-lg border border-gray-200 bg-white shadow-sm">
   <div class="px-5 py-3 border-b border-gray-200">
-    <h2 class="text-base font-semibold text-gray-900">Senarai Terapis</h2>
+    <h2 class="text-base font-semibold text-gray-900">Therapist List</h2>
   </div>
   <div class="p-0">
     <div class="overflow-x-auto">
@@ -29,11 +29,11 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
         <thead class="bg-gray-50">
           <tr class="text-left text-sm text-gray-600">
             <th class="px-5 py-3 w-12">#</th>
-            <th class="px-5 py-3 w-20">Foto</th>
-            <th class="px-5 py-3">Nama</th>
-            <th class="px-5 py-3">No. Telefon</th>
+            <th class="px-5 py-3 w-20">Photo</th>
+            <th class="px-5 py-3">Name</th>
+            <th class="px-5 py-3">Phone Number</th>
             <th class="px-5 py-3 w-40">Status</th>
-            <th class="px-5 py-3 w-56 text-right">Tindakan</th>
+            <th class="px-5 py-3 w-56 text-right">Actions</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-200">
@@ -82,19 +82,19 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
                 </td>
                 <td class="px-5 py-3 text-right">
                   <?php if ($isEdit): ?>
-                    <button type="submit" class="inline-flex items-center rounded-md bg-sky-600 text-white px-3 py-1.5 text-xs hover:bg-sky-700">Simpan</button>
-                    <a href="<?= site_url('admin/therapists'); ?>" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-3 py-1.5 text-xs hover:bg-gray-50">Batal</a>
+                    <button type="submit" class="inline-flex items-center rounded-md bg-sky-600 text-white px-3 py-1.5 text-xs hover:bg-sky-700">Save</button>
+                    <a href="<?= site_url('admin/therapists'); ?>" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-3 py-1.5 text-xs hover:bg-gray-50">Cancel</a>
                     </form>
                   <?php else: ?>
-                    <a class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-3 py-1.5 text-xs hover:bg-gray-50" href="<?= site_url('admin/therapist/edit/' . (isset($t->token) ? $t->token : (int)$t->id)); ?>">Sunting</a>
-                    <a class="inline-flex items-center rounded-md border border-red-300 bg-white text-red-600 px-3 py-1.5 text-xs hover:bg-red-50" href="<?= site_url('admin/therapist/delete/' . (isset($t->token) ? $t->token : (int)$t->id)); ?>" onclick="return confirm('Padam terapis ini?');">Padam</a>
+                    <a class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-3 py-1.5 text-xs hover:bg-gray-50" href="<?= site_url('admin/therapist/edit/' . (isset($t->token) ? $t->token : (int)$t->id)); ?>">Edit</a>
+                    <a class="inline-flex items-center rounded-md border border-red-300 bg-white text-red-600 px-3 py-1.5 text-xs hover:bg-red-50" href="<?= site_url('admin/therapist/delete/' . (isset($t->token) ? $t->token : (int)$t->id)); ?>" onclick="return confirm('Delete this therapist?');">Delete</a>
                   <?php endif; ?>
                 </td>
               </tr>
             <?php endforeach; ?>
           <?php else: ?>
             <tr>
-              <td colspan="6" class="px-5 py-6 text-center text-gray-500">Belum ada data terapis.</td>
+              <td colspan="6" class="px-5 py-6 text-center text-gray-500">No therapist data yet.</td>
             </tr>
           <?php endif; ?>
         </tbody>
@@ -126,8 +126,8 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
      class="fixed inset-0 z-50 <?= $hasEdit ? 'flex' : 'hidden'; ?> items-center justify-center p-4">
   <div class="w-full max-w-xl bg-white rounded-xl shadow-xl ring-1 ring-gray-200">
     <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-      <h3 class="text-lg font-semibold text-gray-900">Sunting Terapis</h3>
-      <button type="button" class="text-gray-400 hover:text-gray-600" onclick="window.thrEditClose()" aria-label="Tutup">
+      <h3 class="text-lg font-semibold text-gray-900">Edit Therapist</h3>
+      <button type="button" class="text-gray-400 hover:text-gray-600" onclick="window.thrEditClose()" aria-label="Close">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
         </svg>
@@ -138,13 +138,13 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
       <?php if ($hasEdit && isset($editItem)): ?>
         <form method="post" action="<?= site_url('admin/therapist/edit/' . $editToken); ?>" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="md:col-span-2">
-            <label for="edit_name" class="block text-sm font-medium text-gray-700">Nama</label>
+            <label for="edit_name" class="block text-sm font-medium text-gray-700">Name</label>
             <input id="edit_name" name="name" type="text" value="<?= htmlspecialchars($editItem->name ?? ''); ?>" required minlength="2"
                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
           </div>
 
           <div>
-            <label for="edit_phone" class="block text-sm font-medium text-gray-700">No. Telefon</label>
+            <label for="edit_phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
             <input id="edit_phone" name="phone" type="text" value="<?= htmlspecialchars($editItem->phone ?? ''); ?>"
                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
           </div>
@@ -159,24 +159,24 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
           </div>
 
           <div class="md:col-span-2">
-            <label for="edit_photo" class="block text-sm font-medium text-gray-700">Foto (opsional)</label>
+            <label for="edit_photo" class="block text-sm font-medium text-gray-700">Photo (optional)</label>
             <?php if (!empty($editItem->photo)): ?>
               <div class="flex items-center gap-3 mt-1">
-                <img src="<?= base_url($editItem->photo); ?>" alt="Foto" class="h-16 w-16 rounded object-cover border border-gray-200">
+                <img src="<?= base_url($editItem->photo); ?>" alt="Photo" class="h-16 w-16 rounded object-cover border border-gray-200">
                 <span class="text-xs text-gray-500 truncate"><?= htmlspecialchars($editItem->photo); ?></span>
               </div>
             <?php endif; ?>
             <input id="edit_photo" name="photo" type="file" accept="image/*" class="mt-2 block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100">
-            <p class="mt-1 text-xs text-gray-500">Format: jpg, jpeg, png, webp, gif. Maks 2MB.</p>
+            <p class="mt-1 text-xs text-gray-500">Format: jpg, jpeg, png, webp, gif. Max 2MB.</p>
           </div>
 
           <div class="md:col-span-2 flex justify-end gap-3 mt-2">
-            <button type="submit" class="inline-flex items-center rounded-md bg-sky-600 text-white px-4 py-2 text-sm hover:bg-sky-700">Simpan</button>
-            <a href="<?= site_url('admin/therapists'); ?>" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-4 py-2 text-sm hover:bg-gray-50">Batal</a>
+            <button type="submit" class="inline-flex items-center rounded-md bg-sky-600 text-white px-4 py-2 text-sm hover:bg-sky-700">Save</button>
+            <a href="<?= site_url('admin/therapists'); ?>" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-4 py-2 text-sm hover:bg-gray-50">Cancel</a>
           </div>
         </form>
       <?php else: ?>
-        <p class="text-sm text-gray-500">Data terapis tidak ditemui.</p>
+        <p class="text-sm text-gray-500">Therapist data not found.</p>
       <?php endif; ?>
     </div>
   </div>
@@ -191,8 +191,8 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
      class="fixed inset-0 z-50 hidden items-center justify-center p-4">
   <div class="w-full max-w-xl bg-white rounded-xl shadow-xl ring-1 ring-gray-200">
     <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-      <h3 class="text-lg font-semibold text-gray-900">Tambah Terapis</h3>
-      <button type="button" class="text-gray-400 hover:text-gray-600" onclick="window.thrCreateClose()" aria-label="Tutup">
+      <h3 class="text-lg font-semibold text-gray-900">Add Therapist</h3>
+      <button type="button" class="text-gray-400 hover:text-gray-600" onclick="window.thrCreateClose()" aria-label="Close">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
         </svg>
@@ -202,13 +202,13 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
     <div class="p-6">
       <form method="post" action="<?= site_url('admin/therapist/create'); ?>" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="md:col-span-2">
-          <label for="create_name" class="block text-sm font-medium text-gray-700">Nama</label>
-          <input id="create_name" name="name" type="text" required minlength="2" placeholder="Nama terapis"
+          <label for="create_name" class="block text-sm font-medium text-gray-700">Name</label>
+          <input id="create_name" name="name" type="text" required minlength="2" placeholder="Therapist name"
                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
         </div>
 
         <div>
-          <label for="create_phone" class="block text-sm font-medium text-gray-700">No. Telefon</label>
+          <label for="create_phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
           <input id="create_phone" name="phone" type="text" placeholder="01xxxxxxxx"
                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
         </div>
@@ -223,14 +223,14 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
         </div>
 
         <div class="md:col-span-2">
-          <label for="create_photo" class="block text-sm font-medium text-gray-700">Foto</label>
+          <label for="create_photo" class="block text-sm font-medium text-gray-700">Photo</label>
           <input id="create_photo" name="photo" type="file" accept="image/*" class="mt-1 block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100">
-          <p class="mt-1 text-xs text-gray-500">Format: jpg, jpeg, png, webp, gif. Maks 2MB.</p>
+          <p class="mt-1 text-xs text-gray-500">Format: jpg, jpeg, png, webp, gif. Max 2MB.</p>
         </div>
 
         <div class="md:col-span-2 flex justify-end gap-3 mt-2">
-          <button type="submit" class="inline-flex items-center rounded-md bg-sky-600 text-white px-4 py-2 text-sm hover:bg-sky-700">Tambah</button>
-          <button type="button" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-4 py-2 text-sm hover:bg-gray-50" onclick="window.thrCreateClose()">Batal</button>
+          <button type="submit" class="inline-flex items-center rounded-md bg-sky-600 text-white px-4 py-2 text-sm hover:bg-sky-700">Add</button>
+          <button type="button" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-4 py-2 text-sm hover:bg-gray-50" onclick="window.thrCreateClose()">Cancel</button>
         </div>
       </form>
     </div>

@@ -1,6 +1,6 @@
 <?php
 // Use the admin layout header
-$this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'Pengaturan Sistem']);
+$this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'System Settings']);
 
 // Prepare values
 $bot  = isset($settings['telegram_bot_token']) ? (string)$settings['telegram_bot_token'] : '';
@@ -25,8 +25,8 @@ $whatsapp_phone = isset($settings['whatsapp_phone']) ? (string)$settings['whatsa
   <!-- Telegram Bot Settings -->
   <div class="rounded-lg border border-gray-200 bg-white shadow-sm">
     <div class="px-5 py-3 border-b border-gray-200">
-      <h2 class="text-base font-semibold text-gray-900">Pengaturan Telegram Bot</h2>
-      <p class="text-sm text-gray-600 mt-1">Masukkan token bot dan chat ID untuk menerima notifikasi pesanan melalui Telegram.</p>
+      <h2 class="text-base font-semibold text-gray-900">Telegram Bot Settings</h2>
+      <p class="text-sm text-gray-600 mt-1">Enter bot token and chat ID to receive order notifications through Telegram.</p>
     </div>
 
     <div class="p-5">
@@ -39,11 +39,11 @@ $whatsapp_phone = isset($settings['whatsapp_phone']) ? (string)$settings['whatsa
           name="telegram_bot_token"
           value="<?= htmlspecialchars($bot); ?>"
           class="mt-1 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500"
-          placeholder="mis. 1234567890:AA...-...."
+          placeholder="e.g. 1234567890:AA...-...."
           required
           minlength="20"
         />
-        <p class="mt-1 text-xs text-gray-500">Dapatkan token dari @BotFather di Telegram.</p>
+        <p class="mt-1 text-xs text-gray-500">Get token from @BotFather on Telegram.</p>
       </div>
 
       <div>
@@ -54,15 +54,15 @@ $whatsapp_phone = isset($settings['whatsapp_phone']) ? (string)$settings['whatsa
           name="telegram_chat_id"
           value="<?= htmlspecialchars($chat); ?>"
           class="mt-1 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500"
-          placeholder="mis. -1001234567890 (channel/supergroup) atau 123456789 (user)"
+          placeholder="e.g. -1001234567890 (channel/supergroup) or 123456789 (user)"
           required
           minlength="3"
         />
-        <p class="mt-1 text-xs text-gray-500">Gunakan ID user, grup, atau channel tempat bot menjadi anggota/admin.</p>
+        <p class="mt-1 text-xs text-gray-500">Use user ID, group, or channel where bot is member/admin.</p>
       </div>
 
       <div>
-        <label for="ad_slider_interval" class="block text-sm font-medium text-gray-700">Interval Slider Iklan (detik)</label>
+        <label for="ad_slider_interval" class="block text-sm font-medium text-gray-700">Ad Slider Interval (seconds)</label>
         <input
           type="number"
           id="ad_slider_interval"
@@ -74,11 +74,11 @@ $whatsapp_phone = isset($settings['whatsapp_phone']) ? (string)$settings['whatsa
           min="1"
           max="60"
         />
-        <p class="mt-1 text-xs text-gray-500">Interval waktu perpindahan gambar iklan dalam detik (1-60 detik).</p>
+        <p class="mt-1 text-xs text-gray-500">Time interval for ad image rotation in seconds (1-60 seconds).</p>
       </div>
 
       <div>
-        <label for="whatsapp_phone" class="block text-sm font-medium text-gray-700">Nomor WhatsApp</label>
+        <label for="whatsapp_phone" class="block text-sm font-medium text-gray-700">WhatsApp Number</label>
         <input
           type="text"
           id="whatsapp_phone"
@@ -88,12 +88,12 @@ $whatsapp_phone = isset($settings['whatsapp_phone']) ? (string)$settings['whatsa
           placeholder="+60123456789"
           maxlength="20"
         />
-        <p class="mt-1 text-xs text-gray-500">Nomor WhatsApp untuk inquiry produk (gunakan format internasional, contoh: +60143218026).</p>
+        <p class="mt-1 text-xs text-gray-500">WhatsApp number for product inquiries (use international format, e.g. +60143218026).</p>
       </div>
 
       <div class="pt-2">
         <button type="submit" class="inline-flex items-center rounded-md bg-sky-600 text-white px-4 py-2 text-sm font-semibold hover:bg-sky-700">
-          Simpan Pengaturan
+          Save Settings
         </button>
       </div>
       </form>

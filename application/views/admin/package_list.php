@@ -1,5 +1,5 @@
 <?php
-$this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'Data Pakej Spa (Menu APITT)']);
+$this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'Spa Package Data (APITT Menu)']);
 ?>
 
 <?php if (!empty($flash['success'])): ?>
@@ -13,15 +13,15 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
   </div>
 <?php endif; ?>
 
-<!-- Toolbar: Tambah Pakej (modal) -->
+<!-- Toolbar: Add Package (modal) -->
 <div class="mb-4 flex justify-end">
-  <button type="button" onclick="window.pkgCreateOpen()" class="inline-flex items-center rounded-md bg-sky-600 text-white px-4 py-2 text-sm hover:bg-sky-700">Tambah Pakej</button>
+  <button type="button" onclick="window.pkgCreateOpen()" class="inline-flex items-center rounded-md bg-sky-600 text-white px-4 py-2 text-sm hover:bg-sky-700">Add Package</button>
 </div>
 
 <!-- List Packages -->
 <div class="rounded-lg border border-gray-200 bg-white shadow-sm">
   <div class="px-5 py-3 border-b border-gray-200">
-    <h2 class="text-base font-semibold text-gray-900">Senarai Pakej (APITT)</h2>
+    <h2 class="text-base font-semibold text-gray-900">Package List (APITT)</h2>
   </div>
   <div class="p-0">
     <div class="overflow-x-auto">
@@ -29,15 +29,15 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
         <thead class="bg-gray-50">
           <tr class="text-left text-sm text-gray-600">
             <th class="px-5 py-3 w-12">#</th>
-            <th class="px-5 py-3">Nama Pakej</th>
-            <th class="px-5 py-3">Kategori</th>
-            <th class="px-5 py-3 text-center w-32">Terapis</th>
-            <th class="px-5 py-3 text-center w-36">Tempoh</th>
-            <th class="px-5 py-3 text-right w-40">Di Premis</th>
-            <th class="px-5 py-3 text-right w-40">Luar Premis</th>
-            <th class="px-5 py-3 text-center w-28">Mata Wang</th>
-            <th class="px-5 py-3 w-[360px]">Keterangan</th>
-            <th class="px-5 py-3 text-right w-56">Tindakan</th>
+            <th class="px-5 py-3">Package Name</th>
+            <th class="px-5 py-3">Category</th>
+            <th class="px-5 py-3 text-center w-32">Therapists</th>
+            <th class="px-5 py-3 text-center w-36">Duration</th>
+            <th class="px-5 py-3 text-right w-40">On Premise</th>
+            <th class="px-5 py-3 text-right w-40">Off Premise</th>
+            <th class="px-5 py-3 text-center w-28">Currency</th>
+            <th class="px-5 py-3 w-[360px]">Description</th>
+            <th class="px-5 py-3 text-right w-56">Actions</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-200">
@@ -83,7 +83,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
                 <?php if (false): ?>
                   <input type="number" name="duration" class="w-24 text-center rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500" value="<?= (int)($p->duration ?? 0); ?>" min="15" step="5" required>
                 <?php else: ?>
-                  <?= (int)($p->duration ?? 0); ?> minit
+                  <?= (int)($p->duration ?? 0); ?> minutes
                 <?php endif; ?>
               </td>
 
@@ -128,15 +128,15 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
                 <?php if (false): ?>
                     <!-- Inline edit disabled; using modal -->
                 <?php else: ?>
-                    <a class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-3 py-1.5 text-xs hover:bg-gray-50" href="<?= site_url('admin/package/edit/' . (isset($p->token) ? $p->token : (int)$p->id)); ?>">Sunting</a>
-                    <a class="inline-flex items-center rounded-md border border-red-300 bg-white text-red-600 px-3 py-1.5 text-xs hover:bg-red-50" href="<?= site_url('admin/package/delete/' . (isset($p->token) ? $p->token : (int)$p->id)); ?>" onclick="return confirm('Padam pakej ini?');">Padam</a>
+                    <a class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-3 py-1.5 text-xs hover:bg-gray-50" href="<?= site_url('admin/package/edit/' . (isset($p->token) ? $p->token : (int)$p->id)); ?>">Edit</a>
+                    <a class="inline-flex items-center rounded-md border border-red-300 bg-white text-red-600 px-3 py-1.5 text-xs hover:bg-red-50" href="<?= site_url('admin/package/delete/' . (isset($p->token) ? $p->token : (int)$p->id)); ?>" onclick="return confirm('Delete this package?');">Delete</a>
                 <?php endif; ?>
               </td>
             </tr>
           <?php endforeach; ?>
         <?php else: ?>
           <tr>
-            <td colspan="10" class="px-5 py-6 text-center text-gray-500">Belum ada data pakej.</td>
+            <td colspan="10" class="px-5 py-6 text-center text-gray-500">No package data available.</td>
           </tr>
         <?php endif; ?>
         </tbody>
@@ -146,7 +146,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
 </div>
 
 <footer class="pt-6 text-gray-500 text-xs">
-  <p>© <?= date('Y'); ?> Sistem Pengurusan Spa</p>
+  <p>© <?= date('Y'); ?> Spa Management System</p>
 </footer>
 
 <?php
@@ -172,8 +172,8 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
      class="fixed inset-0 z-50 <?= $hasEdit ? 'flex' : 'hidden'; ?> items-center justify-center p-4">
   <div class="w-full max-w-2xl bg-white rounded-xl shadow-xl ring-1 ring-gray-200">
     <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-      <h3 class="text-lg font-semibold text-gray-900">Sunting Pakej</h3>
-      <button type="button" class="text-gray-400 hover:text-gray-600" onclick="window.pkgEditClose()" aria-label="Tutup">
+      <h3 class="text-lg font-semibold text-gray-900">Edit Package</h3>
+      <button type="button" class="text-gray-400 hover:text-gray-600" onclick="window.pkgEditClose()" aria-label="Close">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
         </svg>
@@ -184,19 +184,19 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
       <?php if ($hasEdit && isset($editItem)): ?>
         <form method="post" action="<?= site_url('admin/package/edit/' . $editToken); ?>" class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="md:col-span-2">
-            <label for="edit_name" class="block text-sm font-medium text-gray-700">Nama Pakej</label>
+            <label for="edit_name" class="block text-sm font-medium text-gray-700">Package Name</label>
             <input id="edit_name" name="name" type="text" value="<?= htmlspecialchars($editItem->name ?? ''); ?>" required minlength="2"
                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
           </div>
 
           <div class="md:col-span-2">
-            <label for="edit_category" class="block text-sm font-medium text-gray-700">Kategori</label>
+            <label for="edit_category" class="block text-sm font-medium text-gray-700">Category</label>
             <input id="edit_category" name="category" type="text" value="<?= htmlspecialchars($editItem->category ?? ''); ?>" required
                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
           </div>
 
           <div>
-            <label for="edit_hands" class="block text-sm font-medium text-gray-700">Bilangan Terapis</label>
+            <label for="edit_hands" class="block text-sm font-medium text-gray-700">Number of Therapists</label>
             <select id="edit_hands" name="hands" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
               <option value="1" <?= ((int)($editItem->hands ?? 1) === 1) ? 'selected' : ''; ?>>1 (Solo)</option>
               <option value="2" <?= ((int)($editItem->hands ?? 1) === 2) ? 'selected' : ''; ?>>2 (4 Hand)</option>
@@ -204,42 +204,42 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
           </div>
 
           <div>
-            <label for="edit_duration" class="block text-sm font-medium text-gray-700">Tempoh (minit)</label>
+            <label for="edit_duration" class="block text-sm font-medium text-gray-700">Duration (minutes)</label>
             <input id="edit_duration" name="duration" type="number" min="15" step="5" required value="<?= (int)($editItem->duration ?? 0); ?>"
                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-center">
           </div>
 
           <div>
-            <label for="edit_currency" class="block text-sm font-medium text-gray-700">Mata Wang</label>
+            <label for="edit_currency" class="block text-sm font-medium text-gray-700">Currency</label>
             <input id="edit_currency" name="currency" type="text" maxlength="10" required value="<?= htmlspecialchars($editItem->currency ?? 'RM'); ?>"
                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
           </div>
 
           <div>
-            <label for="edit_price_in_call" class="block text-sm font-medium text-gray-700">Harga Di Premis</label>
+            <label for="edit_price_in_call" class="block text-sm font-medium text-gray-700">On Premise Price</label>
             <input id="edit_price_in_call" name="price_in_call" type="number" min="0" step="1" required value="<?= (float)($editItem->price_in_call ?? 0); ?>"
                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-right">
           </div>
 
           <div>
-            <label for="edit_price_out_call" class="block text-sm font-medium text-gray-700">Harga Luar Premis</label>
+            <label for="edit_price_out_call" class="block text-sm font-medium text-gray-700">Off Premise Price</label>
             <input id="edit_price_out_call" name="price_out_call" type="number" min="0" step="1" required value="<?= (float)($editItem->price_out_call ?? 0); ?>"
                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-right">
           </div>
 
           <div class="md:col-span-2">
-            <label for="edit_description" class="block text-sm font-medium text-gray-700">Keterangan</label>
+            <label for="edit_description" class="block text-sm font-medium text-gray-700">Description</label>
             <textarea id="edit_description" name="description" rows="2"
                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"><?= htmlspecialchars($editItem->description ?? ''); ?></textarea>
           </div>
 
           <div class="md:col-span-2 flex justify-end gap-3 mt-2">
-            <button type="submit" class="inline-flex items-center rounded-md bg-sky-600 text-white px-4 py-2 text-sm hover:bg-sky-700">Simpan</button>
-            <a href="<?= site_url('admin/packages'); ?>" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-4 py-2 text-sm hover:bg-gray-50">Batal</a>
+            <button type="submit" class="inline-flex items-center rounded-md bg-sky-600 text-white px-4 py-2 text-sm hover:bg-sky-700">Save</button>
+            <a href="<?= site_url('admin/packages'); ?>" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-4 py-2 text-sm hover:bg-gray-50">Cancel</a>
           </div>
         </form>
       <?php else: ?>
-        <p class="text-sm text-gray-500">Data pakej tidak ditemui.</p>
+        <p class="text-sm text-gray-500">Package data not found.</p>
       <?php endif; ?>
     </div>
   </div>
@@ -254,8 +254,8 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
      class="fixed inset-0 z-50 hidden items-center justify-center p-4">
   <div class="w-full max-w-2xl bg-white rounded-xl shadow-xl ring-1 ring-gray-200">
     <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-      <h3 class="text-lg font-semibold text-gray-900">Tambah Pakej</h3>
-      <button type="button" class="text-gray-400 hover:text-gray-600" onclick="window.pkgCreateClose()" aria-label="Tutup">
+      <h3 class="text-lg font-semibold text-gray-900">Add Package</h3>
+      <button type="button" class="text-gray-400 hover:text-gray-600" onclick="window.pkgCreateClose()" aria-label="Close">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
         </svg>
@@ -265,19 +265,19 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
     <div class="p-6">
       <form method="post" action="<?= site_url('admin/package/create'); ?>" class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="md:col-span-2">
-          <label for="create_name" class="block text-sm font-medium text-gray-700">Nama Pakej</label>
-          <input id="create_name" name="name" type="text" required minlength="2" placeholder="Contoh: Solo Package A"
+          <label for="create_name" class="block text-sm font-medium text-gray-700">Package Name</label>
+          <input id="create_name" name="name" type="text" required minlength="2" placeholder="Example: Solo Package A"
                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
         </div>
 
         <div class="md:col-span-2">
-          <label for="create_category" class="block text-sm font-medium text-gray-700">Kategori</label>
-          <input id="create_category" name="category" type="text" required placeholder="Contoh: Solo Oil Relaxing Massage"
+          <label for="create_category" class="block text-sm font-medium text-gray-700">Category</label>
+          <input id="create_category" name="category" type="text" required placeholder="Example: Solo Oil Relaxing Massage"
                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
         </div>
 
         <div>
-          <label for="create_hands" class="block text-sm font-medium text-gray-700">Bilangan Terapis</label>
+          <label for="create_hands" class="block text-sm font-medium text-gray-700">Number of Therapists</label>
           <select id="create_hands" name="hands" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
             <option value="1">1 (Solo)</option>
             <option value="2">2 (4 Hand)</option>
@@ -285,38 +285,38 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
         </div>
 
         <div>
-          <label for="create_duration" class="block text-sm font-medium text-gray-700">Tempoh (minit)</label>
+          <label for="create_duration" class="block text-sm font-medium text-gray-700">Duration (minutes)</label>
           <input id="create_duration" name="duration" type="number" min="15" step="5" required placeholder="60"
                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
         </div>
 
         <div>
-          <label for="create_currency" class="block text-sm font-medium text-gray-700">Mata Wang</label>
-          <input id="create_currency" name="currency" type="text" maxlength="10" value="RM" placeholder="Contoh: RM"
+          <label for="create_currency" class="block text-sm font-medium text-gray-700">Currency</label>
+          <input id="create_currency" name="currency" type="text" maxlength="10" value="RM" placeholder="Example: RM"
                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
         </div>
 
         <div>
-          <label for="create_price_in_call" class="block text-sm font-medium text-gray-700">Harga Di Premis</label>
-          <input id="create_price_in_call" name="price_in_call" type="number" min="0" step="1" required placeholder="Contoh: 89"
+          <label for="create_price_in_call" class="block text-sm font-medium text-gray-700">On Premise Price</label>
+          <input id="create_price_in_call" name="price_in_call" type="number" min="0" step="1" required placeholder="Example: 89"
                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-right">
         </div>
 
         <div>
-          <label for="create_price_out_call" class="block text-sm font-medium text-gray-700">Harga Luar Premis</label>
-          <input id="create_price_out_call" name="price_out_call" type="number" min="0" step="1" required placeholder="Contoh: 150"
+          <label for="create_price_out_call" class="block text-sm font-medium text-gray-700">Off Premise Price</label>
+          <input id="create_price_out_call" name="price_out_call" type="number" min="0" step="1" required placeholder="Example: 150"
                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-right">
         </div>
 
         <div class="md:col-span-2">
-          <label for="create_description" class="block text-sm font-medium text-gray-700">Keterangan</label>
-          <textarea id="create_description" name="description" rows="2" placeholder="Keterangan pakej (contoh: Urutan Badan Penuh + Manhood)"
+          <label for="create_description" class="block text-sm font-medium text-gray-700">Description</label>
+          <textarea id="create_description" name="description" rows="2" placeholder="Package description (example: Full Body Massage + Manhood)"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"></textarea>
         </div>
 
         <div class="md:col-span-2 flex justify-end gap-3 mt-2">
-          <button type="submit" class="inline-flex items-center rounded-md bg-sky-600 text-white px-4 py-2 text-sm hover:bg-sky-700">Tambah</button>
-          <button type="button" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-4 py-2 text-sm hover:bg-gray-50" onclick="window.pkgCreateClose()">Batal</button>
+          <button type="submit" class="inline-flex items-center rounded-md bg-sky-600 text-white px-4 py-2 text-sm hover:bg-sky-700">Add</button>
+          <button type="button" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-4 py-2 text-sm hover:bg-gray-50" onclick="window.pkgCreateClose()">Cancel</button>
         </div>
       </form>
     </div>

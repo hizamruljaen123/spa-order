@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <title><?= isset($title) ? htmlspecialchars($title) : 'Spa Home'; ?></title>
@@ -160,11 +160,11 @@
         </span>
         <div>
           <div class="text-base font-bold text-slate-800">SPA Management</div>
-          <div class="text-xs text-slate-500">Relaks & Segar Kembali</div>
+          <div class="text-xs text-slate-500">Relax & Refresh</div>
         </div>
       </div>
       <a href="<?= site_url('booking/form'); ?>" class="hidden sm:inline-flex items-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600">
-        Tempah Sekarang
+        Book Now
       </a>
     </div>
   </header>
@@ -173,9 +173,9 @@
  <section class="relative">
   <!-- Background image + overlay -->
   <div class="absolute inset-0 -z-10">
-    <img 
-      src="<?= base_url('assets/img/01.jpg'); ?>" 
-      alt="Spa hero" 
+    <img
+      src="<?= base_url('assets/img/01.jpg'); ?>"
+      alt="Spa hero"
       class="w-full h-full object-cover"
     >
     <div class="absolute inset-0 bg-black/50"></div>
@@ -184,16 +184,16 @@
   <!-- Content -->
   <div class="mx-auto max-w-6xl px-4 py-24 md:py-32">
     <div class="max-w-xl text-white">
-      <h1 class="text-3xl md:text-5xl font-bold">Nikmati Pengalaman Spa Premium</h1>
+      <h1 class="text-3xl md:text-5xl font-bold">Enjoy Premium Spa Experience</h1>
       <p class="mt-4 text-white/90">
-        Perkhidmatan lengkap dengan terapis profesional, suasana yang selesa, dan harga telus.
+        Complete service with professional therapists, comfortable atmosphere, and transparent pricing.
       </p>
       <div class="mt-8">
         <a href="#packages" class="inline-flex items-center rounded-lg bg-white/95 px-4 py-2 text-slate-900 font-semibold shadow-sm hover:bg-white">
-          Terokai Pakej
+          Explore Packages
         </a>
         <a href="<?= site_url('booking/form'); ?>" class="ml-3 inline-flex items-center rounded-lg bg-primary px-4 py-2 text-white font-semibold shadow-sm hover:bg-sky-600">
-          Tempah Sekarang
+          Book Now
         </a>
       </div>
     </div>
@@ -208,13 +208,13 @@
     <!-- Products Section -->
     <section class="mt-8 md:mt-12">
       <div class="mb-4 md:mb-6 flex items-center justify-between">
-        <h2 class="text-xl md:text-2xl font-bold text-slate-800">Produk & Barang</h2>
+        <h2 class="text-xl md:text-2xl font-bold text-slate-800">Products & Items</h2>
         <div class="flex gap-2">
           <a href="<?= site_url('products'); ?>" class="hidden sm:inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50">
-            Lihat Semua Produk
+            View All Products
           </a>
           <a href="<?= site_url('booking/form'); ?>" class="hidden sm:inline-flex items-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600">
-            Tempah Spa
+            Book Spa
           </a>
         </div>
       </div>
@@ -310,7 +310,7 @@
         <?php if (count($active_products) > 8): ?>
           <div class="mt-8 text-center">
             <a href="<?= site_url('products'); ?>" class="inline-flex items-center rounded-lg bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200">
-              Lihat Semua Produk (<?= count($active_products); ?>)
+              View All Products (<?= count($active_products); ?>)
               <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
               </svg>
@@ -323,7 +323,7 @@
     <?php if (!empty($exclusive_treatments_grouped)): ?>
     <section class="mt-8 md:mt-12">
       <div class="mb-4 md:mb-6 flex items-center justify-between">
-        <h2 class="text-xl md:text-2xl font-bold text-slate-800">Rawatan Eksklusif</h2>
+        <h2 class="text-xl md:text-2xl font-bold text-slate-800">Exclusive Treatments</h2>
       </div>
 
       <?php foreach ($exclusive_treatments_grouped as $category => $treatments): ?>
@@ -366,9 +366,9 @@
     <!-- Packages / Services -->
     <section id="packages" class="mt-8 md:mt-12">
       <div class="mb-4 md:mb-6 flex items-center justify-between">
-        <h2 class="text-xl md:text-2xl font-bold text-slate-800">Pakej & Perkhidmatan</h2>
+        <h2 class="text-xl md:text-2xl font-bold text-slate-800">Packages & Services</h2>
         <a href="<?= site_url('booking/form'); ?>" class="hidden sm:inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50">
-          Buat Tempahan
+          Create Booking
         </a>
       </div>
 
@@ -381,12 +381,12 @@
                 <?php if (!empty($p->description)): ?>
                   <p class="text-sm text-slate-600 line-clamp-2 mb-2"><?= htmlspecialchars($p->description); ?></p>
                 <?php else: ?>
-                  <p class="text-sm text-slate-600 mb-2">Pakej spa untuk relaksasi tubuh dan minda.</p>
+                  <p class="text-sm text-slate-600 mb-2">Spa package for body and mind relaxation.</p>
                 <?php endif; ?>
                 <div class="mb-2 text-xs text-slate-600">
                   <span class="inline-flex items-center gap-2">
-                    <span class="rounded-full bg-slate-100 px-2 py-0.5">Kategori: <?= htmlspecialchars($p->category ?? '-'); ?></span>
-                    <span class="rounded-full bg-slate-100 px-2 py-0.5">Terapis: <?= isset($p->hands) ? (int)$p->hands : 1; ?></span>
+                    <span class="rounded-full bg-slate-100 px-2 py-0.5">Category: <?= htmlspecialchars($p->category ?? '-'); ?></span>
+                    <span class="rounded-full bg-slate-100 px-2 py-0.5">Therapist: <?= isset($p->hands) ? (int)$p->hands : 1; ?></span>
                   </span>
                 </div>
                 <div class="flex items-center justify-between">
@@ -399,19 +399,19 @@
                     <?php if ($pin !== null || $pout !== null): ?>
                       <span class="inline-flex items-center gap-2">
                         <?php if ($pin !== null): ?>
-                          <span>Di Premis: <?= htmlspecialchars($curr); ?> <?= number_format($pin, 0, ',', '.'); ?></span>
+                          <span>At Premise: <?= htmlspecialchars($curr); ?> <?= number_format($pin, 0, ',', '.'); ?></span>
                         <?php endif; ?>
                         <?php if ($pout !== null): ?>
                           <span class="text-slate-600">•</span>
-                          <span>Luar Premis: <?= htmlspecialchars($curr); ?> <?= number_format($pout, 0, ',', '.'); ?></span>
+                          <span>Out Premise: <?= htmlspecialchars($curr); ?> <?= number_format($pout, 0, ',', '.'); ?></span>
                         <?php endif; ?>
                       </span>
                     <?php else: ?>
-                      Hubungi kami
+                      Contact us
                     <?php endif; ?>
                   </div>
                   <a href="<?= site_url('booking/form') . '?package_id=' . (int)$p->id; ?>" class="inline-flex items-center rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-white hover:bg-sky-600">
-                    Tempah
+                    Book
                   </a>
                 </div>
               </div>
@@ -419,28 +419,28 @@
           <?php endforeach; ?>
         <?php else: ?>
           <div class="col-span-full rounded-xl border border-dashed border-slate-300 bg-white p-6 text-center text-slate-600">
-            Pakej belum tersedia. Sila kembali lagi nanti.
+            Packages not available yet. Please check back later.
           </div>
         <?php endif; ?>
       </div>
     </section>
 
-    <!-- Senarai harga dihapus mengikut arahan -->
+    <!-- Price list removed per instruction -->
 
     <!-- Address & Contact -->
     <section id="contact" class="mt-10 md:mt-14">
-  <h2 class="text-xl md:text-2xl font-bold text-slate-800 mb-4 md:mb-6">Alamat & Hubungi</h2>
+  <h2 class="text-xl md:text-2xl font-bold text-slate-800 mb-4 md:mb-6">Address & Contact</h2>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-    <!-- Info Kontak -->
+    <!-- Contact Info -->
     <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
       <div class="text-slate-700">
-        <div class="font-semibold text-slate-800">Alamat</div>
+        <div class="font-semibold text-slate-800">Address</div>
         <p class="text-sm text-slate-600 mt-1">21-1, Jalan Abadi 2/1</p>
         <p class="text-sm text-slate-600">Abadi Heights, Puchong, Selangor 71420</p>
         <p class="text-sm text-slate-600">Malaysia</p>
 
-        <div class="mt-4 font-semibold text-slate-800">Kontak</div>
+        <div class="mt-4 font-semibold text-slate-800">Contact</div>
         <p class="text-sm text-slate-600 mt-1">
           Tel:
           <a href="tel:+60380619349" class="text-blue-600 hover:underline">+603 8061 9349</a> /
@@ -458,12 +458,12 @@
         href="<?= site_url('booking/form'); ?>"
         class="mt-4 inline-flex items-center rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-600"
       >
-        Buat Tempahan
+        Create Booking
       </a>
     </div>
 
-    <!-- Gambar -->
-    
+    <!-- Image -->
+     
   </div>
 </section>
 
@@ -473,11 +473,11 @@
   <div class="fixed inset-x-0 bottom-0 z-30 border-t border-slate-200 bg-white/95 backdrop-blur">
     <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
       <div class="text-sm">
-        <div class="font-semibold text-slate-800">Sedia untuk bersantai?</div>
-        <div class="text-slate-500">Tempah jadual anda sekarang</div>
+        <div class="font-semibold text-slate-800">Ready to relax?</div>
+        <div class="text-slate-500">Book your schedule now</div>
       </div>
       <a href="<?= site_url('booking/form'); ?>" class="inline-flex items-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600">
-        Tempah Sekarang
+        Book Now
       </a>
     </div>
   </div>

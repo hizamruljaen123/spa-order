@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <title><?= isset($title) ? htmlspecialchars($title) : 'Product Detail'; ?></title>
@@ -177,12 +177,12 @@
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M10.707 4.293a1 1 0 010 1.414L6.414 10H19a1 1 0 110 2H6.414l4.293 4.293a1 1 0 01-1.414 1.414l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 0z"/></svg>
         </a>
         <div>
-          <div class="text-base font-bold text-slate-800">Detail Produk</div>
+          <div class="text-base font-bold text-slate-800">Product Detail</div>
           <div class="text-xs text-slate-500">SPA Management</div>
         </div>
       </div>
       <a href="<?= site_url('booking/form'); ?>" class="hidden sm:inline-flex items-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600">
-        Tempah Sekarang
+        Book Now
       </a>
     </div>
   </header>
@@ -256,10 +256,10 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.29-1.01-5.625-2.594C6.738 10.832 9.246 10 12 10s5.262.832 6.625 2.406z"/>
           </svg>
         </div>
-        <h2 class="text-2xl font-bold text-slate-800 mb-2">Produk Tidak Ditemui</h2>
-        <p class="text-slate-600 mb-6">Maaf, produk yang anda cari tidak tersedia atau telah dipindahkan.</p>
+        <h2 class="text-2xl font-bold text-slate-800 mb-2">Product Not Found</h2>
+        <p class="text-slate-600 mb-6">Sorry, the product you are looking for is not available or has been moved.</p>
         <a href="<?= site_url('products'); ?>" class="inline-flex items-center rounded-lg bg-primary px-6 py-3 text-white font-semibold hover:bg-sky-600">
-          Kembali ke Produk
+          Back to Products
         </a>
       </div>
     <?php endif; ?>
@@ -271,7 +271,7 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
         </svg>
-        Lihat Semua Produk
+        View All Products
       </a>
     </div>
   </main>
@@ -280,14 +280,14 @@
   <div class="fixed inset-x-0 bottom-0 z-30 border-t border-slate-200 bg-white/95 backdrop-blur">
     <div class="mx-auto max-w-6xl px-4 py-3 flex items-center">
       <div class="flex-1 text-sm">
-        <div class="font-semibold text-slate-800">Ada soalan? Hubungi kami</div>
-        <div class="text-slate-500">Kami sedia membantu</div>
+        <div class="font-semibold text-slate-800">Have questions? Contact us</div>
+        <div class="text-slate-500">We're ready to help</div>
       </div>
       <a href="tel:+60380619349" class="inline-flex items-center rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-600">
         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
         </svg>
-        Hubungi
+        Call
       </a>
     </div>
   </div>
@@ -296,9 +296,9 @@
   <script>
     function openWhatsApp(productName, price, currency) {
       const message = encodeURIComponent(
-        `Hi! Saya berminat dengan produk: ${productName}\n\n` +
-        `Harga: ${currency} ${price}\n\n` +
-        `Boleh saya dapat maklumat lanjut?`
+        `Hi! I'm interested in the product: ${productName}\n\n` +
+        `Price: ${currency} ${price}\n\n` +
+        `Can I get more information?`
       );
       const phoneNumber = '<?= $whatsapp_phone; ?>'; // From settings
       window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');

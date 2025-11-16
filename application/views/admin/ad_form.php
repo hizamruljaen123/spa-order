@@ -1,5 +1,5 @@
 <?php
-$this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'Form Iklan']);
+$this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'Ad Form']);
 ?>
 
 <?php if (!empty($flash['success'])): ?>
@@ -16,13 +16,13 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'F
 <!-- Form Container -->
 <div class="rounded-lg border border-gray-200 bg-white shadow-sm">
   <div class="px-5 py-3 border-b border-gray-200">
-    <h2 class="text-base font-semibold text-gray-900"><?= isset($ad) ? 'Sunting Iklan' : 'Tambah Iklan Baru'; ?></h2>
+    <h2 class="text-base font-semibold text-gray-900"><?= isset($ad) ? 'Edit Ad' : 'Add New Ad'; ?></h2>
   </div>
   <div class="p-6">
     <?php echo form_open(isset($ad) ? 'admin/ad_management/update/' . $ad['id'] : 'admin/ad_management/store', ['enctype' => 'multipart/form-data', 'class' => 'grid grid-cols-1 md:grid-cols-2 gap-4']); ?>
       
       <div class="md:col-span-2">
-        <label for="title" class="block text-sm font-medium text-gray-700">Tajuk</label>
+        <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
         <?php echo form_input('title', set_value('title', isset($ad) ? $ad['title'] : ''), [
           'class' => 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500',
           'id' => 'title',
@@ -32,17 +32,17 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'F
       </div>
 
       <div class="md:col-span-2">
-        <label for="image_url" class="block text-sm font-medium text-gray-700">Imej</label>
+        <label for="image_url" class="block text-sm font-medium text-gray-700">Image</label>
         <?php echo form_upload('image_url', set_value('image_url'), [
           'class' => 'mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100',
           'id' => 'image_url'
         ]); ?>
-        <small class="mt-1 text-xs text-gray-500">Jenis fail yang dibenarkan: jpg, jpeg, png, gif. Saiz maksimum: 2MB.</small>
+        <small class="mt-1 text-xs text-gray-500">Allowed file types: jpg, jpeg, png, gif. Maximum size: 2MB.</small>
         <?php echo form_error('image_url', '<div class="mt-1 text-sm text-red-600">', '</div>'); ?>
       </div>
 
       <div class="md:col-span-2">
-        <label for="link_url" class="block text-sm font-medium text-gray-700">URL Pautan</label>
+        <label for="link_url" class="block text-sm font-medium text-gray-700">Link URL</label>
         <?php echo form_input('link_url', set_value('link_url', isset($ad) ? $ad['link_url'] : ''), [
           'class' => 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500',
           'id' => 'link_url',
@@ -52,7 +52,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'F
       </div>
 
       <div>
-        <label for="display_order" class="block text-sm font-medium text-gray-700">Tertib Paparan</label>
+        <label for="display_order" class="block text-sm font-medium text-gray-700">Display Order</label>
         <?php echo form_input('display_order', set_value('display_order', isset($ad) ? $ad['display_order'] : 0), [
           'class' => 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500',
           'id' => 'display_order',
@@ -70,23 +70,23 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'F
               'id' => 'is_active'
             ]);
           ?>
-          <label for="is_active" class="ml-2 block text-sm text-gray-700">Aktif</label>
+          <label for="is_active" class="ml-2 block text-sm text-gray-700">Active</label>
         </div>
       </div>
 
       <div class="md:col-span-2">
         <?php if (isset($ad) && !empty($ad['image_url'])): ?>
-          <label class="block text-sm font-medium text-gray-700">Imej Semasa</label>
+          <label class="block text-sm font-medium text-gray-700">Current Image</label>
           <div class="flex items-center gap-3 mt-1">
-            <img src="<?= base_url($ad['image_url']); ?>" alt="Imej Iklan" class="h-20 w-20 rounded object-cover border border-gray-200">
+            <img src="<?= base_url($ad['image_url']); ?>" alt="Ad Image" class="h-20 w-20 rounded object-cover border border-gray-200">
             <span class="text-xs text-gray-500 truncate max-w-xs"><?= htmlspecialchars($ad['image_url']); ?></span>
           </div>
         <?php endif; ?>
       </div>
 
       <div class="md:col-span-2 flex justify-end gap-3 mt-2">
-        <button type="submit" class="inline-flex items-center rounded-md bg-sky-600 text-white px-4 py-2 text-sm hover:bg-sky-700">Simpan</button>
-        <a href="<?= site_url('admin/ad_management'); ?>" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-4 py-2 text-sm hover:bg-gray-50">Batal</a>
+        <button type="submit" class="inline-flex items-center rounded-md bg-sky-600 text-white px-4 py-2 text-sm hover:bg-sky-700">Save</button>
+        <a href="<?= site_url('admin/ad_management'); ?>" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-4 py-2 text-sm hover:bg-gray-50">Cancel</a>
       </div>
       
     <?php echo form_close(); ?>

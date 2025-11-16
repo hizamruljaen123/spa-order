@@ -11,7 +11,7 @@ $isActive = function($patterns) use ($uri) {
 };
 ?>
 <!DOCTYPE html>
-<html lang="ms">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -50,47 +50,47 @@ $isActive = function($patterns) use ($uri) {
     <nav class="p-3 space-y-1 text-sm">
       <a href="<?= site_url('admin'); ?>"
          class="block px-3 py-2 rounded-md <?= ($uri === 'admin' || $uri === 'admin/index') ? 'bg-white/10 text-white' : 'text-gray-300 hover:text-white hover:bg-white/10'; ?>">
-        Papan Pemuka
+        Dashboard
       </a>
       <a href="<?= site_url('admin/therapists'); ?>"
          class="block px-3 py-2 rounded-md <?= $isActive(['admin/therapists','admin/therapist']); ?>">
-        Terapis
+        Therapists
       </a>
       <a href="<?= site_url('admin/packages'); ?>"
          class="block px-3 py-2 rounded-md <?= $isActive(['admin/packages','admin/package']); ?>">
-        Pakej
+        Packages
       </a>
       <a href="<?= site_url('admin/addons'); ?>"
          class="block px-3 py-2 rounded-md <?= $isActive(['admin/addons','admin/addon']); ?>">
-        Add-on
+        Add-ons
       </a>
       <a href="<?= site_url('admin/exclusive_treatments'); ?>"
          class="block px-3 py-2 rounded-md <?= $isActive(['admin/exclusive_treatments','admin/exclusive_treatment']); ?>">
-        Rawatan Eksklusif
+        Exclusive Treatments
       </a>
       <a href="<?= site_url('admin/ad_management'); ?>"
          class="block px-3 py-2 rounded-md <?= $isActive(['admin/ad_management']); ?>">
-        Iklan
+        Advertisements
       </a>
       <a href="<?= site_url('admin/product_management'); ?>"
          class="block px-3 py-2 rounded-md <?= $isActive(['admin/product_management']); ?>">
-        Produk
+        Products
       </a>
       <a href="<?= site_url('admin/schedule'); ?>"
          class="block px-3 py-2 rounded-md <?= $isActive(['admin/schedule']); ?>">
-        Jadual
+        Schedule
       </a>
       <a href="<?= site_url('admin/bookings'); ?>"
          class="block px-3 py-2 rounded-md <?= $isActive(['admin/bookings']); ?>">
-        Booking
+        Bookings
       </a>
       <a href="<?= site_url('admin/report'); ?>"
          class="block px-3 py-2 rounded-md <?= $isActive(['admin/report']); ?>">
-        Laporan
+        Reports
       </a>
       <a href="<?= site_url('admin/settings'); ?>"
          class="block px-3 py-2 rounded-md <?= $isActive(['admin/settings']); ?>">
-        Pengaturan
+        Settings
       </a>
     </nav>
 
@@ -104,7 +104,7 @@ $isActive = function($patterns) use ($uri) {
     <!-- Topbar -->
     <header class="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-6">
       <h1 class="font-semibold text-gray-900"><?= htmlspecialchars($title); ?></h1>
-      <div class="text-xs text-gray-500">Panel Admin</div>
+      <div class="text-xs text-gray-500">Admin Panel</div>
     </header>
 
     <!-- Main content -->

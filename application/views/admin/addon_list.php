@@ -1,5 +1,5 @@
 <?php
-$this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'Data Add-on']);
+$this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'Addon Data']);
 ?>
 
 <?php if (!empty($flash['success'])): ?>
@@ -14,25 +14,25 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
 <?php endif; ?>
 
 <div class="mb-4 flex justify-end">
-  <button type="button" onclick="window.aoCreateOpen()" class="inline-flex items-center rounded-md bg-sky-600 text-white px-4 py-2 text-sm hover:bg-sky-700">Tambah Add-on</button>
+  <button type="button" onclick="window.aoCreateOpen()" class="inline-flex items-center rounded-md bg-sky-600 text-white px-4 py-2 text-sm hover:bg-sky-700">Add Add-on</button>
 </div>
 
 <div class="rounded-lg border border-gray-200 bg-white shadow-sm">
   <div class="px-5 py-3 border-b border-gray-200">
-    <h2 class="text-base font-semibold text-gray-900">Senarai Add-on</h2>
+    <h2 class="text-base font-semibold text-gray-900">Addon List</h2>
   </div>
   <div class="p-0 overflow-x-auto">
     <table class="min-w-full table-auto">
       <thead class="bg-gray-50">
         <tr class="text-left text-sm text-gray-600">
           <th class="px-5 py-3 w-12">#</th>
-          <th class="px-5 py-3 w-48">Kategori</th>
-          <th class="px-5 py-3">Nama</th>
-          <th class="px-5 py-3 w-[420px]">Keterangan</th>
-          <th class="px-5 py-3 text-right w-40">Harga</th>
-          <th class="px-5 py-3 text-center w-28">Mata Wang</th>
-          <th class="px-5 py-3 text-center w-24">Aktif</th>
-          <th class="px-5 py-3 text-right w-56">Tindakan</th>
+          <th class="px-5 py-3 w-48">Category</th>
+          <th class="px-5 py-3">Name</th>
+          <th class="px-5 py-3 w-[420px]">Description</th>
+          <th class="px-5 py-3 text-right w-40">Price</th>
+          <th class="px-5 py-3 text-center w-28">Currency</th>
+          <th class="px-5 py-3 text-center w-24">Active</th>
+          <th class="px-5 py-3 text-right w-56">Actions</th>
         </tr>
       </thead>
       <tbody class="divide-y divide-gray-200">
@@ -47,17 +47,17 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
             <td class="px-5 py-3 text-center"><span class="inline-flex items-center px-2 py-1 rounded bg-gray-200 text-gray-700 text-xs"><?= htmlspecialchars($a->currency ?? 'RM'); ?></span></td>
             <td class="px-5 py-3 text-center">
               <?php $active = (int)($a->is_active ?? 0) === 1; ?>
-              <span class="inline-flex items-center px-2 py-1 rounded text-white text-xs <?= $active ? 'bg-emerald-600' : 'bg-gray-400'; ?>"><?= $active ? 'Ya' : 'Tidak'; ?></span>
+              <span class="inline-flex items-center px-2 py-1 rounded text-white text-xs <?= $active ? 'bg-emerald-600' : 'bg-gray-400'; ?>"><?= $active ? 'Yes' : 'No'; ?></span>
             </td>
             <td class="px-5 py-3 text-right">
-              <a class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-3 py-1.5 text-xs hover:bg-gray-50" href="<?= site_url('admin/addon/edit/' . (isset($a->token) ? $a->token : (int)$a->id)); ?>">Sunting</a>
-              <a class="inline-flex items-center rounded-md border border-red-300 bg-white text-red-600 px-3 py-1.5 text-xs hover:bg-red-50" href="<?= site_url('admin/addon/delete/' . (isset($a->token) ? $a->token : (int)$a->id)); ?>" onclick="return confirm('Padam add-on ini?');">Padam</a>
+              <a class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-3 py-1.5 text-xs hover:bg-gray-50" href="<?= site_url('admin/addon/edit/' . (isset($a->token) ? $a->token : (int)$a->id)); ?>">Edit</a>
+              <a class="inline-flex items-center rounded-md border border-red-300 bg-white text-red-600 px-3 py-1.5 text-xs hover:bg-red-50" href="<?= site_url('admin/addon/delete/' . (isset($a->token) ? $a->token : (int)$a->id)); ?>" onclick="return confirm('Delete this addon?');">Delete</a>
             </td>
           </tr>
         <?php endforeach; ?>
       <?php else: ?>
         <tr>
-          <td colspan="8" class="px-5 py-6 text-center text-gray-500">Belum ada data add-on.</td>
+          <td colspan="8" class="px-5 py-6 text-center text-gray-500">No addon data available.</td>
         </tr>
       <?php endif; ?>
       </tbody>
@@ -66,7 +66,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
 </div>
 
 <footer class="pt-6 text-gray-500 text-xs">
-  <p>© <?= date('Y'); ?> Sistem Pengurusan Spa</p>
+  <p>© <?= date('Y'); ?> Spa Management System</p>
 </footer>
 
 <?php
@@ -82,7 +82,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
   }
 ?>
 
-<!-- Edit Add-on Modal -->
+<!-- Edit Addon Modal -->
 <div id="aoEditModalOverlay" class="fixed inset-0 bg-black/40 <?= $hasEdit ? '' : 'hidden'; ?>"></div>
 <div id="aoEditModal"
      role="dialog"
@@ -91,8 +91,8 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
      class="fixed inset-0 z-50 <?= $hasEdit ? 'flex' : 'hidden'; ?> items-center justify-center p-4">
   <div class="w-full max-w-2xl bg-white rounded-xl shadow-xl ring-1 ring-gray-200">
     <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-      <h3 class="text-lg font-semibold text-gray-900">Sunting Add-on</h3>
-      <button type="button" class="text-gray-400 hover:text-gray-600" onclick="window.aoEditClose()" aria-label="Tutup">
+      <h3 class="text-lg font-semibold text-gray-900">Edit Addon</h3>
+      <button type="button" class="text-gray-400 hover:text-gray-600" onclick="window.aoEditClose()" aria-label="Close">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
         </svg>
@@ -103,31 +103,31 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
       <?php if ($hasEdit && isset($editItem)): ?>
         <form method="post" action="<?= site_url('admin/addon/edit/' . $editToken); ?>" class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label for="edit_category" class="block text-sm font-medium text-gray-700">Kategori</label>
+            <label for="edit_category" class="block text-sm font-medium text-gray-700">Category</label>
             <input id="edit_category" name="category" type="text" value="<?= htmlspecialchars($editItem->category ?? ''); ?>" required minlength="2"
                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
           </div>
 
           <div>
-            <label for="edit_name" class="block text-sm font-medium text-gray-700">Nama Add-on</label>
+            <label for="edit_name" class="block text-sm font-medium text-gray-700">Addon Name</label>
             <input id="edit_name" name="name" type="text" value="<?= htmlspecialchars($editItem->name ?? ''); ?>" required minlength="2"
                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
           </div>
 
           <div>
-            <label for="edit_price" class="block text-sm font-medium text-gray-700">Harga</label>
+            <label for="edit_price" class="block text-sm font-medium text-gray-700">Price</label>
             <input id="edit_price" name="price" type="number" min="0" step="1" required value="<?= (float)($editItem->price ?? 0); ?>"
                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-right">
           </div>
 
           <div>
-            <label for="edit_currency" class="block text-sm font-medium text-gray-700">Mata Wang</label>
+            <label for="edit_currency" class="block text-sm font-medium text-gray-700">Currency</label>
             <input id="edit_currency" name="currency" type="text" maxlength="10" required value="<?= htmlspecialchars($editItem->currency ?? 'RM'); ?>"
                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
           </div>
 
           <div class="md:col-span-2">
-            <label for="edit_description" class="block text-sm font-medium text-gray-700">Keterangan</label>
+            <label for="edit_description" class="block text-sm font-medium text-gray-700">Description</label>
             <textarea id="edit_description" name="description" rows="2"
                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"><?= htmlspecialchars($editItem->description ?? ''); ?></textarea>
           </div>
@@ -135,23 +135,23 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
           <div class="md:col-span-2">
             <label class="inline-flex items-center gap-2 text-sm text-gray-700">
               <input type="checkbox" name="is_active" value="1" <?= ((int)($editItem->is_active ?? 0) === 1) ? 'checked' : ''; ?> class="rounded border-gray-300 text-sky-600 focus:ring-sky-500">
-              Aktif
+              Active
             </label>
           </div>
 
           <div class="md:col-span-2 flex justify-end gap-3 mt-2">
-            <button type="submit" class="inline-flex items-center rounded-md bg-sky-600 text-white px-4 py-2 text-sm hover:bg-sky-700">Simpan</button>
-            <a href="<?= site_url('admin/addons'); ?>" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-4 py-2 text-sm hover:bg-gray-50">Batal</a>
+            <button type="submit" class="inline-flex items-center rounded-md bg-sky-600 text-white px-4 py-2 text-sm hover:bg-sky-700">Save</button>
+            <a href="<?= site_url('admin/addons'); ?>" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-4 py-2 text-sm hover:bg-gray-50">Cancel</a>
           </div>
         </form>
       <?php else: ?>
-        <p class="text-sm text-gray-500">Data add-on tidak ditemui.</p>
+        <p class="text-sm text-gray-500">Addon data not found.</p>
       <?php endif; ?>
     </div>
   </div>
 </div>
 
-<!-- Create Add-on Modal -->
+<!-- Create Addon Modal -->
 <div id="aoCreateModalOverlay" class="fixed inset-0 bg-black/40 hidden"></div>
 <div id="aoCreateModal"
      role="dialog"
@@ -160,8 +160,8 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
      class="fixed inset-0 z-50 hidden items-center justify-center p-4">
   <div class="w-full max-w-2xl bg-white rounded-xl shadow-xl ring-1 ring-gray-200">
     <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-      <h3 class="text-lg font-semibold text-gray-900">Tambah Add-on</h3>
-      <button type="button" class="text-gray-400 hover:text-gray-600" onclick="window.aoCreateClose()" aria-label="Tutup">
+      <h3 class="text-lg font-semibold text-gray-900">Add Addon</h3>
+      <button type="button" class="text-gray-400 hover:text-gray-600" onclick="window.aoCreateClose()" aria-label="Close">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
         </svg>
@@ -171,45 +171,45 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
     <div class="p-6">
       <form method="post" action="<?= site_url('admin/addon/create'); ?>" class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label for="create_category" class="block text-sm font-medium text-gray-700">Kategori</label>
-          <input id="create_category" name="category" type="text" required minlength="2" placeholder="Contoh: SHAVING / WAXING / FACIAL"
+          <label for="create_category" class="block text-sm font-medium text-gray-700">Category</label>
+          <input id="create_category" name="category" type="text" required minlength="2" placeholder="Example: SHAVING / WAXING / FACIAL"
                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
         </div>
 
         <div>
-          <label for="create_name" class="block text-sm font-medium text-gray-700">Nama Add-on</label>
-          <input id="create_name" name="name" type="text" required minlength="2" placeholder="Contoh: Armpit"
+          <label for="create_name" class="block text-sm font-medium text-gray-700">Addon Name</label>
+          <input id="create_name" name="name" type="text" required minlength="2" placeholder="Example: Armpit"
                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
         </div>
 
         <div>
-          <label for="create_price" class="block text-sm font-medium text-gray-700">Harga</label>
-          <input id="create_price" name="price" type="number" min="0" step="1" required placeholder="Contoh: 30"
+          <label for="create_price" class="block text-sm font-medium text-gray-700">Price</label>
+          <input id="create_price" name="price" type="number" min="0" step="1" required placeholder="Example: 30"
                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-right">
         </div>
 
         <div>
-          <label for="create_currency" class="block text-sm font-medium text-gray-700">Mata Wang</label>
-          <input id="create_currency" name="currency" type="text" maxlength="10" value="RM" placeholder="Contoh: RM"
+          <label for="create_currency" class="block text-sm font-medium text-gray-700">Currency</label>
+          <input id="create_currency" name="currency" type="text" maxlength="10" value="RM" placeholder="Example: RM"
                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
         </div>
 
         <div class="md:col-span-2">
-          <label for="create_description" class="block text-sm font-medium text-gray-700">Keterangan</label>
-          <textarea id="create_description" name="description" rows="2" placeholder="Opsional"
+          <label for="create_description" class="block text-sm font-medium text-gray-700">Description</label>
+          <textarea id="create_description" name="description" rows="2" placeholder="Optional"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"></textarea>
         </div>
 
         <div class="md:col-span-2">
           <label class="inline-flex items-center gap-2 text-sm text-gray-700">
             <input type="checkbox" name="is_active" value="1" checked class="rounded border-gray-300 text-sky-600 focus:ring-sky-500">
-            Aktif
+            Active
           </label>
         </div>
 
         <div class="md:col-span-2 flex justify-end gap-3 mt-2">
-          <button type="submit" class="inline-flex items-center rounded-md bg-sky-600 text-white px-4 py-2 text-sm hover:bg-sky-700">Tambah</button>
-          <button type="button" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-4 py-2 text-sm hover:bg-gray-50" onclick="window.aoCreateClose()">Batal</button>
+          <button type="submit" class="inline-flex items-center rounded-md bg-sky-600 text-white px-4 py-2 text-sm hover:bg-sky-700">Add</button>
+          <button type="button" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-4 py-2 text-sm hover:bg-gray-50" onclick="window.aoCreateClose()">Cancel</button>
         </div>
       </form>
     </div>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <title><?= isset($title) ? htmlspecialchars($title) : 'Spa Booking'; ?></title>
@@ -40,13 +40,13 @@
     <!-- Header -->
     <div class="flex items-center justify-between mb-8">
       <div>
-        <h1 class="text-3xl md:text-4xl font-bold text-slate-800">Tempahan Spa</h1>
-        <p class="mt-2 text-slate-500">Isi borang berikut untuk membuat tempahan perkhidmatan spa.</p>
+        <h1 class="text-3xl md:text-4xl font-bold text-slate-800">Spa Booking</h1>
+        <p class="mt-2 text-slate-500">Fill out the form below to make a spa service booking.</p>
       </div>
       <div class="hidden md:block">
         <span class="inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-2 shadow-sm ring-1 ring-slate-200">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-teal-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
-          <span class="text-sm font-medium text-slate-700">Relaks & Segar Kembali</span>
+          <span class="text-sm font-medium text-slate-700">Relax & Refresh</span>
         </span>
       </div>
     </div>
@@ -58,8 +58,8 @@
           <img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=1200&q=60" alt="Spa ambience" class="h-full w-full object-cover">
           <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-black/10 to-transparent"></div>
           <div class="absolute bottom-0 left-0 right-0 p-5 text-white">
-            <div class="text-lg font-semibold">Pengalaman Spa Premium</div>
-            <p class="text-sm opacity-90">Nikmati layanan terbaik dengan therapist profesional.</p>
+            <div class="text-lg font-semibold">Premium Spa Experience</div>
+            <p class="text-sm opacity-90">Enjoy the best service with professional therapists.</p>
           </div>
         </div>
       </div>
@@ -81,13 +81,13 @@
 
               <!-- Optional payment info -->
               <div class="mb-6 rounded-lg border border-green-200 bg-white p-5">
-                <div class="font-semibold text-slate-700 mb-2">Maklumat Pembayaran Deposit (Pilihan)</div>
+                <div class="font-semibold text-slate-700 mb-2">Deposit Payment Information (Optional)</div>
                 <ul class="text-sm text-slate-600 space-y-1">
                   <li>Bank: BCA</li>
-                  <li>No. Rekening: 1234567890</li>
-                  <li>Atas Nama: PT Spa Sejahtera</li>
+                  <li>Account No: 1234567890</li>
+                  <li>Account Name: PT Spa Sejahtera</li>
                 </ul>
-                <p class="mt-2 text-xs text-slate-500">Pengesahan pembayaran boleh dilakukan melalui WhatsApp admin.</p>
+                <p class="mt-2 text-xs text-slate-500">Payment confirmation can be done via admin WhatsApp.</p>
               </div>
             <?php endif; ?>
 
@@ -99,32 +99,32 @@
 
             <form method="post" action="<?= site_url('booking/submit'); ?>" novalidate>
               <div class="mb-4">
-                <label class="required block text-sm font-medium text-slate-700" for="customer_name">Nama</label>
-                <input type="text" class="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary" id="customer_name" name="customer_name" required minlength="2" placeholder="Nama lengkap">
+                <label class="required block text-sm font-medium text-slate-700" for="customer_name">Name</label>
+                <input type="text" class="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary" id="customer_name" name="customer_name" required minlength="2" placeholder="Full name">
               </div>
 
               <div class="mb-4">
-                <label class="required block text-sm font-medium text-slate-700" for="address">Alamat</label>
-                <textarea class="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary" id="address" name="address" rows="3" required minlength="5" placeholder="Alamat lengkap"></textarea>
+                <label class="required block text-sm font-medium text-slate-700" for="address">Address</label>
+                <textarea class="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary" id="address" name="address" rows="3" required minlength="5" placeholder="Full address"></textarea>
               </div>
 
               <!-- Optional phone number used for WhatsApp link in Telegram notification -->
               <div class="mb-4">
-                <label class="block text-sm font-medium text-slate-700" for="phone">No Telefon (opsional)</label>
+                <label class="block text-sm font-medium text-slate-700" for="phone">Phone Number (optional)</label>
                 <input
                   type="tel"
                   class="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary"
                   id="phone"
                   name="phone"
                   maxlength="20"
-                  placeholder="Contoh: 6281234567890">
-                <p class="mt-1 text-xs text-slate-500">Nomor akan dilampirkan sebagai pautan WhatsApp dalam notifikasi.</p>
+                  placeholder="Example: 6281234567890">
+                <p class="mt-1 text-xs text-slate-500">Number will be attached as WhatsApp link in notification.</p>
               </div>
 
               <div class="mb-4">
-                <label class="block text-sm font-medium text-slate-700" for="therapist_id">Nama Terapis (pilihan)</label>
+                <label class="block text-sm font-medium text-slate-700" for="therapist_id">Therapist Name (optional)</label>
                 <select class="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary" id="therapist_id" name="therapist_id">
-                  <option value="">Pilih terapis (pilihan)</option>
+                  <option value="">Choose therapist (optional)</option>
                   <?php if (!empty($therapists)): ?>
                     <?php foreach ($therapists as $t): ?>
                       <option value="<?= (int)$t->id; ?>">
@@ -133,13 +133,13 @@
                     <?php endforeach; ?>
                   <?php endif; ?>
                 </select>
-                <p class="mt-1 text-xs text-slate-500">Biarkan kosong jika tidak memilih terapis.</p>
+                <p class="mt-1 text-xs text-slate-500">Leave blank if not selecting a therapist.</p>
               </div>
 
               <div class="mb-4">
-                <label class="required block text-sm font-medium text-slate-700" for="package_id">Pakej</label>
+                <label class="required block text-sm font-medium text-slate-700" for="package_id">Package</label>
                 <select class="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary" id="package_id" name="package_id" required>
-                  <option value="">Pilih pakej</option>
+                  <option value="">Select package</option>
                   <?php if (!empty($packages)): ?>
                     <?php foreach ($packages as $p): ?>
                       <option value="<?= (int)$p->id; ?>" <?= (isset($selected_package_id) && (int)$selected_package_id === (int)$p->id) ? 'selected' : ''; ?>>
@@ -149,7 +149,7 @@
                           $pout = isset($p->price_out_call) ? (float)$p->price_out_call : null;
                         ?>
                         <?= htmlspecialchars($p->name); ?>
-                        <?php if (isset($p->duration)): ?> - <?= (int)$p->duration; ?> minit<?php endif; ?>
+                        <?php if (isset($p->duration)): ?> - <?= (int)$p->duration; ?> minutes<?php endif; ?>
                         <?php if ($pin): ?> - IN: <?= htmlspecialchars($curr); ?> <?= number_format($pin, 0, ',', '.'); ?><?php endif; ?>
                         <?php if ($pout): ?> / OUT: <?= htmlspecialchars($curr); ?> <?= number_format($pout, 0, ',', '.'); ?><?php endif; ?>
                       </option>
@@ -159,14 +159,14 @@
               </div>
               <!-- Add-on selection (optional) -->
               <div class="mb-4">
-                <label class="block text-sm font-medium text-slate-700">Add-on Tambahan (opsional)</label>
+                <label class="block text-sm font-medium text-slate-700">Additional Add-on (optional)</label>
                 <input type="hidden" id="addon_ids" name="addon_ids" value="">
                 <div class="mt-2 flex items-center justify-between gap-3">
                   <button type="button" onclick="window.aoSelOpen()" class="inline-flex items-center rounded-md bg-emerald-600 text-white px-3 py-2 text-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500">
-                    Pilih Add-on
+                    Select Add-on
                   </button>
                   <div id="addon_summary" class="text-xs text-slate-600 ml-3 flex-1 text-right truncate">
-                    Tiada add-on dipilih.
+                    No add-on selected.
                   </div>
                 </div>
               </div>
@@ -180,8 +180,8 @@
                    class="fixed inset-0 z-50 hidden items-center justify-center p-4">
                 <div class="w-full max-w-3xl bg-white rounded-xl shadow-xl ring-1 ring-gray-200">
                   <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-                    <h3 class="text-lg font-semibold text-gray-900">Pilih Add-on</h3>
-                    <button type="button" class="text-gray-400 hover:text-gray-600" onclick="window.aoSelClose()" aria-label="Tutup">
+                    <h3 class="text-lg font-semibold text-gray-900">Select Add-on</h3>
+                    <button type="button" class="text-gray-400 hover:text-gray-600" onclick="window.aoSelClose()" aria-label="Close">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
                       </svg>
@@ -221,13 +221,13 @@
                         </div>
                       <?php endforeach; ?>
                     <?php else: ?>
-                      <p class="text-sm text-slate-600">Tiada add-on tersedia saat ini.</p>
+                      <p class="text-sm text-slate-600">No add-ons currently available.</p>
                     <?php endif; ?>
                   </div>
 
                   <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-end gap-3">
-                    <button type="button" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-4 py-2 text-sm hover:bg-gray-50" onclick="window.aoSelClose()">Batal</button>
-                    <button type="button" class="inline-flex items-center rounded-md bg-emerald-600 text-white px-4 py-2 text-sm hover:bg-emerald-700" onclick="window.aoSelApply()">Simpan</button>
+                    <button type="button" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-4 py-2 text-sm hover:bg-gray-50" onclick="window.aoSelClose()">Cancel</button>
+                    <button type="button" class="inline-flex items-center rounded-md bg-emerald-600 text-white px-4 py-2 text-sm hover:bg-emerald-700" onclick="window.aoSelApply()">Save</button>
                   </div>
                 </div>
               </div>
@@ -275,12 +275,12 @@
                       if (ids.length) {
                         try {
                           var fmt = new Intl.NumberFormat('id-ID');
-                          summary.textContent = names.join(', ') + ' • Tambahan: ' + currency + ' ' + fmt.format(Math.round(total));
+                          summary.textContent = names.join(', ') + ' • Add-on: ' + currency + ' ' + fmt.format(Math.round(total));
                         } catch (e) {
-                          summary.textContent = names.join(', ') + ' • Tambahan: ' + currency + ' ' + Math.round(total);
+                          summary.textContent = names.join(', ') + ' • Add-on: ' + currency + ' ' + Math.round(total);
                         }
                       } else {
-                        summary.textContent = 'Tiada add-on dipilih.';
+                        summary.textContent = 'No add-on selected.';
                       }
                     }
                     closeModal();
@@ -300,7 +300,7 @@
               </script>
 
               <div class="mb-4">
-                <span class="block text-sm font-medium text-slate-700">Tipe Panggilan</span>
+                <span class="block text-sm font-medium text-slate-700">Call Type</span>
                 <div class="mt-2 flex items-center gap-4">
                   <label class="inline-flex items-center gap-2">
                     <input type="radio" name="call_type" value="IN" class="h-4 w-4 text-primary focus:ring-primary" checked>
@@ -311,13 +311,13 @@
                     <span class="text-sm text-slate-700">Out Call</span>
                   </label>
                 </div>
-                <p class="mt-1 text-xs text-slate-500">Harga akan mengikuti tipe panggilan.</p>
+                <p class="mt-1 text-xs text-slate-500">Price will follow the call type.</p>
               </div>
 
 
-              <!-- Jadwal - Pilih Tanggal lalu Jam (berdasarkan ketersediaan) -->
+              <!-- Schedule - Select Date then Time (based on availability) -->
               <div class="mb-4">
-                <label class="required block text-sm font-medium text-slate-700" for="date">Tarikh</label>
+                <label class="required block text-sm font-medium text-slate-700" for="date">Date</label>
                 <input
                   type="date"
                   class="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary"
@@ -326,13 +326,13 @@
                   required
                   min="<?= date('Y-m-d'); ?>"
                 >
-                <p class="mt-1 text-xs text-slate-500">Pilih tanggal terlebih dahulu.</p>
+                <p class="mt-1 text-xs text-slate-500">Please select a date first.</p>
               </div>
 
               <div class="mb-4">
-                <label class="required block text-sm font-medium text-slate-700" for="time">Pilih Jam</label>
+                <label class="required block text-sm font-medium text-slate-700" for="time">Select Time</label>
                 <select class="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary" id="time" name="time" required>
-                  <option value="">Pilih jam</option>
+                  <option value="">Select time</option>
                   <?php
                   $start = strtotime('09:00');
                   $end = strtotime('21:00');
@@ -342,14 +342,14 @@
                   }
                   ?>
                 </select>
-                <p class="mt-1 text-xs text-slate-500">Pilih jam yang tersedia. Jika jam sudah dipesan, akan diberitahu saat submit.</p>
+                <p class="mt-1 text-xs text-slate-500">Select available time. If the time is already booked, it will be informed upon submission.</p>
               </div>
 
               <!-- No dynamic slot loading needed anymore -->
 
               <div class="mt-6">
                 <button type="submit" class="inline-flex w-full items-center justify-center rounded-md bg-primary px-4 py-3 text-base font-semibold text-white shadow-sm transition hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-primary">
-                  Hantar Tempahan
+                  Submit Booking
                 </button>
               </div>
             </form>
@@ -360,8 +360,8 @@
 
     <!-- Footer note -->
     <div class="mt-10 text-sm text-slate-500">
-      <p class="mb-1">Selepas tempahan dihantar, notifikasi akan diteruskan kepada admin melalui Telegram.</p>
-      <p class="mb-0">Admin akan mengesahkan ketersediaan jadual dan terapis.</p>
+      <p class="mb-1">After the booking is submitted, notifications will be forwarded to admin via Telegram.</p>
+      <p class="mb-0">Admin will confirm the availability of schedule and therapist.</p>
     </div>
   </div>
 </body>

@@ -1,14 +1,14 @@
 <?php
-$this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'Daftar Booking']);
+$this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'Booking List']);
 ?>
 
 <div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
   <div>
-    <h2 class="text-base font-semibold text-gray-900">Daftar Booking</h2>
-    <p class="text-sm text-gray-600">Lihat, tapis, dan ubah status pesanan.</p>
+    <h2 class="text-base font-semibold text-gray-900">Booking List</h2>
+    <p class="text-sm text-gray-600">View, filter, and manage order status.</p>
   </div>
   <div class="text-sm">
-    <a href="<?= site_url('admin/schedule'); ?>" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-3 py-1.5 hover:bg-gray-50">Kalendar Jadwal</a>
+    <a href="<?= site_url('admin/schedule'); ?>" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-3 py-1.5 hover:bg-gray-50">Schedule Calendar</a>
   </div>
 </div>
 
@@ -23,18 +23,18 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
 <form method="get" action="<?= site_url('admin/bookings'); ?>" class="rounded-lg border border-gray-200 bg-white p-3 shadow-sm">
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
     <div>
-      <label class="block text-xs text-gray-600 mb-1">Dari Tanggal</label>
+      <label class="block text-xs text-gray-600 mb-1">From Date</label>
       <input type="date" name="from" value="<?= htmlspecialchars($filters['from'] ?? ''); ?>" class="w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-sm">
     </div>
     <div>
-      <label class="block text-xs text-gray-600 mb-1">Sampai Tanggal</label>
+      <label class="block text-xs text-gray-600 mb-1">To Date</label>
       <input type="date" name="to" value="<?= htmlspecialchars($filters['to'] ?? ''); ?>" class="w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-sm">
     </div>
     <div>
       <label class="block text-xs text-gray-600 mb-1">Status</label>
       <?php $st = $filters['status'] ?? ''; ?>
       <select name="status" class="w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-sm">
-        <option value="">(Semua)</option>
+        <option value="">(All)</option>
         <option value="pending"   <?= $st==='pending'?'selected':''; ?>>pending</option>
         <option value="accepted"  <?= $st==='accepted'?'selected':''; ?>>accepted</option>
         <option value="working"   <?= $st==='working'?'selected':''; ?>>working</option>
@@ -44,20 +44,20 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
       </select>
     </div>
     <div>
-      <label class="block text-xs text-gray-600 mb-1">Terapis</label>
+      <label class="block text-xs text-gray-600 mb-1">Therapist</label>
       <?php $tf = $filters['therapist_id'] ?? ''; ?>
       <select name="therapist_id" class="w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-sm">
-        <option value="">(Semua)</option>
+        <option value="">(All)</option>
         <?php if (!empty($therapists)): foreach ($therapists as $t): ?>
           <option value="<?= (int)$t->id; ?>" <?= ((string)$tf === (string)$t->id)?'selected':''; ?>><?= htmlspecialchars($t->name); ?></option>
         <?php endforeach; endif; ?>
       </select>
     </div>
     <div>
-      <label class="block text-xs text-gray-600 mb-1">Paket</label>
+      <label class="block text-xs text-gray-600 mb-1">Package</label>
       <?php $pf = $filters['package_id'] ?? ''; ?>
       <select name="package_id" class="w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-sm">
-        <option value="">(Semua)</option>
+        <option value="">(All)</option>
         <?php if (!empty($packages)): foreach ($packages as $p): ?>
           <option value="<?= (int)$p->id; ?>" <?= ((string)$pf === (string)$p->id)?'selected':''; ?>><?= htmlspecialchars($p->name); ?></option>
         <?php endforeach; endif; ?>
@@ -66,7 +66,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
   </div>
   <div class="mt-3 flex items-center justify-end gap-2">
     <a href="<?= site_url('admin/bookings'); ?>" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-3 py-1.5 text-sm hover:bg-gray-50">Reset</a>
-    <button type="submit" class="inline-flex items-center rounded-md bg-sky-600 text-white px-3 py-1.5 text-sm hover:bg-sky-700">Terapkan</button>
+    <button type="submit" class="inline-flex items-center rounded-md bg-sky-600 text-white px-3 py-1.5 text-sm hover:bg-sky-700">Apply</button>
   </div>
 </form>
 
@@ -75,15 +75,15 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
   <table class="min-w-full divide-y divide-gray-200 text-sm">
     <thead class="bg-gray-50">
       <tr>
-        <th class="px-4 py-2 text-left font-semibold text-gray-700">Pelanggan</th>
-        <th class="px-4 py-2 text-left font-semibold text-gray-700">Paket</th>
-        <th class="px-4 py-2 text-left font-semibold text-gray-700">Terapis</th>
-        <th class="px-4 py-2 text-left font-semibold text-gray-700">Tanggal</th>
-        <th class="px-4 py-2 text-left font-semibold text-gray-700">Jam</th>
-        <th class="px-4 py-2 text-left font-semibold text-gray-700">Tipe</th>
+        <th class="px-4 py-2 text-left font-semibold text-gray-700">Customer</th>
+        <th class="px-4 py-2 text-left font-semibold text-gray-700">Package</th>
+        <th class="px-4 py-2 text-left font-semibold text-gray-700">Therapist</th>
+        <th class="px-4 py-2 text-left font-semibold text-gray-700">Date</th>
+        <th class="px-4 py-2 text-left font-semibold text-gray-700">Time</th>
+        <th class="px-4 py-2 text-left font-semibold text-gray-700">Type</th>
         <th class="px-4 py-2 text-left font-semibold text-gray-700">Status</th>
         <th class="px-4 py-2 text-right font-semibold text-gray-700">Total</th>
-        <th class="px-4 py-2 text-right font-semibold text-gray-700">Tindakan</th>
+        <th class="px-4 py-2 text-right font-semibold text-gray-700">Actions</th>
       </tr>
     </thead>
     <tbody class="divide-y divide-gray-200">
@@ -122,11 +122,11 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
             </td>
             <td class="px-4 py-2 text-right">
               <div class="inline-flex items-center gap-1">
-                <button type="button" data-action="accepted"  class="px-2 py-1 rounded bg-blue-600 text-white text-xs hover:bg-blue-700">Terima</button>
-                <button type="button" data-action="rejected"  class="px-2 py-1 rounded bg-rose-600 text-white text-xs hover:bg-rose-700">Tolak</button>
-                <button type="button" data-action="working"   class="px-2 py-1 rounded bg-amber-500 text-white text-xs hover:bg-amber-600">On Working</button>
-                <button type="button" data-action="completed" class="px-2 py-1 rounded bg-gray-700 text-white text-xs hover:bg-gray-800">Selesai</button>
-                <button type="button" data-action="canceled"  class="px-2 py-1 rounded bg-orange-600 text-white text-xs hover:bg-orange-700">Batal</button>
+                <button type="button" data-action="accepted"  class="px-2 py-1 rounded bg-blue-600 text-white text-xs hover:bg-blue-700">Accept</button>
+                <button type="button" data-action="rejected"  class="px-2 py-1 rounded bg-rose-600 text-white text-xs hover:bg-rose-700">Reject</button>
+                <button type="button" data-action="working"   class="px-2 py-1 rounded bg-amber-500 text-white text-xs hover:bg-amber-600">Working</button>
+                <button type="button" data-action="completed" class="px-2 py-1 rounded bg-gray-700 text-white text-xs hover:bg-gray-800">Complete</button>
+                <button type="button" data-action="canceled"  class="px-2 py-1 rounded bg-orange-600 text-white text-xs hover:bg-orange-700">Cancel</button>
                 <a href="<?= site_url('admin/invoice'); ?>/<?= rawurlencode($idToken); ?>" target="_blank" rel="noopener" class="px-2 py-1 rounded border border-gray-300 text-gray-700 text-xs hover:bg-gray-50">Invoice</a>
               </div>
             </td>
@@ -134,7 +134,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
         <?php endforeach; ?>
       <?php else: ?>
         <tr>
-          <td class="px-4 py-6 text-center text-gray-600" colspan="9">Belum ada data booking.</td>
+          <td class="px-4 py-6 text-center text-gray-600" colspan="9">No booking data available.</td>
         </tr>
       <?php endif; ?>
     </tbody>
@@ -160,11 +160,11 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'D
   function setStatus(token, status) {
     apiPost('<?= site_url('admin/booking/set-status'); ?>', { token, status })
       .then(res => {
-        if (!res || !res.ok) throw new Error(res && res.error ? res.error : 'Gagal mengubah status.');
+        if (!res || !res.ok) throw new Error(res && res.error ? res.error : 'Failed to update status.');
         // Refresh page to reflect updates
         window.location.reload();
       })
-      .catch(err => alert('Gagal mengubah status: ' + err.message));
+      .catch(err => alert('Failed to update status: ' + err.message));
   }
 
   document.querySelectorAll('tr[data-token] .inline-flex [data-action]').forEach(function(btn) {
