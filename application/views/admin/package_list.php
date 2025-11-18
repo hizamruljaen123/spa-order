@@ -221,11 +221,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'S
                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-right">
           </div>
 
-          <div>
-            <label for="edit_price_out_call" class="block text-sm font-medium text-gray-700">Off Premise Price</label>
-            <input id="edit_price_out_call" name="price_out_call" type="number" min="0" step="1" required value="<?= (float)($editItem->price_out_call ?? 0); ?>"
-                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-right">
-          </div>
+         
 
           <div class="md:col-span-2">
             <label for="edit_description" class="block text-sm font-medium text-gray-700">Description</label>
@@ -297,16 +293,12 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'S
         </div>
 
         <div>
-          <label for="create_price_in_call" class="block text-sm font-medium text-gray-700">On Premise Price</label>
+          <label for="create_price_in_call" class="block text-sm font-medium text-gray-700">Price</label>
           <input id="create_price_in_call" name="price_in_call" type="number" min="0" step="1" required placeholder="Example: 89"
                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-right">
         </div>
 
-        <div>
-          <label for="create_price_out_call" class="block text-sm font-medium text-gray-700">Off Premise Price</label>
-          <input id="create_price_out_call" name="price_out_call" type="number" min="0" step="1" required placeholder="Example: 150"
-                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-right">
-        </div>
+        
 
         <div class="md:col-span-2">
           <label for="create_description" class="block text-sm font-medium text-gray-700">Description</label>

@@ -159,8 +159,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
         </span>
         <div>
-          <div class="text-base font-bold text-slate-800">SPA Management</div>
-          <div class="text-xs text-slate-500">Relax & Refresh</div>
+          <div class="text-base font-bold text-slate-800">APITT Man Soa</div>
         </div>
       </div>
       <a href="<?= site_url('booking/form'); ?>" class="hidden sm:inline-flex items-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600">
@@ -178,23 +177,13 @@
       alt="Spa hero"
       class="w-full h-full object-cover"
     >
-    <div class="absolute inset-0 bg-black/50"></div>
+    <div class="absolute inset-0"></div>
   </div>
 
   <!-- Content -->
   <div class="mx-auto max-w-6xl px-4 py-24 md:py-32">
     <div class="max-w-xl text-white">
-      <h1 class="text-3xl md:text-5xl font-bold">Enjoy Premium Spa Experience</h1>
-      <p class="mt-4 text-white/90">
-        Complete service with professional therapists, comfortable atmosphere, and transparent pricing.
-      </p>
       <div class="mt-8">
-        <a href="#packages" class="inline-flex items-center rounded-lg bg-white/95 px-4 py-2 text-slate-900 font-semibold shadow-sm hover:bg-white">
-          Explore Packages
-        </a>
-        <a href="<?= site_url('booking/form'); ?>" class="ml-3 inline-flex items-center rounded-lg bg-primary px-4 py-2 text-white font-semibold shadow-sm hover:bg-sky-600">
-          Book Now
-        </a>
       </div>
     </div>
   </div>

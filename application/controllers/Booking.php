@@ -120,7 +120,6 @@ public function form()
         $this->form_validation->set_rules('package_id', 'Package', 'required|integer');
         $this->form_validation->set_rules('date', 'Tanggal', 'required|regex_match[/^\d{4}-\d{2}-\d{2}$/]');
         $this->form_validation->set_rules('time', 'Jam', 'required|regex_match[/^\d{2}:\d{2}(:\d{2})?$/]');
-        $this->form_validation->set_rules('call_type', 'Tipe Panggilan', 'required|in_list[IN,OUT]');
         // Optional customer phone to include WhatsApp link on notification
         $this->form_validation->set_rules('phone', 'No Telefon', 'trim|max_length[20]');
 
@@ -312,7 +311,7 @@ public function form()
                     foreach ($exclusive_addon_ids as $ex_id) {
                         $ex_addon = $this->Exclusive_treatment_model->get_treatment_by_id($ex_id);
                         if ($ex_addon) {
-                            $addon_name = ($ex_addon['name'] ?? '-') . ' (' . (($ex_addon['currency'] ?? 'RM')) . ' ' . number_format((float)($ex_addon['price'] ?? 0), 0, ',', '.') . ')';
+                            $addon_name = "\n*".($ex_addon['name'] ?? '-') . ' (' . (($ex_addon['currency'] ?? 'RM')) . ' ' . number_format((float)($ex_addon['price'] ?? 0), 0, ',', '.') . ')';
                             $names[] = $addon_name;
                             $exclusive_addon_details[] = $ex_addon;
                         }
@@ -344,7 +343,6 @@ public function form()
                          . "💅 *Paket*: {$package}\n\n"
                          . "➕ *Add-on*: {$addon_text}\n\n"
                          . "‍♀️ *Terapis*: {$thera}\n\n"
-                         . "🏷️ *Tipe*: {$call_type}\n\n"
                          . "📅 *Tanggal*: {$date}\n\n"
                          . "⏰ *Jam*: {$time}\n\n"
                          . "🧾 *Invoice*: {$invNo}\n"

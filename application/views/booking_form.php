@@ -15,8 +15,9 @@
             primary: { DEFAULT: '#0ea5e9' } // sky-500
           }
         }
-      }
-    }
+      };
+      // Off Premise Price
+
   </script>
 
   <!-- Modern, clean font -->
@@ -559,20 +560,7 @@
                 })();
               </script>
 
-              <div class="mb-4">
-                <span class="block text-sm font-medium text-slate-700">Call Type</span>
-                <div class="mt-2 flex items-center gap-4">
-                  <label class="inline-flex items-center gap-2">
-                    <input type="radio" name="call_type" value="IN" class="h-4 w-4 text-primary focus:ring-primary" checked>
-                    <span class="text-sm text-slate-700">In Call</span>
-                  </label>
-                  <label class="inline-flex items-center gap-2">
-                    <input type="radio" name="call_type" value="OUT" class="h-4 w-4 text-primary focus:ring-primary">
-                    <span class="text-sm text-slate-700">Out Call</span>
-                  </label>
-                </div>
-                <p class="mt-1 text-xs text-slate-500">Price will follow the call type.</p>
-              </div>
+              
 
 
               <!-- Schedule - Select Date then Time (based on availability) -->
@@ -608,7 +596,7 @@
               <!-- No dynamic slot loading needed anymore -->
 
               <div class="mt-6">
-                <button type="submit" class="inline-flex w-full items-center justify-center rounded-md bg-primary px-4 py-3 text-base font-semibold text-white shadow-sm transition hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-primary">
+                <button type="submit" class="inline-flex w-full items-center justify-center rounded-md bg-sky-500 px-4 py-3 text-base font-semibold text-white shadow-sm transition hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-500">
                   Submit Booking
                 </button>
               </div>
