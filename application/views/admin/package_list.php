@@ -33,8 +33,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'S
             <th class="px-5 py-3">Category</th>
             <th class="px-5 py-3 text-center w-32">Therapists</th>
             <th class="px-5 py-3 text-center w-36">Duration</th>
-            <th class="px-5 py-3 text-right w-40">On Premise</th>
-            <th class="px-5 py-3 text-right w-40">Off Premise</th>
+            <th class="px-5 py-3 text-right w-40">Price</th>
             <th class="px-5 py-3 text-center w-28">Currency</th>
             <th class="px-5 py-3 w-[360px]">Description</th>
             <th class="px-5 py-3 text-right w-56">Actions</th>
@@ -92,21 +91,12 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'S
                 <?php endif; ?>
               </td>
 
-              <!-- In Call -->
+              <!-- Price -->
               <td class="px-5 py-3 text-right">
                 <?php if (false): ?>
                   <input type="number" name="price_in_call" class="w-28 text-right rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500" value="<?= (float)($p->price_in_call ?? 0); ?>" min="0" step="1" required>
                 <?php else: ?>
                   <?= htmlspecialchars($p->currency ?? 'RM'); ?> <?= number_format((float)($p->price_in_call ?? 0), 0, ',', '.'); ?>
-                <?php endif; ?>
-              </td>
-
-              <!-- Out Call -->
-              <td class="px-5 py-3 text-right">
-                <?php if (false): ?>
-                  <input type="number" name="price_out_call" class="w-28 text-right rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500" value="<?= (float)($p->price_out_call ?? 0); ?>" min="0" step="1" required>
-                <?php else: ?>
-                  <?= htmlspecialchars($p->currency ?? 'RM'); ?> <?= number_format((float)($p->price_out_call ?? 0), 0, ',', '.'); ?>
                 <?php endif; ?>
               </td>
 
@@ -146,7 +136,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'S
           <?php endforeach; ?>
         <?php else: ?>
           <tr>
-            <td colspan="10" class="px-5 py-6 text-center text-gray-500">No package data available.</td>
+            <td colspan="9" class="px-5 py-6 text-center text-gray-500">No package data available.</td>
           </tr>
         <?php endif; ?>
         </tbody>
@@ -226,12 +216,10 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'S
           </div>
 
           <div>
-            <label for="edit_price_in_call" class="block text-sm font-medium text-gray-700">On Premise Price</label>
+            <label for="edit_price_in_call" class="block text-sm font-medium text-gray-700">Price</label>
             <input id="edit_price_in_call" name="price_in_call" type="number" min="0" step="1" required value="<?= (float)($editItem->price_in_call ?? 0); ?>"
                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-right">
           </div>
-
-         
 
           <div class="md:col-span-2">
             <label for="edit_description" class="block text-sm font-medium text-gray-700">Description</label>
@@ -307,8 +295,6 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'S
           <input id="create_price_in_call" name="price_in_call" type="number" min="0" step="1" required placeholder="Example: 89"
                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-right">
         </div>
-
-        
 
         <div class="md:col-span-2">
           <label for="create_description" class="block text-sm font-medium text-gray-700">Description</label>

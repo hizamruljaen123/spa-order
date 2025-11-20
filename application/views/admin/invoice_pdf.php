@@ -68,7 +68,7 @@ if ($invoice && isset($invoice->total) && is_numeric($invoice->total)) {
           <div>Date: <?= $safe($booking ? date('d M Y', strtotime($booking->date)) : null); ?></div>
           <div>Time: <?= $safe($booking ? substr($booking->time, 0, 5) : null); ?></div>
           <?php if ($booking && isset($booking->call_type)): ?>
-            <div class="mt-1">Service Type: <?= $booking->call_type === 'OUT' ? 'Out Call' : 'In Call'; ?></div>
+            <div class="mt-1">Service Type: At Premise</div>
           <?php endif; ?>
           <?php if ($booking && isset($booking->therapist_name) && $booking->therapist_name): ?>
             <div class="mt-1">Therapist: <?= $safe($booking->therapist_name); ?></div>
