@@ -276,6 +276,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'S
           <select id="create_hands" name="hands" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
             <option value="1">1 (Solo)</option>
             <option value="2">2 (4 Hand)</option>
+            <option value="3">3 (6 Hand)</option>
           </select>
         </div>
 
