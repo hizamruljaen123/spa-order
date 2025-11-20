@@ -385,16 +385,8 @@
                       $pin  = isset($p->price_in_call) ? (float)$p->price_in_call : null;
                       $pout = isset($p->price_out_call) ? (float)$p->price_out_call : null;
                     ?>
-                    <?php if ($pin !== null || $pout !== null): ?>
-                      <span class="inline-flex items-center gap-2">
-                        <?php if ($pin !== null): ?>
-                          <span>At Premise: <?= htmlspecialchars($curr); ?> <?= number_format($pin, 0, ',', '.'); ?></span>
-                        <?php endif; ?>
-                        <?php if ($pout !== null): ?>
-                          <span class="text-slate-600">•</span>
-                          <span>Out Premise: <?= htmlspecialchars($curr); ?> <?= number_format($pout, 0, ',', '.'); ?></span>
-                        <?php endif; ?>
-                      </span>
+                    <?php if ($pin !== null): ?>
+                      <span>At Premise: <?= htmlspecialchars($curr); ?> <?= number_format($pin, 0, ',', '.'); ?></span>
                     <?php else: ?>
                       Contact us
                     <?php endif; ?>
