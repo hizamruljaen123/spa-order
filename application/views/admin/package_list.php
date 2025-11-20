@@ -200,6 +200,7 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'S
             <select id="edit_hands" name="hands" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
               <option value="1" <?= ((int)($editItem->hands ?? 1) === 1) ? 'selected' : ''; ?>>1 (Solo)</option>
               <option value="2" <?= ((int)($editItem->hands ?? 1) === 2) ? 'selected' : ''; ?>>2 (4 Hand)</option>
+              <option value="3" <?= ((int)($editItem->hands ?? 1) === 3) ? 'selected' : ''; ?>>3 (6 Hand)</option>
             </select>
           </div>
 
