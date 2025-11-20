@@ -216,12 +216,10 @@
                         <?php
                           $curr = isset($p->currency) ? $p->currency : 'Rp';
                           $pin  = isset($p->price_in_call) ? (float)$p->price_in_call : (isset($p->price) ? (float)$p->price : 0);
-                          $pout = isset($p->price_out_call) ? (float)$p->price_out_call : null;
                         ?>
                         <?= htmlspecialchars($p->name); ?>
                         <?php if (isset($p->duration)): ?> - <?= (int)$p->duration; ?> minutes<?php endif; ?>
-                        <?php if ($pin): ?> - IN: <?= htmlspecialchars($curr); ?> <?= number_format($pin, 0, ',', '.'); ?><?php endif; ?>
-                        <?php if ($pout): ?> / OUT: <?= htmlspecialchars($curr); ?> <?= number_format($pout, 0, ',', '.'); ?><?php endif; ?>
+                        <?php if ($pin): ?> - <?= htmlspecialchars($curr); ?> <?= number_format($pin, 0, ',', '.'); ?><?php endif; ?>
                       </option>
                     <?php endforeach; ?>
                   <?php endif; ?>
