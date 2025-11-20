@@ -105,7 +105,15 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'B
           ?>
           <tr data-token="<?= htmlspecialchars($idToken); ?>">
             <td class="px-4 py-2"><?= htmlspecialchars($b->customer_name ?? '-'); ?></td>
-            <td class="px-4 py-2"><?= htmlspecialchars($b->package_name ?? '-'); ?></td>
+            <td class="px-4 py-2">
+              <?php
+                $package_display = $b->package_name ?? '-';
+                if (!empty($b->package_is_deleted)) {
+                  $package_display .= ' <span class="text-xs bg-red-100 text-red-700 px-1 rounded">(Deleted)</span>';
+                }
+                echo $package_display;
+              ?>
+            </td>
             <td class="px-4 py-2"><?= htmlspecialchars($b->therapist_name ?? '-'); ?></td>
             <td class="px-4 py-2"><?= htmlspecialchars($b->date ?? '-'); ?></td>
             <td class="px-4 py-2"><?= htmlspecialchars(substr((string)($b->time ?? ''), 0, 5)); ?></td>

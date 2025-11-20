@@ -53,7 +53,12 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'S
                   <form method="post" action="<?= site_url('admin/package/edit/' . (isset($p->token) ? $p->token : (int)$p->id)); ?>" class="grid grid-cols-1 gap-2">
                     <input type="text" name="name" class="rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500" value="<?= htmlspecialchars($p->name); ?>" required minlength="2">
                 <?php else: ?>
-                  <div class="font-medium text-gray-900"><?= htmlspecialchars($p->name); ?></div>
+                  <div class="flex items-center gap-2">
+                    <div class="font-medium text-gray-900"><?= htmlspecialchars($p->name); ?></div>
+                    <?php if (!empty($p->is_deleted)): ?>
+                      <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800">Sudah Dihapus</span>
+                    <?php endif; ?>
+                  </div>
                 <?php endif; ?>
               </td>
 
@@ -128,8 +133,13 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'S
                 <?php if (false): ?>
                     <!-- Inline edit disabled; using modal -->
                 <?php else: ?>
-                    <a class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-3 py-1.5 text-xs hover:bg-gray-50" href="<?= site_url('admin/package/edit/' . (isset($p->token) ? $p->token : (int)$p->id)); ?>">Edit</a>
-                    <a class="inline-flex items-center rounded-md border border-red-300 bg-white text-red-600 px-3 py-1.5 text-xs hover:bg-red-50" href="<?= site_url('admin/package/delete/' . (isset($p->token) ? $p->token : (int)$p->id)); ?>" onclick="return confirm('Delete this package?');">Delete</a>
+                    <?php if (empty($p->is_deleted)): ?>
+                      <a class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-3 py-1.5 text-xs hover:bg-gray-50" href="<?= site_url('admin/package/edit/' . (isset($p->token) ? $p->token : (int)$p->id)); ?>">Edit</a>
+                      <a class="inline-flex items-center rounded-md border border-red-300 bg-white text-red-600 px-3 py-1.5 text-xs hover:bg-red-50" href="<?= site_url('admin/package/delete/' . (isset($p->token) ? $p->token : (int)$p->id)); ?>" onclick="return confirm('Hapus paket ini? (Data booking historis akan tetap terjaga)');">Delete</a>
+                    <?php else: ?>
+                      <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">Tidak Aktif</span>
+                      <a class="inline-flex items-center rounded-md border border-green-300 bg-white text-green-600 px-3 py-1.5 text-xs hover:bg-green-50" href="<?= site_url('admin/package/restore/' . (isset($p->token) ? $p->token : (int)$p->id)); ?>" onclick="return confirm('Pulihkan paket ini?');">Restore</a>
+                    <?php endif; ?>
                 <?php endif; ?>
               </td>
             </tr>

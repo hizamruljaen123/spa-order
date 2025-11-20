@@ -47,7 +47,7 @@ public function index()
 
     $data = [
         'title'    => 'Spa Booking',
-        'packages' => $this->Package_model->get_all(),
+        'packages' => $this->Package_model->get_active_packages(),
         'active_ads' => $active_ads,
         'active_products' => $active_products,
         'exclusive_treatments_grouped' => $this->Exclusive_treatment_model->get_treatments_grouped(),
@@ -69,7 +69,7 @@ public function form()
     $this->load->model('Exclusive_treatment_model');
 
     // Get packages from both sources: regular packages and exclusive treatments
-    $regular_packages = $this->Package_model->get_all();
+    $regular_packages = $this->Package_model->get_active_packages();
     $exclusive_treatments = $this->Exclusive_treatment_model->get_main_treatments_as_packages();
     $combined_packages = array_merge($regular_packages, $exclusive_treatments);
 
@@ -186,6 +186,19 @@ public function form()
         } else {
             // This is a regular package
             $pkg = $this->Package_model->get_by_id($package_id);
+            if (!$pkg) {
+                $this->session->set_flashdata('error', 'Paket tidak ditemukan atau sudah tidak tersedia.');
+                redirect('booking/form');
+                return;
+            }
+            
+            // Check if package is soft-deleted
+            if ($this->Package_model->is_deleted($package_id)) {
+                $this->session->set_flashdata('error', 'Maaf, paket ini sudah tidak tersedia.');
+                redirect('booking/form');
+                return;
+            }
+            
             if ($pkg) {
                 $base = ($call_type === 'OUT') ? (float)$pkg->price_out_call : (float)$pkg->price_in_call;
             }
@@ -477,7 +490,7 @@ public function form()
     {
         $data = [
             'title'       => 'Spa Booking (Mobile)',
-            'packages'    => $this->Package_model->get_all(),
+            'packages'    => $this->Package_model->get_active_packages(),
             'therapists'  => $this->Therapist_model->get_all(true),
             'success'     => $this->session->flashdata('success'),
             'error'       => $this->session->flashdata('error'),

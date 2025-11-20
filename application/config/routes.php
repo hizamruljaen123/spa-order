@@ -73,6 +73,7 @@ $route['admin/packages'] = 'admin/packages';
 $route['admin/package/create'] = 'admin/package_create';
 $route['admin/package/edit/(:any)'] = 'admin/package_edit/$1';
 $route['admin/package/delete/(:any)'] = 'admin/package_delete/$1';
+$route['admin/package/restore/(:any)'] = 'admin/package_restore/$1';
 
 $route['admin/addons'] = 'admin/addons';
 $route['admin/addon/create'] = 'admin/addon_create';

@@ -218,7 +218,7 @@ class Admin extends CI_Controller
     // 3. Packages - List
     public function packages()
     {
-        $packages = $this->Package_model->get_all();
+        $packages = $this->Package_model->get_all_with_deleted();
         if (is_array($packages)) {
             foreach ($packages as $p) {
                 if (is_object($p) && isset($p->id)) {
@@ -317,12 +317,12 @@ class Admin extends CI_Controller
             return;
         }
 
-        $packages = $this->Package_model->get_all();
+        $packages = $this->Package_model->get_all_with_deleted();
         $data = [
             'title'      => 'Data Paket',
             'packages'   => $packages,
             'editItemId' => $id,
-            'editItem'   => $this->Package_model->get_by_id($id),
+            'editItem'   => $this->Package_model->get_by_id($id, true),
             'flash'      => [
                 'success' => $this->session->flashdata('success'),
                 'error'   => $this->session->flashdata('error'),
@@ -339,8 +339,62 @@ class Admin extends CI_Controller
             redirect('admin/packages');
             return;
         }
-        $this->Package_model->delete($id);
-        $this->session->set_flashdata('success', 'Paket dihapus.');
+        
+        // Check if package exists and is not already deleted
+        $package = $this->Package_model->get_by_id($id, true);
+        if (!$package) {
+            $this->session->set_flashdata('error', 'Paket tidak ditemukan.');
+            redirect('admin/packages');
+            return;
+        }
+        
+        if ($package->is_deleted) {
+            $this->session->set_flashdata('error', 'Paket sudah dihapus sebelumnya.');
+            redirect('admin/packages');
+            return;
+        }
+        
+        // Perform soft delete
+        if ($this->Package_model->delete($id)) {
+            $this->session->set_flashdata('success', 'Paket berhasil ditandai sebagai dihapus (soft delete). Data booking historis tetap terjaga.');
+        } else {
+            $this->session->set_flashdata('error', 'Gagal menghapus paket.');
+        }
+        redirect('admin/packages');
+    }
+    
+    /**
+     * Restore a soft-deleted package
+     */
+    public function package_restore($token)
+    {
+        $id = ctype_digit((string)$token) ? (int)$token : $this->urlcrypt->decode($token);
+        if (!$id) {
+            $this->session->set_flashdata('error', 'Parameter tidak valid.');
+            redirect('admin/packages');
+            return;
+        }
+        
+        // Check if package exists and is soft-deleted
+        $package = $this->Package_model->get_by_id($id, true);
+        if (!$package) {
+            $this->session->set_flashdata('error', 'Paket tidak ditemukan.');
+            redirect('admin/packages');
+            return;
+        }
+        
+        if (!$package->is_deleted) {
+            $this->session->set_flashdata('error', 'Paket tidak dalam status terhapus.');
+            redirect('admin/packages');
+            return;
+        }
+        
+        // Restore the package
+        if ($this->Package_model->restore($id)) {
+            $this->session->set_flashdata('success', 'Paket berhasil dipulihkan.');
+        } else {
+            $this->session->set_flashdata('error', 'Gagal memulihkan paket.');
+        }
         redirect('admin/packages');
     }
 
@@ -543,7 +597,7 @@ class Admin extends CI_Controller
             'bookings'   => $bookings,
             'filters'    => $filters,
             'therapists' => $this->Therapist_model->get_all(false),
-            'packages'   => $this->Package_model->get_all(),
+            'packages'   => $this->Package_model->get_all_with_deleted(),
             'flash'      => [
                 'success' => $this->session->flashdata('success'),
                 'error'   => $this->session->flashdata('error'),

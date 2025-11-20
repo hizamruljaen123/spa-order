@@ -47,7 +47,7 @@ class Booking_model extends CI_Model
      */
     public function get_by_id($id)
     {
-        $this->db->select('b.*, p.name AS package_name, p.category AS package_category, p.hands AS package_hands, p.price_in_call AS price_in_call, p.price_out_call AS price_out_call, p.currency AS currency, t.name AS therapist_name, t.phone AS therapist_phone')
+        $this->db->select('b.*, p.name AS package_name, p.category AS package_category, p.hands AS package_hands, p.price_in_call AS price_in_call, p.price_out_call AS price_out_call, p.currency AS currency, p.is_deleted AS package_is_deleted, t.name AS therapist_name, t.phone AS therapist_phone')
                  ->from($this->table . ' b')
                  ->join('package p', 'p.id = b.package_id', 'left')
                  ->join('therapist t', 't.id = b.therapist_id', 'left')
@@ -61,7 +61,7 @@ class Booking_model extends CI_Model
      */
     public function get_all(array $filters = [], $limit = null, $offset = null)
     {
-        $this->db->select('b.*, p.name AS package_name, p.currency AS currency, t.name AS therapist_name')
+        $this->db->select('b.*, p.name AS package_name, p.currency AS currency, p.is_deleted AS package_is_deleted, t.name AS therapist_name')
                  ->from($this->table . ' b')
                  ->join('package p', 'p.id = b.package_id', 'left')
                  ->join('therapist t', 't.id = b.therapist_id', 'left')
@@ -124,7 +124,7 @@ class Booking_model extends CI_Model
      */
     public function get_calendar_events($start, $end, $therapist_id = null)
     {
-        $this->db->select('b.id, b.customer_name, b.date, b.time, b.status, p.name AS package_name, p.duration AS package_duration, t.name AS therapist_name')
+        $this->db->select('b.id, b.customer_name, b.date, b.time, b.status, p.name AS package_name, p.duration AS package_duration, p.is_deleted AS package_is_deleted, t.name AS therapist_name')
                  ->from($this->table . ' b')
                  ->join('package p', 'p.id = b.package_id', 'left')
                  ->join('therapist t', 't.id = b.therapist_id', 'left')
@@ -146,7 +146,11 @@ class Booking_model extends CI_Model
             $endTs   = $startTs !== false ? ($startTs + ($durationMin * 60)) : null;
             $endDt   = $endTs ? date('Y-m-d\TH:i:s', $endTs) : null;
     
-            $title = sprintf('%s - %s (%s)', $r->customer_name, $r->package_name, $r->therapist_name ?: 'N/A');
+            $package_display = $r->package_name ?: 'Unknown Package';
+            if (!empty($r->package_is_deleted)) {
+                $package_display .= ' (Deleted)';
+            }
+            $title = sprintf('%s - %s (%s)', $r->customer_name, $package_display, $r->therapist_name ?: 'N/A');
     
             // Determine color: red for pending/confirmed, gray for completed, orange for canceled
             $color = '#28a745'; // default green (available) not used for booked events
@@ -203,6 +207,7 @@ class Booking_model extends CI_Model
             ->select('price_in_call, price_out_call')
             ->from('package')
             ->where('id', (int)$package_id)
+            ->where('is_deleted', 0) // Only get price for non-deleted packages
             ->get()
             ->row();
 
