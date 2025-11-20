@@ -7,12 +7,17 @@ class Package_model extends CI_Model
 
     public function get_all($include_deleted = false)
     {
+        // Urutkan berdasarkan hands dulu, baru name
+        $this->db->order_by('hands', 'ASC');
         $this->db->order_by('name', 'ASC');
+
         if (!$include_deleted) {
             $this->db->where('is_deleted', 0);
         }
+
         return $this->db->get($this->table)->result();
     }
+
 
     public function get_by_id($id, $include_deleted = false)
     {
@@ -76,8 +81,12 @@ class Package_model extends CI_Model
      */
     public function get_all_with_deleted()
     {
-        return $this->get_all(true);
+        $this->db->order_by('hands', 'ASC');
+        $this->db->order_by('name', 'ASC');
+
+        return $this->get_all(true); // true = include deleted data
     }
+
 
     /**
      * Check if a package is soft-deleted

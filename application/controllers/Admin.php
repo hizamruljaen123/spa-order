@@ -291,7 +291,7 @@ class Admin extends CI_Controller
             $this->form_validation->set_rules('hands', 'Jumlah Therapist', 'required|in_list[1,2]');
             $this->form_validation->set_rules('duration', 'Durasi', 'required|integer');
             $this->form_validation->set_rules('price_in_call', 'Harga In Call', 'required|numeric');
-            $this->form_validation->set_rules('price_out_call', 'Harga Out Call', 'required|numeric');
+            // $this->form_validation->set_rules('price_out_call', 'Harga Out Call', 'required|numeric');
             $this->form_validation->set_rules('currency', 'Mata Uang', 'required|trim|max_length[10]');
             $this->form_validation->set_rules('description', 'Deskripsi', 'trim');
 

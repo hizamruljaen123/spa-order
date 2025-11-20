@@ -15,12 +15,15 @@ class Exclusive_treatment_model extends CI_Model {
     }
 
     // Get all active exclusive treatments ordered by display_order
-    public function get_active_treatments() {
+    public function get_active_treatments()
+    {
         $this->db->where('is_active', 1);
-        $this->db->order_by('display_order', 'ASC');
-        $query = $this->db->get($this->table);
-        return $query->result_array();
+        // $this->db->order_by('display_order', 'ASC');
+        $this->db->order_by('name', 'ASC'); 
+
+        return $this->db->get($this->table)->result_array();
     }
+
 
     // Get treatments by category
     public function get_treatments_by_category($category = null) {

@@ -75,10 +75,11 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'S
                 <?php if (false): ?>
                   <select name="hands" class="rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">
                     <option value="1" <?= ((int)($p->hands ?? 1) === 1) ? 'selected' : ''; ?>>1</option>
-                    <option value="2" <?= ((int)($p->hands ?? 1) === 2) ? 'selected' : ''; ?>>2</option>
+                    <option value="2" <?= ((int)($p->hands ?? 2) === 2) ? 'selected' : ''; ?>>2</option>
+                    <option value="3" <?= ((int)($p->hands ?? 3) === 3) ? 'selected' : ''; ?>>3</option>
                   </select>
                 <?php else: ?>
-                  <?= (int)($p->hands ?? 1); ?>
+                  <?= (int)($p->hands); ?>
                 <?php endif; ?>
               </td>
 
