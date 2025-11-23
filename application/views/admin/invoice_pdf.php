@@ -33,15 +33,15 @@ if ($invoice && isset($invoice->total) && is_numeric($invoice->total)) {
 <!-- Invoice container -->
 <div class="max-w-4xl mx-auto">
   <!-- Header -->
-  <div class="rounded-lg border border-gray-200 bg-white shadow-sm mb-6">
+  <div class="rounded-lg border border-gray-600 bg-gray-800 shadow-sm mb-6">
     <div class="px-5 py-4 flex items-start justify-between">
       <div>
-        <h2 class="text-xl font-semibold text-sky-600">SPA Management</h2>
-        <p class="text-xs text-gray-500 mt-1">Jl. Example No. 123, Bandung • +62-812-3456-7890</p>
+        <h2 class="text-xl font-semibold text-sky-400">SPA Management</h2>
+        <p class="text-xs text-gray-400 mt-1">Jl. Example No. 123, Bandung • +62-812-3456-7890</p>
       </div>
       <div class="text-right">
-        <div class="text-2xl font-bold text-gray-900 tracking-wide">INVOIS</div>
-        <div class="mt-1 text-sm text-gray-700 font-medium"><?= $safe($invNum); ?></div>
+        <div class="text-2xl font-bold text-gray-100 tracking-wide">INVOIS</div>
+        <div class="mt-1 text-sm text-gray-200 font-medium"><?= $safe($invNum); ?></div>
         <div class="mt-2">
           <?php
             $badgeClass = 'bg-sky-600';
@@ -53,17 +53,17 @@ if ($invoice && isset($invoice->total) && is_numeric($invoice->total)) {
       </div>
     </div>
 
-    <div class="px-5 py-4 border-t border-gray-200 grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="px-5 py-4 border-t border-gray-700 grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
-        <div class="text-xs uppercase tracking-wide text-gray-500">Bill To</div>
-        <div class="mt-2 text-sm text-gray-800">
+        <div class="text-xs uppercase tracking-wide text-gray-400">Bill To</div>
+        <div class="mt-2 text-sm text-gray-200">
           <div class="font-medium"><?= $safe($booking ? $booking->customer_name : null); ?></div>
           <div class="mt-1"><?= nl2br($safe($booking ? $booking->address : null)); ?></div>
         </div>
       </div>
       <div>
-        <div class="text-xs uppercase tracking-wide text-gray-500">Booking Details</div>
-        <div class="mt-2 text-sm text-gray-800">
+        <div class="text-xs uppercase tracking-wide text-gray-400">Booking Details</div>
+        <div class="mt-2 text-sm text-gray-200">
           <div>Package: <span class="font-medium"><?= $safe($booking ? ($booking->package_name ?? null) : null); ?></span></div>
           <div>Date: <?= $safe($booking ? date('d M Y', strtotime($booking->date)) : null); ?></div>
           <div>Time: <?= $safe($booking ? substr($booking->time, 0, 5) : null); ?></div>
@@ -79,34 +79,34 @@ if ($invoice && isset($invoice->total) && is_numeric($invoice->total)) {
   </div>
 
   <!-- Items table -->
-  <div class="rounded-lg border border-gray-200 bg-white shadow-sm mb-6 overflow-hidden">
+  <div class="rounded-lg border border-gray-600 bg-gray-800 shadow-sm mb-6 overflow-hidden">
     <div class="overflow-x-auto">
       <table class="min-w-full table-auto">
-        <thead class="bg-gray-50">
-          <tr class="text-left text-sm text-gray-600">
+        <thead class="bg-gray-700">
+          <tr class="text-left text-sm text-gray-200">
             <th class="px-5 py-3">Description</th>
             <th class="px-5 py-3 text-center w-28">Quantity</th>
             <th class="px-5 py-3 text-right w-40">Price</th>
             <th class="px-5 py-3 text-right w-40">Total</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-gray-200 text-sm">
+        <tbody class="divide-y divide-gray-700 text-sm bg-gray-800">
           <tr>
-            <td class="px-5 py-3 align-top">
+            <td class="px-5 py-3 align-top text-gray-200">
               <?= $safe($booking ? ($booking->package_name ?? 'Spa Package') : 'Spa Package'); ?>
-              <div class="mt-1 text-xs text-gray-500">
+              <div class="mt-1 text-xs text-gray-400">
                 Therapist: <?= $safe($booking ? ($booking->therapist_name ?: '-') : '-'); ?>
               </div>
             </td>
-            <td class="px-5 py-3 text-center align-top">1</td>
-            <td class="px-5 py-3 text-right align-top"><?= $fmt($price); ?></td>
-            <td class="px-5 py-3 text-right align-top"><?= $fmt($total); ?></td>
+            <td class="px-5 py-3 text-center align-top text-gray-200">1</td>
+            <td class="px-5 py-3 text-right align-top text-gray-200"><?= $fmt($price); ?></td>
+            <td class="px-5 py-3 text-right align-top text-gray-200"><?= $fmt($total); ?></td>
           </tr>
         </tbody>
-        <tfoot class="bg-gray-50">
+        <tfoot class="bg-gray-700">
           <tr>
-            <td class="px-5 py-3 text-right font-medium" colspan="3">Total</td>
-            <td class="px-5 py-3 text-right font-bold"><?= $fmt($total); ?></td>
+            <td class="px-5 py-3 text-right font-medium text-gray-200" colspan="3">Total</td>
+            <td class="px-5 py-3 text-right font-bold text-gray-200"><?= $fmt($total); ?></td>
           </tr>
         </tfoot>
       </table>
@@ -114,12 +114,12 @@ if ($invoice && isset($invoice->total) && is_numeric($invoice->total)) {
   </div>
 
   <!-- Notes -->
-  <div class="rounded-lg border border-gray-200 bg-white shadow-sm mb-6">
+  <div class="rounded-lg border border-gray-600 bg-gray-800 shadow-sm mb-6">
     <div class="px-5 py-4">
-      <div class="text-xs uppercase tracking-wide text-gray-500">Notes</div>
-      <div class="mt-2 text-sm text-gray-700">
+      <div class="text-xs uppercase tracking-wide text-gray-400">Notes</div>
+      <div class="mt-2 text-sm text-gray-300">
         <p>- Please include invoice number when confirming payment.</p>
-        <p>- Unique number: <code class="text-sky-600"><?= $safe($invNum); ?></code></p>
+        <p>- Unique number: <code class="text-sky-400"><?= $safe($invNum); ?></code></p>
         <p>- Thank you for using our services.</p>
       </div>
     </div>
@@ -131,16 +131,16 @@ if ($invoice && isset($invoice->total) && is_numeric($invoice->total)) {
       Print
     </button>
     <?php if ($booking): ?>
-      <a href="<?= site_url('admin/invoice/generate/' . (isset($booking_token) ? $booking_token : (int)$booking->id)); ?>" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-4 py-2 text-sm hover:bg-gray-50">
+      <a href="<?= site_url('admin/invoice/generate/' . (isset($booking_token) ? $booking_token : (int)$booking->id)); ?>" class="inline-flex items-center rounded-md border border-gray-600 bg-gray-700 text-gray-200 px-4 py-2 text-sm hover:bg-gray-600">
         Download (HTML/Backup)
       </a>
     <?php endif; ?>
-    <a href="<?= site_url('admin'); ?>" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-4 py-2 text-sm hover:bg-gray-50">
+    <a href="<?= site_url('admin'); ?>" class="inline-flex items-center rounded-md border border-gray-600 bg-gray-700 text-gray-200 px-4 py-2 text-sm hover:bg-gray-600">
       Back to Dashboard
     </a>
   </div>
 
-  <p class="no-print mt-2 text-xs text-gray-500">Use the "Print" button to save as PDF.</p>
+  <p class="no-print mt-2 text-xs text-gray-400">Use the "Print" button to save as PDF.</p>
 </div>
 
 <?php

@@ -39,7 +39,7 @@ $isActive = function($patterns) use ($uri) {
     }
   </style>
 </head>
-<body class="bg-gray-50 text-gray-800 antialiased">
+<body class="bg-gray-900 text-gray-100 antialiased">
 <div class="min-h-screen flex">
   <!-- Sidebar -->
   <aside class="w-64 bg-slate-900 text-slate-100 fixed inset-y-0 left-0 flex flex-col">
@@ -102,9 +102,9 @@ $isActive = function($patterns) use ($uri) {
   <!-- Content wrapper -->
   <div class="flex-1 min-h-screen ml-64 flex flex-col">
     <!-- Topbar -->
-    <header class="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-6">
-      <h1 class="font-semibold text-gray-900"><?= htmlspecialchars($title); ?></h1>
-      <div class="text-xs text-gray-500">Admin Panel</div>
+    <header class="h-14 bg-gray-800 border-b border-gray-700 flex items-center justify-between px-6">
+      <h1 class="font-semibold text-gray-100"><?= htmlspecialchars($title); ?></h1>
+      <div class="text-xs text-gray-400">Admin Panel</div>
     </header>
 
     <!-- Main content -->

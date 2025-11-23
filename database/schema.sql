@@ -1,204 +1,405 @@
--- --------------------------------------------------------
--- Host:                         127.0.0.1
--- Server version:               8.0.30 - MySQL Community Server - GPL
--- Server OS:                    Win64
--- HeidiSQL Version:             12.11.0.7065
--- --------------------------------------------------------
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost
+-- Generation Time: Nov 23, 2025 at 09:48 AM
+-- Server version: 10.3.39-MariaDB
+-- PHP Version: 7.2.24
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES utf8 */;
-/*!50503 SET NAMES utf8mb4 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
--- Dumping structure for table data_spa.add_on
-CREATE TABLE IF NOT EXISTS `add_on` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `category` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `name` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
-  `description` text COLLATE utf8mb4_general_ci,
+--
+-- Database: `data_spa`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `add_on`
+--
+
+CREATE TABLE `add_on` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `category` varchar(100) NOT NULL,
+  `name` varchar(150) NOT NULL,
+  `description` text DEFAULT NULL,
   `price` decimal(10,2) NOT NULL,
-  `currency` varchar(10) COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'RM',
-  `is_active` tinyint(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `currency` varchar(10) NOT NULL DEFAULT 'RM',
+  `is_active` tinyint(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Data exporting was unselected.
+-- --------------------------------------------------------
 
--- Dumping structure for table data_spa.admin_user
-CREATE TABLE IF NOT EXISTS `admin_user` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `username` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
-  `password_hash` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `name` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `role` varchar(20) COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'admin',
-  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+--
+-- Table structure for table `admin_user`
+--
 
--- Data exporting was unselected.
+CREATE TABLE `admin_user` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `password_hash` varchar(255) NOT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `role` varchar(20) NOT NULL DEFAULT 'admin',
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping structure for table data_spa.ads
-CREATE TABLE IF NOT EXISTS `ads` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `image_url` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `link_url` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `is_active` tinyint(1) NOT NULL DEFAULT '1',
-  `display_order` int unsigned NOT NULL DEFAULT '0',
-  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `idx_ads_active` (`is_active`),
-  KEY `idx_ads_order` (`display_order`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+-- --------------------------------------------------------
 
--- Data exporting was unselected.
+--
+-- Table structure for table `ads`
+--
 
--- Dumping structure for table data_spa.products
-CREATE TABLE IF NOT EXISTS `products` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `description` text COLLATE utf8mb4_general_ci,
-  `price` decimal(10,2) NOT NULL,
-  `currency` varchar(10) COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'RM',
-  `image_url` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `is_active` tinyint(1) NOT NULL DEFAULT '1',
-  `display_order` int unsigned NOT NULL DEFAULT '0',
-  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `idx_products_active` (`is_active`),
-  KEY `idx_products_order` (`display_order`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `ads` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `image_url` varchar(255) NOT NULL,
+  `link_url` varchar(255) NOT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `display_order` int(10) UNSIGNED NOT NULL DEFAULT 0,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Sample product data for testing
-INSERT INTO products (name, description, price, currency, image_url, is_active, display_order) VALUES
-('Essential Oil - Lavender', 'Premium lavender essential oil for relaxation and aromatherapy. Helps reduce stress and promote better sleep.', 45.00, 'RM', NULL, 1, 1),
-('Massage Oil Blend', 'Special blend of natural oils for professional massage therapy. Contains jojoba, almond, and essential oils.', 35.00, 'RM', NULL, 1, 2),
-('Aromatherapy Diffuser', 'Electric aromatherapy diffuser with LED lights. Creates a relaxing atmosphere with essential oils.', 89.00, 'RM', NULL, 1, 3),
-('Spa Towels Set', 'High-quality spa towels set with 6 pieces. Soft, absorbent, and perfect for professional spa use.', 120.00, 'RM', NULL, 1, 4),
-('Herbal Compress', 'Traditional Malay herbal compress filled with aromatic herbs. Perfect for hot stone therapy.', 25.00, 'RM', NULL, 1, 5),
-('Body Scrub - Coffee', 'Natural coffee body scrub for exfoliation and skin rejuvenation. Made with fresh ground coffee and natural oils.', 55.00, 'RM', NULL, 1, 6),
-('Face Mask Pack', 'Professional grade face masks for various skin types. Includes hydrating, cleansing, and anti-aging formulas.', 75.00, 'RM', NULL, 1, 7),
-('Spa Candles Set', 'Scented spa candles in relaxing fragrances. Creates ambient lighting and aromatherapy atmosphere.', 65.00, 'RM', NULL, 1, 8);
+-- --------------------------------------------------------
 
--- Data exporting was unselected.
+--
+-- Table structure for table `app_settings`
+--
 
--- Dumping structure for table data_spa.app_settings
-CREATE TABLE IF NOT EXISTS `app_settings` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `key` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `value` text COLLATE utf8mb4_general_ci,
-  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `key` (`key`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `app_settings` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `key` varchar(100) NOT NULL,
+  `value` text DEFAULT NULL,
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Data exporting was unselected.
+-- --------------------------------------------------------
 
--- Dumping structure for table data_spa.booking
-CREATE TABLE IF NOT EXISTS `booking` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `customer_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `address` text COLLATE utf8mb4_general_ci,
-  `therapist_id` int unsigned DEFAULT NULL,
-  `package_id` int unsigned NOT NULL,
-  `call_type` enum('IN','OUT') COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'IN',
+--
+-- Table structure for table `booking`
+--
+
+CREATE TABLE `booking` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `customer_name` varchar(100) NOT NULL,
+  `address` text DEFAULT NULL,
+  `therapist_id` int(10) UNSIGNED DEFAULT NULL,
+  `package_id` int(10) UNSIGNED NOT NULL,
+  `call_type` enum('IN','OUT') NOT NULL DEFAULT 'IN',
   `date` date NOT NULL,
   `time` time NOT NULL,
   `total_price` decimal(10,2) NOT NULL,
-  `status` enum('pending','accepted','working','rejected','confirmed','completed','canceled') COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'pending',
-  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `idx_booking_date` (`date`),
-  KEY `idx_booking_status` (`status`),
-  KEY `idx_booking_therapist` (`therapist_id`),
-  KEY `idx_booking_package` (`package_id`),
-  CONSTRAINT `fk_booking_package` FOREIGN KEY (`package_id`) REFERENCES `package` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT `fk_booking_therapist` FOREIGN KEY (`therapist_id`) REFERENCES `therapist` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `status` enum('pending','accepted','working','rejected','confirmed','completed','canceled') NOT NULL DEFAULT 'pending',
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Data exporting was unselected.
+-- --------------------------------------------------------
 
--- Dumping structure for table data_spa.booking_addon
-CREATE TABLE IF NOT EXISTS `booking_addon` (
-  `booking_id` int unsigned NOT NULL,
-  `add_on_id` int unsigned NOT NULL,
+--
+-- Table structure for table `booking_addon`
+--
+
+CREATE TABLE `booking_addon` (
+  `booking_id` int(10) UNSIGNED NOT NULL,
+  `add_on_id` int(10) UNSIGNED NOT NULL,
   `unit_price` decimal(10,2) NOT NULL,
-  `qty` int unsigned NOT NULL DEFAULT '1',
-  PRIMARY KEY (`booking_id`,`add_on_id`),
-  KEY `fk_booking_addon_addon` (`add_on_id`),
-  CONSTRAINT `fk_booking_addon_addon` FOREIGN KEY (`add_on_id`) REFERENCES `add_on` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT `fk_booking_addon_booking` FOREIGN KEY (`booking_id`) REFERENCES `booking` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  `qty` int(10) UNSIGNED NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Data exporting was unselected.
+-- --------------------------------------------------------
 
--- Dumping structure for table data_spa.ci_sessions
-CREATE TABLE IF NOT EXISTS `ci_sessions` (
-  `id` varchar(128) COLLATE utf8mb4_general_ci NOT NULL,
-  `ip_address` varchar(45) COLLATE utf8mb4_general_ci NOT NULL,
-  `timestamp` int unsigned NOT NULL DEFAULT '0',
-  `data` blob NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `ci_sessions_timestamp` (`timestamp`)
+--
+-- Table structure for table `ci_sessions`
+--
+
+CREATE TABLE `ci_sessions` (
+  `id` varchar(128) NOT NULL,
+  `ip_address` varchar(45) NOT NULL,
+  `timestamp` int(10) UNSIGNED NOT NULL DEFAULT 0,
+  `data` blob NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Data exporting was unselected.
+-- --------------------------------------------------------
 
--- Dumping structure for table data_spa.invoice
-CREATE TABLE IF NOT EXISTS `invoice` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `booking_id` int unsigned NOT NULL,
-  `invoice_number` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+--
+-- Table structure for table `exclusive_treatments`
+--
+
+CREATE TABLE `exclusive_treatments` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `currency` varchar(10) NOT NULL DEFAULT 'RM',
+  `category` varchar(50) NOT NULL DEFAULT 'treatment',
+  `is_add_on` tinyint(1) NOT NULL DEFAULT 0 COMMENT '1 for add-on treatments, 0 for main treatments',
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `display_order` int(10) UNSIGNED NOT NULL DEFAULT 0,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `invoice`
+--
+
+CREATE TABLE `invoice` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `booking_id` int(10) UNSIGNED NOT NULL,
+  `invoice_number` varchar(50) NOT NULL,
   `total` decimal(10,2) NOT NULL,
-  `payment_status` enum('DP','Lunas') COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'DP',
-  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `invoice_number` (`invoice_number`),
-  KEY `idx_invoice_booking` (`booking_id`),
-  CONSTRAINT `fk_invoice_booking` FOREIGN KEY (`booking_id`) REFERENCES `booking` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `payment_status` enum('DP','Lunas') NOT NULL DEFAULT 'DP',
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Data exporting was unselected.
+-- --------------------------------------------------------
 
--- Dumping structure for table data_spa.package
-CREATE TABLE IF NOT EXISTS `package` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `category` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `hands` tinyint unsigned NOT NULL DEFAULT '1' COMMENT 'number of therapists (1 or 2)',
-  `duration` int NOT NULL COMMENT 'minutes',
+--
+-- Table structure for table `package`
+--
+
+CREATE TABLE `package` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `category` varchar(100) NOT NULL,
+  `hands` tinyint(3) UNSIGNED NOT NULL DEFAULT 1 COMMENT 'number of therapists (1 or 2)',
+  `duration` int(11) NOT NULL COMMENT 'minutes',
   `price_in_call` decimal(10,2) NOT NULL,
-  `price_out_call` decimal(10,2) NOT NULL,
-  `currency` varchar(10) COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'RM',
-  `description` text COLLATE utf8mb4_general_ci,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `price_out_call` varchar(50) NOT NULL DEFAULT '-',
+  `currency` varchar(10) NOT NULL DEFAULT 'RM',
+  `description` text DEFAULT NULL,
+  `is_deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '1 for soft deleted, 0 for active'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Data exporting was unselected.
+-- --------------------------------------------------------
 
--- Dumping structure for table data_spa.therapist
-CREATE TABLE IF NOT EXISTS `therapist` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `phone` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `status` enum('available','busy','off') COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'available',
-  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `photo` text COLLATE utf8mb4_general_ci,
-  PRIMARY KEY (`id`),
-  KEY `idx_therapist_status` (`status`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+--
+-- Table structure for table `products`
+--
 
--- Data exporting was unselected.
+CREATE TABLE `products` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `currency` varchar(10) NOT NULL DEFAULT 'RM',
+  `image_url` varchar(255) DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `display_order` int(10) UNSIGNED NOT NULL DEFAULT 0,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
-/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `therapist`
+--
+
+CREATE TABLE `therapist` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `status` enum('available','busy','off') NOT NULL DEFAULT 'available',
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `photo` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `add_on`
+--
+ALTER TABLE `add_on`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `admin_user`
+--
+ALTER TABLE `admin_user`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`);
+
+--
+-- Indexes for table `ads`
+--
+ALTER TABLE `ads`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_ads_active` (`is_active`),
+  ADD KEY `idx_ads_order` (`display_order`);
+
+--
+-- Indexes for table `app_settings`
+--
+ALTER TABLE `app_settings`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `key` (`key`);
+
+--
+-- Indexes for table `booking`
+--
+ALTER TABLE `booking`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_booking_date` (`date`),
+  ADD KEY `idx_booking_status` (`status`),
+  ADD KEY `idx_booking_therapist` (`therapist_id`),
+  ADD KEY `idx_booking_package` (`package_id`);
+
+--
+-- Indexes for table `booking_addon`
+--
+ALTER TABLE `booking_addon`
+  ADD PRIMARY KEY (`booking_id`,`add_on_id`),
+  ADD KEY `fk_booking_addon_addon` (`add_on_id`);
+
+--
+-- Indexes for table `ci_sessions`
+--
+ALTER TABLE `ci_sessions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `ci_sessions_timestamp` (`timestamp`);
+
+--
+-- Indexes for table `exclusive_treatments`
+--
+ALTER TABLE `exclusive_treatments`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_exclusive_treatments_category` (`category`),
+  ADD KEY `idx_exclusive_treatments_active` (`is_active`),
+  ADD KEY `idx_exclusive_treatments_order` (`display_order`);
+
+--
+-- Indexes for table `invoice`
+--
+ALTER TABLE `invoice`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `invoice_number` (`invoice_number`),
+  ADD KEY `idx_invoice_booking` (`booking_id`);
+
+--
+-- Indexes for table `package`
+--
+ALTER TABLE `package`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_package_is_deleted` (`is_deleted`);
+
+--
+-- Indexes for table `products`
+--
+ALTER TABLE `products`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_products_active` (`is_active`),
+  ADD KEY `idx_products_order` (`display_order`);
+
+--
+-- Indexes for table `therapist`
+--
+ALTER TABLE `therapist`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_therapist_status` (`status`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `add_on`
+--
+ALTER TABLE `add_on`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `admin_user`
+--
+ALTER TABLE `admin_user`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `ads`
+--
+ALTER TABLE `ads`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `app_settings`
+--
+ALTER TABLE `app_settings`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `booking`
+--
+ALTER TABLE `booking`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `exclusive_treatments`
+--
+ALTER TABLE `exclusive_treatments`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `invoice`
+--
+ALTER TABLE `invoice`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `package`
+--
+ALTER TABLE `package`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `products`
+--
+ALTER TABLE `products`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `therapist`
+--
+ALTER TABLE `therapist`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `booking`
+--
+ALTER TABLE `booking`
+  ADD CONSTRAINT `fk_booking_package` FOREIGN KEY (`package_id`) REFERENCES `package` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_booking_therapist` FOREIGN KEY (`therapist_id`) REFERENCES `therapist` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `booking_addon`
+--
+ALTER TABLE `booking_addon`
+  ADD CONSTRAINT `fk_booking_addon_addon` FOREIGN KEY (`add_on_id`) REFERENCES `add_on` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_booking_addon_booking` FOREIGN KEY (`booking_id`) REFERENCES `booking` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `invoice`
+--
+ALTER TABLE `invoice`
+  ADD CONSTRAINT `fk_invoice_booking` FOREIGN KEY (`booking_id`) REFERENCES `booking` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+COMMIT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

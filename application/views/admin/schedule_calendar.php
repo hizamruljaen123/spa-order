@@ -4,12 +4,12 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'S
 <!-- Page: Schedule Calendar -->
 <div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
   <div>
-    <h2 class="text-base font-semibold text-gray-900">Schedule Calendar</h2>
-    <p class="text-sm text-gray-600">Monitor and manage booking schedules using an interactive calendar.</p>
+    <h2 class="text-base font-semibold text-gray-200">Schedule Calendar</h2>
+    <p class="text-sm text-gray-300">Monitor and manage booking schedules using an interactive calendar.</p>
   </div>
   <div class="flex items-center gap-3">
-    <label for="therapistFilter" class="text-sm text-gray-700">Filter Therapist</label>
-    <select id="therapistFilter" class="rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-sm">
+    <label for="therapistFilter" class="text-sm text-gray-300">Filter Therapist</label>
+    <select id="therapistFilter" class="rounded-md border-gray-600 bg-gray-700 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-sm text-slate-100">
       <option value="">All Therapists</option>
       <?php if (!empty($therapists)): ?>
         <?php foreach ($therapists as $t): ?>
@@ -21,106 +21,106 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'S
 </div>
 
 <!-- Monthly Summary -->
-<div id="monthSummary" class="mb-3 rounded-lg border border-gray-200 bg-white px-4 py-3 shadow-sm">
+<div id="monthSummary" class="mb-3 rounded-lg border border-gray-600 bg-gray-800 px-4 py-3 shadow-sm">
   <div class="flex items-center justify-between">
-    <div class="text-sm text-gray-500">Total orders this month</div>
-    <div class="text-xl md:text-3xl font-extrabold tracking-tight"><span id="monthTotal">0</span> Orders</div>
+    <div class="text-sm text-gray-400">Total orders this month</div>
+    <div class="text-xl md:text-3xl font-extrabold tracking-tight text-gray-200"><span id="monthTotal">0</span> Orders</div>
   </div>
 </div>
 
 <!-- Calendar container -->
-<div id="calendar" class="rounded-lg border border-gray-200 bg-white p-3 shadow-sm"></div>
+<div id="calendar" class="rounded-lg border border-gray-600 bg-gray-800 p-3 shadow-sm"></div>
 
 <!-- Legend: Schedule Density -->
-<div class="mt-3 rounded-lg border border-gray-200 bg-white p-3 shadow-sm">
+<div class="mt-3 rounded-lg border border-gray-600 bg-gray-800 p-3 shadow-sm">
   <div class="flex flex-wrap items-center gap-3 text-xs">
-    <span class="font-medium text-gray-700">Schedule Density Legend:</span>
+    <span class="font-medium text-gray-300">Schedule Density Legend:</span>
     <span class="inline-flex items-center gap-2">
       <span class="inline-flex items-center gap-1">
-        <span class="h-3 w-3 rounded bg-green-300 border border-green-500"></span><span>1–2 Orders (Low)</span>
+        <span class="h-3 w-3 rounded bg-green-700 border border-green-600"></span><span>1–2 Orders (Low)</span>
       </span>
       <span class="inline-flex items-center gap-1">
-        <span class="h-3 w-3 rounded bg-yellow-300 border border-yellow-500"></span><span>3–5 Orders (Medium)</span>
+        <span class="h-3 w-3 rounded bg-yellow-700 border border-yellow-600"></span><span>3–5 Orders (Medium)</span>
       </span>
       <span class="inline-flex items-center gap-1">
-        <span class="h-3 w-3 rounded bg-orange-300 border border-orange-500"></span><span>6–8 Orders (High)</span>
+        <span class="h-3 w-3 rounded bg-orange-700 border border-orange-600"></span><span>6–8 Orders (High)</span>
       </span>
       <span class="inline-flex items-center gap-1">
-        <span class="h-3 w-3 rounded bg-red-400 border border-red-600"></span><span>9+ Orders (Very High)</span>
+        <span class="h-3 w-3 rounded bg-red-700 border border-red-600"></span><span>9+ Orders (Very High)</span>
       </span>
     </span>
   </div>
-  <p class="mt-2 text-[11px] text-gray-500">The denser the schedule, the color changes from green → yellow → orange → red.</p>
+  <p class="mt-2 text-[11px] text-gray-400">The denser the schedule, the color changes from green → yellow → orange → red.</p>
 </div>
 
 <!-- Tailwind modal (details) -->
 <div id="bookingModal" class="fixed inset-0 z-40 hidden" aria-hidden="true">
-  <div class="absolute inset-0 bg-black/40"></div>
+  <div class="absolute inset-0 bg-black/60"></div>
   <div class="absolute inset-0 flex items-center justify-center p-4">
-    <div class="w-full max-w-md rounded-lg bg-white shadow-lg">
-      <div class="px-5 py-3 border-b border-gray-200 flex items-center justify-between">
-        <h3 class="text-sm font-medium text-gray-900">Booking Details</h3>
-        <button id="closeModalBtn" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-2 py-1 text-xs hover:bg-gray-50">Close</button>
+    <div class="w-full max-w-md rounded-lg bg-gray-800 shadow-lg border border-gray-600">
+      <div class="px-5 py-3 border-b border-gray-700 flex items-center justify-between">
+        <h3 class="text-sm font-medium text-gray-100">Booking Details</h3>
+        <button id="closeModalBtn" class="inline-flex items-center rounded-md border border-gray-600 bg-gray-700 text-gray-200 px-2 py-1 text-xs hover:bg-gray-600">Close</button>
       </div>
       <div class="p-5">
-        <dl class="text-sm text-gray-800 space-y-2">
+        <dl class="text-sm text-gray-200 space-y-2">
           <div class="flex">
-            <dt class="w-32 text-gray-600">Customer</dt>
+            <dt class="w-32 text-gray-300">Customer</dt>
             <dd id="bd_customer" class="flex-1">-</dd>
           </div>
           <div class="flex">
-            <dt class="w-32 text-gray-600">Package</dt>
+            <dt class="w-32 text-gray-300">Package</dt>
             <dd id="bd_package" class="flex-1">-</dd>
           </div>
           <div class="flex">
-            <dt class="w-32 text-gray-600">Therapist</dt>
+            <dt class="w-32 text-gray-300">Therapist</dt>
             <dd id="bd_therapist" class="flex-1">-</dd>
           </div>
           <div class="flex">
-            <dt class="w-32 text-gray-600">Date</dt>
+            <dt class="w-32 text-gray-300">Date</dt>
             <dd id="bd_date" class="flex-1">-</dd>
           </div>
           <div class="flex">
-            <dt class="w-32 text-gray-600">Time</dt>
+            <dt class="w-32 text-gray-300">Time</dt>
             <dd id="bd_time" class="flex-1">-</dd>
           </div>
           <div class="flex">
-            <dt class="w-32 text-gray-600">Status</dt>
-            <dd class="flex-1"><span id="bd_status" class="inline-flex items-center px-2 py-1 rounded bg-gray-200 text-gray-700 text-xs">-</span></dd>
+            <dt class="w-32 text-gray-300">Status</dt>
+            <dd class="flex-1"><span id="bd_status" class="inline-flex items-center px-2 py-1 rounded bg-gray-600 text-gray-200 text-xs">-</span></dd>
           </div>
         </dl>
       </div>
 
       <!-- Edit Time Section (hidden by default) -->
-      <div id="editSection" class="px-5 py-3 border-t border-gray-100 hidden">
+      <div id="editSection" class="px-5 py-3 border-t border-gray-700 hidden">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label for="edit_date" class="block text-xs font-medium text-gray-700">Date</label>
-            <input type="date" id="edit_date" class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-sm">
+            <label for="edit_date" class="block text-xs font-medium text-gray-300">Date</label>
+            <input type="date" id="edit_date" class="mt-1 w-full rounded-md border-gray-600 bg-gray-700 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-sm text-slate-100">
           </div>
           <div>
-            <label for="edit_time" class="block text-xs font-medium text-gray-700">Time</label>
-            <input type="time" id="edit_time" step="60" class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-sm">
+            <label for="edit_time" class="block text-xs font-medium text-gray-300">Time</label>
+            <input type="time" id="edit_time" step="60" class="mt-1 w-full rounded-md border-gray-600 bg-gray-700 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-sm text-slate-100">
           </div>
         </div>
         <div class="mt-3 flex items-center justify-end gap-2">
-          <button id="editCancelBtn" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-3 py-1.5 text-xs hover:bg-gray-50">Cancel</button>
+          <button id="editCancelBtn" class="inline-flex items-center rounded-md border border-gray-600 bg-gray-700 text-gray-200 px-3 py-1.5 text-xs hover:bg-gray-600">Cancel</button>
           <button id="editSaveBtn" class="inline-flex items-center rounded-md bg-sky-600 text-white px-3 py-1.5 text-xs hover:bg-sky-700">Save</button>
         </div>
       </div>
 
-      <div class="px-5 py-3 border-t border-gray-200 flex items-center justify-end gap-2">
-        <button id="editBtn" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-3 py-1.5 text-xs hover:bg-gray-50">Edit Time</button>
+      <div class="px-5 py-3 border-t border-gray-700 flex items-center justify-end gap-2">
+        <button id="editBtn" class="inline-flex items-center rounded-md border border-gray-600 bg-gray-700 text-gray-200 px-3 py-1.5 text-xs hover:bg-gray-600">Edit Time</button>
         <button id="deleteBtn" class="inline-flex items-center rounded-md bg-red-600 text-white px-3 py-1.5 text-xs hover:bg-red-700">Delete</button>
 
         <!-- Status Actions -->
         <button id="statusAcceptBtn"  title="Mark as Accepted"   class="inline-flex items-center rounded-md bg-blue-600 text-white px-3 py-1.5 text-xs hover:bg-blue-700">Accept</button>
         <button id="statusRejectBtn"  title="Mark as Rejected"    class="inline-flex items-center rounded-md bg-rose-600 text-white px-3 py-1.5 text-xs hover:bg-rose-700">Reject</button>
         <button id="statusWorkingBtn" title="Mark as Working" class="inline-flex items-center rounded-md bg-amber-500 text-white px-3 py-1.5 text-xs hover:bg-amber-600">On Working</button>
-        <button id="statusCompleteBtn" title="Mark as Completed"   class="inline-flex items-center rounded-md bg-gray-700 text-white px-3 py-1.5 text-xs hover:bg-gray-800">Complete</button>
+        <button id="statusCompleteBtn" title="Mark as Completed"   class="inline-flex items-center rounded-md bg-gray-600 text-white px-3 py-1.5 text-xs hover:bg-gray-700">Complete</button>
         <button id="statusCancelBtn"  title="Mark as Canceled" class="inline-flex items-center rounded-md bg-orange-600 text-white px-3 py-1.5 text-xs hover:bg-orange-700">Cancel</button>
 
-        <a href="#" id="bd_invoice_btn" target="_blank" rel="noopener" class="inline-flex items-center rounded-md border border-gray-300 bg-white text-gray-700 px-3 py-1.5 text-xs hover:bg-gray-50">View Invoice</a>
+        <a href="#" id="bd_invoice_btn" target="_blank" rel="noopener" class="inline-flex items-center rounded-md border border-gray-600 bg-gray-700 text-gray-200 px-3 py-1.5 text-xs hover:bg-gray-600">View Invoice</a>
         <button id="closeModalBtn2" class="inline-flex items-center rounded-md bg-sky-600 text-white px-3 py-1.5 text-xs hover:bg-sky-700">Close</button>
       </div>
     </div>
@@ -324,11 +324,11 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'S
 
   // Color mapping based on count (heatmap)
   function getHeatClasses(count) {
-    if (count >= 9) return { bg: 'bg-red-200', text: 'text-red-900' };
-    if (count >= 6) return { bg: 'bg-orange-200', text: 'text-orange-900' };
-    if (count >= 3) return { bg: 'bg-yellow-200', text: 'text-yellow-900' };
-    if (count >= 1) return { bg: 'bg-green-200', text: 'text-green-900' };
-    return { bg: 'bg-gray-50', text: 'text-gray-400' };
+    if (count >= 9) return { bg: 'bg-red-800', text: 'text-red-100' };
+    if (count >= 6) return { bg: 'bg-orange-800', text: 'text-orange-100' };
+    if (count >= 3) return { bg: 'bg-yellow-800', text: 'text-yellow-100' };
+    if (count >= 1) return { bg: 'bg-green-800', text: 'text-green-100' };
+    return { bg: 'bg-gray-700', text: 'text-gray-400' };
   }
 
   // Render heatmap + large text "X Orders" in each day cell (month view only)
@@ -513,26 +513,26 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'S
         const s = String(props.status || '').toLowerCase();
         bdStatus.textContent = s || '-';
         const base = 'inline-flex items-center px-2 py-1 rounded text-xs border ';
-        let cls = 'bg-gray-200 text-gray-700 border-gray-300';
+        let cls = 'bg-gray-600 text-gray-200 border-gray-500';
         switch (s) {
           case 'pending':
-            cls = 'bg-red-100 text-red-700 border-red-300';
+            cls = 'bg-red-900/50 text-red-300 border-red-700';
             break;
           case 'accepted':
           case 'confirmed':
-            cls = 'bg-blue-100 text-blue-700 border-blue-300';
+            cls = 'bg-blue-900/50 text-blue-300 border-blue-700';
             break;
           case 'working':
-            cls = 'bg-amber-100 text-amber-800 border-amber-300';
+            cls = 'bg-amber-900/50 text-amber-300 border-amber-700';
             break;
           case 'completed':
-            cls = 'bg-gray-300 text-gray-800 border-gray-500';
+            cls = 'bg-gray-600 text-gray-100 border-gray-500';
             break;
           case 'rejected':
-            cls = 'bg-rose-100 text-rose-700 border-rose-300';
+            cls = 'bg-rose-900/50 text-rose-300 border-rose-700';
             break;
           case 'canceled':
-            cls = 'bg-orange-100 text-orange-800 border-orange-300';
+            cls = 'bg-orange-900/50 text-orange-300 border-orange-700';
             break;
         }
         bdStatus.className = base + cls;

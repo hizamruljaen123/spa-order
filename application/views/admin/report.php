@@ -4,12 +4,12 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'R
 <!-- Filters -->
 <div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
   <div>
-    <h2 class="text-base font-semibold text-gray-900">Revenue Report</h2>
-    <p class="text-sm text-gray-600">Monthly revenue analysis and total bookings.</p>
+    <h2 class="text-base font-semibold text-gray-200">Revenue Report</h2>
+    <p class="text-sm text-gray-300">Monthly revenue analysis and total bookings.</p>
   </div>
   <div class="flex items-center gap-3">
-    <label for="yearSelect" class="text-sm text-gray-700">Year</label>
-    <select id="yearSelect" class="rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-sm">
+    <label for="yearSelect" class="text-sm text-gray-300">Year</label>
+    <select id="yearSelect" class="rounded-md border-gray-600 bg-gray-700 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-sm text-slate-100">
       <?php
       $currentYear = isset($year) ? (int)$year : (int)date('Y');
       for ($y = $currentYear - 4; $y <= $currentYear + 1; $y++):
@@ -23,24 +23,24 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'R
 
 <!-- Summary cards -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-  <div class="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
-    <div class="text-xs uppercase tracking-wide text-emerald-600 font-semibold">Total Revenue This Year</div>
-    <div id="sumRevenue" class="mt-2 text-4xl font-bold text-gray-900">RM 0</div>
-    <p class="mt-1 text-gray-500 text-sm">Total from all months in selected year.</p>
+  <div class="rounded-lg border border-gray-600 bg-gray-800 p-5 shadow-sm">
+    <div class="text-xs uppercase tracking-wide text-emerald-400 font-semibold">Total Revenue This Year</div>
+    <div id="sumRevenue" class="mt-2 text-4xl font-bold text-gray-200">RM 0</div>
+    <p class="mt-1 text-gray-400 text-sm">Total from all months in selected year.</p>
   </div>
-  <div class="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
-    <div class="text-xs uppercase tracking-wide text-sky-600 font-semibold">Total Bookings This Year</div>
-    <div id="sumBooking" class="mt-2 text-4xl font-bold text-gray-900">0</div>
-    <p class="mt-1 text-gray-500 text-sm">Total bookings throughout the year.</p>
+  <div class="rounded-lg border border-gray-600 bg-gray-800 p-5 shadow-sm">
+    <div class="text-xs uppercase tracking-wide text-sky-400 font-semibold">Total Bookings This Year</div>
+    <div id="sumBooking" class="mt-2 text-4xl font-bold text-gray-200">0</div>
+    <p class="mt-1 text-gray-400 text-sm">Total bookings throughout the year.</p>
   </div>
 </div>
 
 <!-- Chart -->
-<div class="rounded-lg border border-gray-200 bg-white shadow-sm mb-6">
-  <div class="px-5 py-3 border-b border-gray-200 flex items-center justify-between">
-    <span class="text-sm font-medium text-gray-900">Monthly Revenue Chart</span>
-    <label class="inline-flex items-center gap-2 text-sm text-gray-700">
-      <input type="checkbox" id="toggleBooking" class="rounded border-gray-300 text-sky-600 focus:ring-sky-500" checked>
+<div class="rounded-lg border border-gray-600 bg-gray-800 shadow-sm mb-6">
+  <div class="px-5 py-3 border-b border-gray-700 flex items-center justify-between">
+    <span class="text-sm font-medium text-gray-200">Monthly Revenue Chart</span>
+    <label class="inline-flex items-center gap-2 text-sm text-gray-300">
+      <input type="checkbox" id="toggleBooking" class="rounded border-gray-600 text-sky-600 focus:ring-sky-500 bg-gray-700" checked>
       Show Total Bookings
     </label>
   </div>
@@ -50,21 +50,21 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'R
 </div>
 
 <!-- Table data -->
-<div class="rounded-lg border border-gray-200 bg-white shadow-sm">
-  <div class="px-5 py-3 border-b border-gray-200">
-    <h3 class="text-sm font-medium text-gray-900">Monthly Details</h3>
+<div class="rounded-lg border border-gray-600 bg-gray-800 shadow-sm">
+  <div class="px-5 py-3 border-b border-gray-700">
+    <h3 class="text-sm font-medium text-gray-200">Monthly Details</h3>
   </div>
   <div class="p-0">
     <div class="overflow-x-auto">
       <table class="min-w-full table-auto" id="detailTable">
-        <thead class="bg-gray-50">
-          <tr class="text-left text-sm text-gray-600">
+        <thead class="bg-gray-700">
+          <tr class="text-left text-sm text-gray-200">
             <th class="px-5 py-3 w-20">Month</th>
             <th class="px-5 py-3 text-right w-56">Revenue</th>
             <th class="px-5 py-3 text-center w-40">Bookings</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-gray-200"><!-- dynamic --></tbody>
+        <tbody class="divide-y divide-gray-700 bg-gray-800"><!-- dynamic --></tbody>
       </table>
     </div>
   </div>
@@ -222,83 +222,83 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'R
 <!-- Additional Analytics: Peak Hours/Days, Heatmap, Top Therapists & Packages -->
 <div class="mt-6 grid grid-cols-1 md:grid-cols-12 gap-6">
   <!-- Peak hours (annual average) -->
-  <div class="rounded-lg md:col-span-6 border border-gray-200 bg-white shadow-sm">
-    <div class="px-5 py-3 border-b border-gray-200 flex items-center justify-between">
+  <div class="rounded-lg md:col-span-6 border border-gray-600 bg-gray-800 shadow-sm">
+    <div class="px-5 py-3 border-b border-gray-700 flex items-center justify-between">
       <div>
-        <h3 class="text-sm font-medium text-gray-900">Order Distribution per Hour</h3>
-        <p class="text-xs text-gray-500">Average number of orders per hour throughout the selected year.</p>
+        <h3 class="text-sm font-medium text-gray-200">Order Distribution per Hour</h3>
+        <p class="text-xs text-gray-400">Average number of orders per hour throughout the selected year.</p>
       </div>
       <div class="text-xs">
-        <span class="text-gray-600">Peak Hour:</span>
-        <span id="busiestHourLabel" class="ml-2 inline-flex items-center rounded bg-amber-100 px-2 py-1 font-semibold text-amber-800">-</span>
+        <span class="text-gray-300">Peak Hour:</span>
+        <span id="busiestHourLabel" class="ml-2 inline-flex items-center rounded bg-amber-900/50 px-2 py-1 font-semibold text-amber-300">-</span>
       </div>
     </div>
     <div class="p-5">
       <canvas id="hourChart" height="90"></canvas>
       <div class="mt-4 overflow-x-auto">
         <table class="min-w-full table-auto text-sm" id="hourTable">
-          <thead class="bg-gray-50">
-            <tr class="text-left text-gray-600">
+          <thead class="bg-gray-700">
+            <tr class="text-left text-gray-200">
               <th class="px-5 py-3 w-32">Hour</th>
               <th class="px-5 py-3 text-center w-40">Total Orders</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-200"></tbody>
+          <tbody class="divide-y divide-gray-700 bg-gray-800"></tbody>
         </table>
       </div>
     </div>
   </div>
 
   <!-- Peak order day -->
-  <div class="rounded-lg md:col-span-6 border border-gray-200 bg-white shadow-sm">
-    <div class="px-5 py-3 border-b border-gray-200 flex items-center justify-between">
+  <div class="rounded-lg md:col-span-6 border border-gray-600 bg-gray-800 shadow-sm">
+    <div class="px-5 py-3 border-b border-gray-700 flex items-center justify-between">
       <div>
-        <h3 class="text-sm font-medium text-gray-900">Order Distribution per Day</h3>
-        <p class="text-xs text-gray-500">Number of orders per day (Monday to Sunday) throughout the selected year.</p>
+        <h3 class="text-sm font-medium text-gray-200">Order Distribution per Day</h3>
+        <p class="text-xs text-gray-400">Number of orders per day (Monday to Sunday) throughout the selected year.</p>
       </div>
       <div class="text-xs">
-        <span class="text-gray-600">Peak Day:</span>
-        <span id="busiestDayLabel" class="ml-2 inline-flex items-center rounded bg-emerald-100 px-2 py-1 font-semibold text-emerald-800">-</span>
+        <span class="text-gray-300">Peak Day:</span>
+        <span id="busiestDayLabel" class="ml-2 inline-flex items-center rounded bg-emerald-900/50 px-2 py-1 font-semibold text-emerald-300">-</span>
       </div>
     </div>
     <div class="p-5">
       <canvas id="weekdayChart" height="90"></canvas>
       <div class="mt-4 overflow-x-auto">
         <table class="min-w-full table-auto text-sm" id="weekdayTable">
-          <thead class="bg-gray-50">
-            <tr class="text-left text-gray-600">
+          <thead class="bg-gray-700">
+            <tr class="text-left text-gray-200">
               <th class="px-5 py-3 w-48">Day</th>
               <th class="px-5 py-3 text-center w-40">Total Orders</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-200"></tbody>
+          <tbody class="divide-y divide-gray-700 bg-gray-800"></tbody>
         </table>
       </div>
     </div>
   </div>
 
   <!-- Day x Hour Heatmap -->
-  <div class="rounded-lg md:col-span-12 border border-gray-200 bg-white shadow-sm">
-    <div class="px-5 py-3 border-b border-gray-200 flex items-center justify-between">
+  <div class="rounded-lg md:col-span-12 border border-gray-600 bg-gray-800 shadow-sm">
+    <div class="px-5 py-3 border-b border-gray-700 flex items-center justify-between">
       <div>
-        <h3 class="text-sm font-medium text-gray-900">Day x Hour Heatmap</h3>
-        <p class="text-xs text-gray-500">Order density for each day and hour combination.</p>
+        <h3 class="text-sm font-medium text-gray-200">Day x Hour Heatmap</h3>
+        <p class="text-xs text-gray-400">Order density for each day and hour combination.</p>
       </div>
       <div class="text-xs">
-        <span class="text-gray-600">Peak Slot:</span>
-        <span id="busiestSlotLabel" class="ml-2 inline-flex items-center rounded bg-rose-100 px-2 py-1 font-semibold text-rose-800">-</span>
+        <span class="text-gray-300">Peak Slot:</span>
+        <span id="busiestSlotLabel" class="ml-2 inline-flex items-center rounded bg-rose-900/50 px-2 py-1 font-semibold text-rose-300">-</span>
       </div>
     </div>
     <div class="p-5">
       <div id="heatmapContainer" class="overflow-x-auto"></div>
-      <p class="mt-2 text-[11px] text-gray-500">Darker colors indicate higher order volume for that time slot.</p>
+      <p class="mt-2 text-[11px] text-gray-400">Darker colors indicate higher order volume for that time slot.</p>
     </div>
   </div>
 
   <!-- Top Therapists -->
-  <div class="rounded-lg md:col-span-6 border border-gray-200 bg-white shadow-sm">
-    <div class="px-5 py-3 border-b border-gray-200">
-      <h3 class="text-sm font-medium text-gray-900">Top Therapists by Orders</h3>
+  <div class="rounded-lg md:col-span-6 border border-gray-600 bg-gray-800 shadow-sm">
+    <div class="px-5 py-3 border-b border-gray-700">
+      <h3 class="text-sm font-medium text-gray-200">Top Therapists by Orders</h3>
     </div>
     <div class="p-5 grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
@@ -306,22 +306,22 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'R
       </div>
       <div class="overflow-x-auto">
         <table class="min-w-full table-auto text-sm" id="topTherapistTable">
-          <thead class="bg-gray-50">
-            <tr class="text-left text-gray-600">
+          <thead class="bg-gray-700">
+            <tr class="text-left text-gray-200">
               <th class="px-5 py-3">Therapist</th>
               <th class="px-5 py-3 text-center w-40">Total Orders</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-200"></tbody>
+          <tbody class="divide-y divide-gray-700 bg-gray-800"></tbody>
         </table>
       </div>
     </div>
   </div>
 
   <!-- Top Packages -->
-  <div class="rounded-lg md:col-span-6 border border-gray-200 bg-white shadow-sm">
-    <div class="px-5 py-3 border-b border-gray-200">
-      <h3 class="text-sm font-medium text-gray-900">Top Packages by Orders</h3>
+  <div class="rounded-lg md:col-span-6 border border-gray-600 bg-gray-800 shadow-sm">
+    <div class="px-5 py-3 border-b border-gray-700">
+      <h3 class="text-sm font-medium text-gray-200">Top Packages by Orders</h3>
     </div>
     <div class="p-5 grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
@@ -329,13 +329,13 @@ $this->load->view('admin/layout/header', ['title' => isset($title) ? $title : 'R
       </div>
       <div class="overflow-x-auto">
         <table class="min-w-full table-auto text-sm" id="topPackageTable">
-          <thead class="bg-gray-50">
-            <tr class="text-left text-gray-600">
+          <thead class="bg-gray-700">
+            <tr class="text-left text-gray-200">
               <th class="px-5 py-3">Package</th>
               <th class="px-5 py-3 text-center w-40">Total Orders</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-200"></tbody>
+          <tbody class="divide-y divide-gray-700 bg-gray-800"></tbody>
         </table>
       </div>
     </div>
