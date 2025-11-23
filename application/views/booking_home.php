@@ -226,7 +226,7 @@
                     <div class="text-primary font-bold">
                       <?= htmlspecialchars($addon->currency); ?> <?= number_format($addon->price, 2, ',', '.'); ?>
                     </div>
-                    <a href="<?= site_url('booking/form'); ?>" class="inline-flex items-center rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-white hover:bg-sky-600">
+                    <a href="<?= site_url('booking/form'); ?>?addon_id=<?= (int)$addon->id; ?>&addon_name=<?= urlencode($addon->name); ?>&addon_price=<?= (float)$addon->price; ?>&addon_currency=<?= urlencode($addon->currency); ?>" class="inline-flex items-center rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-white hover:bg-sky-600">
                       Book
                     </a>
                   </div>
@@ -284,7 +284,7 @@
                         <div class="text-primary font-bold">
                           <?= htmlspecialchars($treatment['currency']); ?> <?= number_format($treatment['price'], 2, ',', '.'); ?>
                         </div>
-                        <a href="<?= site_url('booking/form'); ?>" class="inline-flex items-center rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-white hover:bg-sky-600">
+                        <a href="<?= site_url('booking/form'); ?>?package_id=<?= (int)$treatment['id']; ?>&package_name=<?= urlencode($treatment['name']); ?>&package_price=<?= (float)$treatment['price']; ?>&package_currency=<?= urlencode($treatment['currency']); ?>" class="inline-flex items-center rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-white hover:bg-sky-600">
                           Book
                         </a>
                       </div>
@@ -321,7 +321,7 @@
                         <div class="text-primary font-bold">
                           <?= htmlspecialchars($treatment['currency']); ?> <?= number_format($treatment['price'], 2, ',', '.'); ?>
                         </div>
-                        <a href="<?= site_url('booking/form'); ?>" class="inline-flex items-center rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-white hover:bg-sky-600">
+                        <a href="<?= site_url('booking/form'); ?>?package_id=<?= (int)$treatment['id']; ?>&package_name=<?= urlencode($treatment['name']); ?>&package_price=<?= (float)$treatment['price']; ?>&package_currency=<?= urlencode($treatment['currency']); ?>" class="inline-flex items-center rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-white hover:bg-sky-600">
                           Book
                         </a>
                       </div>
@@ -489,7 +489,7 @@
                       Contact us
                     <?php endif; ?>
                   </div>
-                  <a href="<?= site_url('booking/form') . '?package_id=' . (int)$p->id; ?>" class="inline-flex items-center rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-white hover:bg-sky-600">
+                  <a href="<?= site_url('booking/form'); ?>?package_id=<?= (int)$p->id; ?>&package_name=<?= urlencode($p->name); ?>&package_price=<?= isset($p->price_in_call) ? (float)$p->price_in_call : (isset($p->price) ? (float)$p->price : 0); ?>&package_currency=<?= urlencode(isset($p->currency) ? $p->currency : 'RM'); ?>" class="inline-flex items-center rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-white hover:bg-sky-600">
                     Book
                   </a>
                 </div>

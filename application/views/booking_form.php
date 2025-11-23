@@ -98,6 +98,18 @@
               </div>
             <?php endif; ?>
 
+<?php
+// Get URL parameters for auto-selection
+$package_id = $this->input->get('package_id');
+$addon_id = $this->input->get('addon_id');
+$package_name = $this->input->get('package_name');
+$addon_name = $this->input->get('addon_name');
+$package_price = $this->input->get('package_price');
+$addon_price = $this->input->get('addon_price');
+$package_currency = $this->input->get('package_currency');
+$addon_currency = $this->input->get('addon_currency');
+?>
+
             <form method="post" action="<?= site_url('booking/submit'); ?>" novalidate>
               <div class="mb-4">
                 <label class="required block text-sm font-medium text-slate-200" for="customer_name">Name</label>
@@ -212,7 +224,9 @@
                   <option value="">Select package</option>
                   <?php if (!empty($packages)): ?>
                     <?php foreach ($packages as $p): ?>
-                      <option value="<?= (int)$p->id; ?>" <?= (isset($selected_package_id) && (int)$selected_package_id === (int)$p->id) ? 'selected' : ''; ?>>
+                      <option value="<?= (int)$p->id; ?>"
+                        <?= ((isset($selected_package_id) && (int)$selected_package_id === (int)$p->id) ||
+                             (isset($package_id) && (int)$package_id === (int)$p->id)) ? 'selected' : ''; ?>>
                         <?php
                           $curr = isset($p->currency) ? $p->currency : 'Rp';
                           $pin  = isset($p->price_in_call) ? (float)$p->price_in_call : (isset($p->price) ? (float)$p->price : 0);
@@ -555,6 +569,120 @@
                       validateTimeSelection();
                     });
                   }
+                  
+                  // Auto-select addon from URL parameters
+                  function autoSelectAddonFromURL() {
+                    var addonId = '<?= isset($addon_id) ? (int)$addon_id : 0; ?>';
+                    var addonName = '<?= isset($addon_name) ? htmlspecialchars($addon_name) : ''; ?>';
+                    var addonPrice = '<?= isset($addon_price) ? (float)$addon_price : 0; ?>';
+                    
+                    if (addonId && addonId > 0) {
+                      // Find the addon checkbox and select it
+                      var addonCheckboxes = document.querySelectorAll('.ao-item');
+                      addonCheckboxes.forEach(function(checkbox) {
+                        if (parseInt(checkbox.getAttribute('data-id')) === parseInt(addonId)) {
+                          checkbox.checked = true;
+                        }
+                      });
+                      
+                      // Update addon selection
+                      if (typeof applyAddonSelection === 'function') {
+                        applyAddonSelection();
+                      }
+                      
+                      // Show notification
+                      setTimeout(function() {
+                        if (window.aoSelOpen) {
+                          window.aoSelOpen();
+                          setTimeout(function() {
+                            window.aoSelClose();
+                          }, 2000);
+                        }
+                      }, 500);
+                    }
+                  }
+                  
+                  // Auto-select package from URL parameters
+                  function autoSelectPackageFromURL() {
+                    var packageId = '<?= isset($package_id) ? (int)$package_id : 0; ?>';
+                    if (packageId && packageId > 0) {
+                      var packageSelect = document.getElementById('package_id');
+                      if (packageSelect) {
+                        packageSelect.value = packageId;
+                        packageSelect.dispatchEvent(new Event('change'));
+                      }
+                    }
+                  }
+                  
+                  // Calculate and display total billing
+                  function calculateTotal() {
+                    var packageSelect = document.getElementById('package_id');
+                    var selectedPackage = packageSelect ? packageSelect.options[packageSelect.selectedIndex] : null;
+                    
+                    var packagePrice = 0;
+                    if (selectedPackage && selectedPackage.textContent) {
+                      // Extract price from option text (e.g., "Package Name - 60 minutes - RM 150")
+                      var priceMatch = selectedPackage.textContent.match(/RM\s?(\d+(?:,\d{3})*(?:\.\d{2})?)/);
+                      if (priceMatch) {
+                        packagePrice = parseFloat(priceMatch[1].replace(/,/g, ''));
+                      }
+                    }
+                    
+                    // Get addon total
+                    var addonBoxes = document.querySelectorAll('.ao-item:checked');
+                    var addonTotal = 0;
+                    addonBoxes.forEach(function(box) {
+                      var price = parseFloat(box.getAttribute('data-price') || '0');
+                      addonTotal += price;
+                    });
+                    
+                    return {
+                      package: packagePrice,
+                      addon: addonTotal,
+                      total: packagePrice + addonTotal
+                    };
+                  }
+                  
+                  // Update sticky total billing display
+                  function updateStickyTotal() {
+                    var billing = calculateTotal();
+                    var stickyTotal = document.getElementById('stickyTotal');
+                    if (stickyTotal) {
+                      var packageText = billing.package > 0 ? 'Package: RM ' + Math.round(billing.package).toLocaleString('id-ID') : 'No package selected';
+                      var addonText = billing.addon > 0 ? 'Add-ons: RM ' + Math.round(billing.addon).toLocaleString('id-ID') : 'No add-ons selected';
+                      var totalText = 'Total: RM ' + Math.round(billing.total).toLocaleString('id-ID');
+                      
+                      stickyTotal.innerHTML =
+                        '<div class="space-y-1">' +
+                        '<div class="text-sm text-gray-300">' + packageText + '</div>' +
+                        '<div class="text-sm text-gray-300">' + addonText + '</div>' +
+                        '<div class="text-lg font-bold text-teal-300 border-t border-gray-600 pt-1">' + totalText + '</div>' +
+                        '</div>';
+                    }
+                  }
+                  
+                  // Initialize auto-selection when page loads
+                  document.addEventListener('DOMContentLoaded', function() {
+                    autoSelectPackageFromURL();
+                    autoSelectAddonFromURL();
+                    updateStickyTotal();
+                  });
+                  
+                  // Add event listeners for real-time total updates
+                  document.addEventListener('change', function(e) {
+                    if (e.target && (e.target.id === 'package_id' || e.target.classList.contains('ao-item'))) {
+                      updateStickyTotal();
+                    }
+                  });
+                  
+                  // Override addon apply function to include total update
+                  if (typeof window.aoSelApply === 'function') {
+                    var originalApplyAddonSelection = window.aoSelApply;
+                    window.aoSelApply = function() {
+                      originalApplyAddonSelection.call(this);
+                      updateStickyTotal();
+                    };
+                  }
                 })();
               </script>
 
@@ -591,7 +719,23 @@
                 <p class="mt-1 text-xs text-gray-400">Select a time. If the time is already booked, you will be alerted.</p>
               </div>
 
-              <!-- No dynamic slot loading needed anymore -->
+              <!-- Sticky Total Billing -->
+              <div class="sticky bottom-4 bg-gray-700 rounded-lg p-4 ring-1 ring-gray-600 shadow-lg border border-gray-600 mb-4">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-sm font-medium text-gray-300">Total Billing</span>
+                  <div class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                    </svg>
+                    <span class="text-xs text-gray-400">Live Total</span>
+                  </div>
+                </div>
+                <div id="stickyTotal" class="text-sm text-gray-300">
+                  <div>Package: No package selected</div>
+                  <div>Add-ons: No add-ons selected</div>
+                  <div class="text-lg font-bold text-teal-300 border-t border-gray-600 pt-1">Total: RM 0</div>
+                </div>
+              </div>
 
               <div class="mt-6">
                 <button type="submit" class="inline-flex w-full items-center justify-center rounded-md bg-sky-500 px-4 py-3 text-base font-semibold text-white shadow-sm transition hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-500">
