@@ -123,7 +123,7 @@
     }
   </style>
 </head>
-<body class="bg-slate-50">
+<body class="bg-gray-900 text-gray-100">
 
 <!-- Advertisement Modal -->
 <?php if (!empty($active_ads)): ?>
@@ -152,14 +152,14 @@
 </div>
 <?php endif; ?>
   <!-- App-like top bar -->
-  <header class="sticky top-0 z-30 bg-white/90 backdrop-blur border-b border-slate-200">
-    <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
+  <header class="sticky top-0 z-30 bg-gray-800/90 backdrop-blur border-b border-gray-600">
+    <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between text-gray-100">
       <div class="flex items-center gap-2">
         <span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-teal-500 text-white">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
         </span>
         <div>
-          <div class="text-base font-bold text-slate-800">APITT Man Soa</div>
+          <div class="text-base font-bold text-gray-100">APITT Man Soa</div>
         </div>
       </div>
       <a href="<?= site_url('booking/form'); ?>" class="hidden sm:inline-flex items-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600">
@@ -189,17 +189,159 @@
   </div>
 </section>
 
-
   <!-- Content -->
-  <main class="mx-auto max-w-6xl px-4 pb-24 -mt-6 md:-mt-12">
+  <main class="mx-auto max-w-6xl px-4 pb-12 -mt-6 md:-mt-8">
     <!-- Quick info cards -->
 
-    <!-- Products Section -->
-    <section class="mt-8 md:mt-12">
+    <!-- Add On Section -->
+    <?php if (!empty($addons_grouped)): ?>
+    <section class="mt-6 md:mt-8">
       <div class="mb-4 md:mb-6 flex items-center justify-between">
-        <h2 class="text-xl md:text-2xl font-bold text-slate-800">Products & Items</h2>
+        <h2 class="text-xl md:text-2xl font-bold text-slate-100">Add On</h2>
+        <a href="<?= site_url('booking/form'); ?>" class="hidden sm:inline-flex items-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600">
+          Book Now
+        </a>
+      </div>
+
+      <?php foreach ($addons_grouped as $category => $addons): ?>
+        <div class="mb-8">
+          <h3 class="text-lg md:text-xl font-semibold text-slate-200 mb-4">
+            <?= htmlspecialchars($category); ?>
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            <?php foreach ($addons as $addon): ?>
+              <div class="group rounded-2xl bg-gray-800 overflow-hidden shadow-sm ring-1 ring-gray-700 hover:shadow-md transition">
+                <div class="p-4">
+                  <div class="mb-3">
+                    <h4 class="font-semibold text-gray-100 mb-1 line-clamp-2">
+                      <?= htmlspecialchars($addon->name); ?>
+                    </h4>
+                    <?php if (!empty($addon->description)): ?>
+                      <p class="text-sm text-gray-300 line-clamp-2">
+                        <?= htmlspecialchars($addon->description); ?>
+                      </p>
+                    <?php endif; ?>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <div class="text-primary font-bold">
+                      <?= htmlspecialchars($addon->currency); ?> <?= number_format($addon->price, 2, ',', '.'); ?>
+                    </div>
+                    <a href="<?= site_url('booking/form'); ?>" class="inline-flex items-center rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-white hover:bg-sky-600">
+                      Book
+                    </a>
+                  </div>
+                </div>
+              </div>
+            <?php endforeach; ?>
+          </div>
+        </div>
+      <?php endforeach; ?>
+    </section>
+    <?php endif; ?>
+
+    <!-- Exclusive Treatments Section -->
+    <?php if (!empty($exclusive_treatments_grouped)): ?>
+    <section class="mt-6 md:mt-8">
+      <div class="mb-4 md:mb-6 flex items-center justify-between">
+        <h2 class="text-xl md:text-2xl font-bold text-slate-100">EXCLUSIVE TREATMENT</h2>
+      </div>
+
+      <?php 
+      // Reorganize treatments in specific order
+      $treatment_order = ['Solo Massage', '4Hand Massage', '6Hand Massage', 'Reflexology', 'Bekam'];
+      
+      // Get all treatments from all categories
+      $all_treatments = [];
+      foreach ($exclusive_treatments_grouped as $category => $treatments) {
+          foreach ($treatments as $treatment) {
+              $all_treatments[$treatment['name']] = $treatment;
+          }
+      }
+
+      // Display treatments in specific order
+      foreach ($treatment_order as $treatment_name) {
+          if (isset($all_treatments[$treatment_name])) {
+              $treatment = $all_treatments[$treatment_name];
+              ?>
+              <div class="mb-6">
+                <h3 class="text-lg md:text-xl font-semibold text-slate-200 mb-4">
+                  <?= htmlspecialchars($treatment_name); ?>
+                </h3>
+                <div class="max-w-md">
+                  <div class="group rounded-2xl bg-gray-800 overflow-hidden shadow-sm ring-1 ring-gray-700 hover:shadow-md transition">
+                    <div class="p-4">
+                      <div class="mb-3">
+                        <h4 class="font-semibold text-gray-100 mb-1 line-clamp-2">
+                          <?= htmlspecialchars($treatment['name']); ?>
+                        </h4>
+                        <?php if (!empty($treatment['description'])): ?>
+                          <p class="text-sm text-gray-300 line-clamp-2">
+                            <?= htmlspecialchars($treatment['description']); ?>
+                          </p>
+                        <?php endif; ?>
+                      </div>
+                      <div class="flex items-center justify-between">
+                        <div class="text-primary font-bold">
+                          <?= htmlspecialchars($treatment['currency']); ?> <?= number_format($treatment['price'], 2, ',', '.'); ?>
+                        </div>
+                        <a href="<?= site_url('booking/form'); ?>" class="inline-flex items-center rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-white hover:bg-sky-600">
+                          Book
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <?php
+          }
+      }
+
+      // Display any remaining treatments not in the specific order
+      foreach ($all_treatments as $treatment_name => $treatment) {
+          if (!in_array($treatment_name, $treatment_order)) {
+              ?>
+              <div class="mb-6">
+                <h3 class="text-lg md:text-xl font-semibold text-slate-200 mb-4">
+                  <?= htmlspecialchars($treatment['category']); ?>
+                </h3>
+                <div class="max-w-md">
+                  <div class="group rounded-2xl bg-gray-800 overflow-hidden shadow-sm ring-1 ring-gray-700 hover:shadow-md transition">
+                    <div class="p-4">
+                      <div class="mb-3">
+                        <h4 class="font-semibold text-gray-100 mb-1 line-clamp-2">
+                          <?= htmlspecialchars($treatment['name']); ?>
+                        </h4>
+                        <?php if (!empty($treatment['description'])): ?>
+                          <p class="text-sm text-gray-300 line-clamp-2">
+                            <?= htmlspecialchars($treatment['description']); ?>
+                          </p>
+                        <?php endif; ?>
+                      </div>
+                      <div class="flex items-center justify-between">
+                        <div class="text-primary font-bold">
+                          <?= htmlspecialchars($treatment['currency']); ?> <?= number_format($treatment['price'], 2, ',', '.'); ?>
+                        </div>
+                        <a href="<?= site_url('booking/form'); ?>" class="inline-flex items-center rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-white hover:bg-sky-600">
+                          Book
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <?php
+          }
+      }
+      ?>
+    </section>
+    <?php endif; ?>
+
+    <!-- Products Section -->
+    <section class="mt-6 md:mt-8">
+      <div class="mb-4 md:mb-6 flex items-center justify-between">
+        <h2 class="text-xl md:text-2xl font-bold text-slate-100">Products & Items</h2>
         <div class="flex gap-2">
-          <a href="<?= site_url('products'); ?>" class="hidden sm:inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50">
+          <a href="<?= site_url('products'); ?>" class="hidden sm:inline-flex items-center rounded-lg border border-gray-600 bg-gray-700 px-3 py-2 text-sm font-semibold text-gray-200 shadow-sm hover:bg-gray-600">
             View All Products
           </a>
           <a href="<?= site_url('booking/form'); ?>" class="hidden sm:inline-flex items-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600">
@@ -220,7 +362,7 @@
 
           <?php if (!empty($first_row_products)): ?>
             <?php foreach ($first_row_products as $product): ?>
-              <div class="group rounded-2xl bg-white overflow-hidden shadow-sm ring-1 ring-slate-200 hover:shadow-md transition">
+              <div class="group rounded-2xl bg-gray-800 overflow-hidden shadow-sm ring-1 ring-gray-700 hover:shadow-md transition">
                 <div class="aspect-square overflow-hidden">
                   <?php if (!empty($product['image_url'])): ?>
                     <a href="<?= site_url('product_shop/detail/' . $product['id']); ?>">
@@ -231,16 +373,16 @@
                       >
                     </a>
                   <?php else: ?>
-                    <a href="<?= site_url('product_shop/detail/' . $product['id']); ?>" class="w-full h-full bg-slate-200 flex items-center justify-center">
-                      <span class="text-slate-500">No Image</span>
+                    <a href="<?= site_url('product_shop/detail/' . $product['id']); ?>" class="w-full h-full bg-gray-700 flex items-center justify-center">
+                      <span class="text-gray-400">No Image</span>
                     </a>
                   <?php endif; ?>
                 </div>
 
                 <div class="p-4">
-                  <h3 class="font-semibold text-slate-800 mb-1 line-clamp-1"><?= htmlspecialchars($product['name']); ?></h3>
+                  <h3 class="font-semibold text-gray-100 mb-1 line-clamp-1"><?= htmlspecialchars($product['name']); ?></h3>
                   <?php if (!empty($product['description'])): ?>
-                    <p class="text-sm text-slate-600 line-clamp-2 mb-3"><?= htmlspecialchars($product['description']); ?></p>
+                    <p class="text-sm text-gray-300 line-clamp-2 mb-3"><?= htmlspecialchars($product['description']); ?></p>
                   <?php endif; ?>
                   <div class="text-center">
                     <div class="text-primary font-bold mb-2">
@@ -262,7 +404,7 @@
 
           <?php if (!empty($second_row_products)): ?>
             <?php foreach ($second_row_products as $product): ?>
-            <div class="group rounded-2xl bg-white overflow-hidden shadow-sm ring-1 ring-slate-200 hover:shadow-md transition">
+            <div class="group rounded-2xl bg-gray-800 overflow-hidden shadow-sm ring-1 ring-gray-700 hover:shadow-md transition">
               <div class="aspect-square overflow-hidden">
                 <?php if (!empty($product['image_url'])): ?>
                   <a href="<?= site_url('product_shop/detail/' . $product['id']); ?>">
@@ -273,16 +415,16 @@
                     >
                   </a>
                 <?php else: ?>
-                  <a href="<?= site_url('product_shop/detail/' . $product['id']); ?>" class="w-full h-full bg-slate-200 flex items-center justify-center">
-                    <span class="text-slate-500">No Image</span>
+                  <a href="<?= site_url('product_shop/detail/' . $product['id']); ?>" class="w-full h-full bg-gray-700 flex items-center justify-center">
+                    <span class="text-gray-400">No Image</span>
                   </a>
                 <?php endif; ?>
               </div>
 
               <div class="p-4">
-                <h3 class="font-semibold text-slate-800 mb-1 line-clamp-1"><?= htmlspecialchars($product['name']); ?></h3>
+                <h3 class="font-semibold text-gray-100 mb-1 line-clamp-1"><?= htmlspecialchars($product['name']); ?></h3>
                 <?php if (!empty($product['description'])): ?>
-                  <p class="text-sm text-slate-600 line-clamp-2 mb-3"><?= htmlspecialchars($product['description']); ?></p>
+                  <p class="text-sm text-gray-300 line-clamp-2 mb-3"><?= htmlspecialchars($product['description']); ?></p>
                 <?php endif; ?>
                 <div class="text-center">
                   <div class="text-primary font-bold mb-2">
@@ -298,7 +440,7 @@
 
         <?php if (count($active_products) > 8): ?>
           <div class="mt-8 text-center">
-            <a href="<?= site_url('products'); ?>" class="inline-flex items-center rounded-lg bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200">
+            <a href="<?= site_url('products'); ?>" class="inline-flex items-center rounded-lg bg-gray-700 px-4 py-2 text-sm font-semibold text-gray-200 hover:bg-gray-600">
               View All Products (<?= count($active_products); ?>)
               <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -308,55 +450,11 @@
         <?php endif; ?>
     </section>
 
-    <!-- Exclusive Treatments Section -->
-    <?php if (!empty($exclusive_treatments_grouped)): ?>
-    <section class="mt-8 md:mt-12">
-      <div class="mb-4 md:mb-6 flex items-center justify-between">
-        <h2 class="text-xl md:text-2xl font-bold text-slate-800">Exclusive Treatments</h2>
-      </div>
-
-      <?php foreach ($exclusive_treatments_grouped as $category => $treatments): ?>
-        <div class="mb-8">
-          <h3 class="text-lg md:text-xl font-semibold text-slate-800 mb-4 capitalize">
-            <?= htmlspecialchars($category); ?>
-          </h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-            <?php foreach ($treatments as $treatment): ?>
-              <div class="group rounded-2xl bg-white overflow-hidden shadow-sm ring-1 ring-slate-200 hover:shadow-md transition">
-                <div class="p-4">
-                  <div class="mb-3">
-                    <h4 class="font-semibold text-slate-800 mb-1 line-clamp-2">
-                      <?= htmlspecialchars($treatment['name']); ?>
-                    </h4>
-                    <?php if (!empty($treatment['description'])): ?>
-                      <p class="text-sm text-slate-600 line-clamp-2">
-                        <?= htmlspecialchars($treatment['description']); ?>
-                      </p>
-                    <?php endif; ?>
-                  </div>
-                  <div class="flex items-center justify-between">
-                    <div class="text-primary font-bold">
-                      <?= htmlspecialchars($treatment['currency']); ?> <?= number_format($treatment['price'], 2, ',', '.'); ?>
-                    </div>
-                    <a href="<?= site_url('booking/form'); ?>" class="inline-flex items-center rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-white hover:bg-sky-600">
-                      Tempah Sekarang
-                    </a>
-                  </div>
-                </div>
-              </div>
-            <?php endforeach; ?>
-          </div>
-        </div>
-      <?php endforeach; ?>
-
-    </section>
-    <?php endif; ?>
-
     <!-- Packages / Services -->
     <section id="packages" class="mt-8 md:mt-12">
       <div class="mb-4 md:mb-6 flex items-center justify-between">
-        <h2 class="text-xl md:text-2xl font-bold text-slate-800">Packages & Services</h2>
-        <a href="<?= site_url('booking/form'); ?>" class="hidden sm:inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50">
+        <h2 class="text-xl md:text-2xl font-bold text-slate-100">Packages & Services</h2>
+        <a href="<?= site_url('booking/form'); ?>" class="hidden sm:inline-flex items-center rounded-lg border border-gray-600 bg-gray-700 px-3 py-2 text-sm font-semibold text-gray-200 shadow-sm hover:bg-gray-600">
           Create Booking
         </a>
       </div>
@@ -364,18 +462,18 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         <?php if (!empty($packages)): ?>
           <?php foreach ($packages as $p): ?>
-            <div class="group rounded-2xl bg-white overflow-hidden shadow-sm ring-1 ring-slate-200 hover:shadow-md transition">
+            <div class="group rounded-2xl bg-gray-800 overflow-hidden shadow-sm ring-1 ring-gray-700 hover:shadow-md transition">
 
               <div class="p-4">
                 <?php if (!empty($p->description)): ?>
-                  <p class="text-sm text-slate-600 line-clamp-2 mb-2"><?= htmlspecialchars($p->description); ?></p>
+                  <p class="text-sm text-gray-300 line-clamp-2 mb-2"><?= htmlspecialchars($p->description); ?></p>
                 <?php else: ?>
-                  <p class="text-sm text-slate-600 mb-2">Spa package for body and mind relaxation.</p>
+                  <p class="text-sm text-gray-300 mb-2">Spa package for body and mind relaxation.</p>
                 <?php endif; ?>
-                <div class="mb-2 text-xs text-slate-600">
+                <div class="mb-2 text-xs text-gray-400">
                   <span class="inline-flex items-center gap-2">
-                    <span class="rounded-full bg-slate-100 px-2 py-0.5">Category: <?= htmlspecialchars($p->category ?? '-'); ?></span>
-                    <span class="rounded-full bg-slate-100 px-2 py-0.5">Therapist: <?= isset($p->hands) ? (int)$p->hands : 1; ?></span>
+                    <span class="rounded-full bg-gray-700 px-2 py-0.5">Category: <?= htmlspecialchars($p->category ?? '-'); ?></span>
+                    <span class="rounded-full bg-gray-700 px-2 py-0.5">Therapist: <?= isset($p->hands) ? (int)$p->hands : 1; ?></span>
                   </span>
                 </div>
                 <div class="flex items-center justify-between">
@@ -399,7 +497,7 @@
             </div>
           <?php endforeach; ?>
         <?php else: ?>
-          <div class="col-span-full rounded-xl border border-dashed border-slate-300 bg-white p-6 text-center text-slate-600">
+          <div class="col-span-full rounded-xl border border-dashed border-gray-600 bg-gray-800 p-6 text-center text-gray-400">
             Packages not available yet. Please check back later.
           </div>
         <?php endif; ?>
@@ -410,26 +508,26 @@
 
     <!-- Address & Contact -->
     <section id="contact" class="mt-10 md:mt-14">
-  <h2 class="text-xl md:text-2xl font-bold text-slate-800 mb-4 md:mb-6">Address & Contact</h2>
+  <h2 class="text-xl md:text-2xl font-bold text-slate-100 mb-4 md:mb-6">Address & Contact</h2>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
     <!-- Contact Info -->
-    <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
-      <div class="text-slate-700">
-        <div class="font-semibold text-slate-800">Address</div>
-        <p class="text-sm text-slate-600 mt-1">21-1, Jalan Abadi 2/1</p>
-        <p class="text-sm text-slate-600">Abadi Heights, Puchong, Selangor 71420</p>
-        <p class="text-sm text-slate-600">Malaysia</p>
+    <div class="rounded-2xl bg-gray-800 p-5 shadow-sm ring-1 ring-gray-700">
+      <div class="text-gray-300">
+        <div class="font-semibold text-gray-100">Address</div>
+        <p class="text-sm text-gray-300 mt-1">21-1, Jalan Abadi 2/1</p>
+        <p class="text-sm text-gray-300">Abadi Heights, Puchong, Selangor 71420</p>
+        <p class="text-sm text-gray-300">Malaysia</p>
 
-        <div class="mt-4 font-semibold text-slate-800">Contact</div>
-        <p class="text-sm text-slate-600 mt-1">
+        <div class="mt-4 font-semibold text-gray-100">Contact</div>
+        <p class="text-sm text-gray-300 mt-1">
           Tel:
-          <a href="tel:+60380619349" class="text-blue-600 hover:underline">+603 8061 9349</a> /
-          <a href="tel:+601123332894" class="text-blue-600 hover:underline">+60 11 2333 2894</a>
+          <a href="tel:+60380619349" class="text-blue-400 hover:underline">+603 8061 9349</a> /
+          <a href="tel:+601123332894" class="text-blue-400 hover:underline">+60 11 2333 2894</a>
         </p>
-        <p class="text-sm text-slate-600">
+        <p class="text-sm text-gray-300">
           Email:
-          <a href="mailto:apittmenspa@outlook.com" class="text-blue-600 hover:underline">
+          <a href="mailto:apittmenspa@outlook.com" class="text-blue-400 hover:underline">
             apittmenspa@outlook.com
           </a>
         </p>
@@ -444,18 +542,18 @@
     </div>
 
     <!-- Image -->
-     
+       
   </div>
 </section>
 
   </main>
 
   <!-- Bottom sticky CTA (mobile-first) -->
-  <div class="fixed inset-x-0 bottom-0 z-30 border-t border-slate-200 bg-white/95 backdrop-blur">
+  <div class="fixed inset-x-0 bottom-0 z-30 border-t border-gray-600 bg-gray-800/95 backdrop-blur">
     <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
       <div class="text-sm">
-        <div class="font-semibold text-slate-800">Ready to relax?</div>
-        <div class="text-slate-500">Book your schedule now</div>
+        <div class="font-semibold text-gray-100">Ready to relax?</div>
+        <div class="text-gray-300">Book your schedule now</div>
       </div>
       <a href="<?= site_url('booking/form'); ?>" class="inline-flex items-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600">
         Book Now

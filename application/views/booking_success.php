@@ -13,35 +13,35 @@
     html, body { font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, 'Helvetica Neue', sans-serif; }
   </style>
 </head>
-<body class="bg-slate-50">
+<body class="bg-gray-900">
   <div class="max-w-3xl mx-auto px-4 py-8">
     <header class="mb-6">
-      <h1 class="text-2xl md:text-3xl font-bold text-slate-800">Booking Successful</h1>
-      <p class="text-slate-600 mt-1">Thank you. Use the WhatsApp button below to contact admin. This page will automatically redirect to WhatsApp in 5 minutes.</p>
+      <h1 class="text-2xl md:text-3xl font-bold text-slate-100">Booking Successful</h1>
+      <p class="text-slate-300 mt-1">Thank you. Use the WhatsApp button below to contact admin. This page will automatically redirect to WhatsApp in 5 minutes.</p>
     </header>
 
     <?php if (!empty($error)): ?>
-      <div class="mb-4 rounded-md bg-red-50 p-4 ring-1 ring-red-200">
-        <p class="text-sm text-red-700"><?= htmlspecialchars($error); ?></p>
+      <div class="mb-4 rounded-md bg-red-900/50 p-4 ring-1 ring-red-800">
+        <p class="text-sm text-red-300"><?= htmlspecialchars($error); ?></p>
       </div>
     <?php endif; ?>
 
     <?php if (!empty($success)): ?>
-      <div class="mb-4 rounded-md bg-green-50 p-4 ring-1 ring-green-200">
-        <p class="text-sm text-green-700"><?= htmlspecialchars($success); ?></p>
+      <div class="mb-4 rounded-md bg-green-900/50 p-4 ring-1 ring-green-800">
+        <p class="text-sm text-green-300"><?= htmlspecialchars($success); ?></p>
       </div>
     <?php endif; ?>
 
-    <section class="rounded-2xl bg-white shadow ring-1 ring-slate-200 overflow-hidden">
+    <section class="rounded-2xl bg-gray-800 shadow ring-1 ring-gray-700 overflow-hidden">
       <div class="p-6 md:p-8">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="rounded-lg border border-slate-200 p-4">
-            <div class="text-sm text-slate-500">Invoice Number</div>
-            <div class="mt-1 font-semibold text-slate-800"><?= htmlspecialchars($invoice->invoice_number ?? '-'); ?></div>
+          <div class="rounded-lg border border-gray-700 p-4">
+            <div class="text-sm text-slate-400">Invoice Number</div>
+            <div class="mt-1 font-semibold text-slate-100"><?= htmlspecialchars($invoice->invoice_number ?? '-'); ?></div>
           </div>
-          <div class="rounded-lg border border-slate-200 p-4">
-            <div class="text-sm text-slate-500">Total</div>
-            <div class="mt-1 font-semibold text-slate-800">
+          <div class="rounded-lg border border-gray-700 p-4">
+            <div class="text-sm text-slate-400">Total</div>
+            <div class="mt-1 font-semibold text-slate-100">
               <?php
                 $curr = $booking->currency ?? 'RM';
                 $total = isset($invoice->total) ? (float)$invoice->total : 0;
@@ -52,16 +52,16 @@
         </div>
 
         <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="rounded-lg border border-slate-200 p-4">
-            <div class="text-sm text-slate-500">Customer Details</div>
-            <div class="mt-1 text-slate-800">
+          <div class="rounded-lg border border-gray-700 p-4">
+            <div class="text-sm text-slate-400">Customer Details</div>
+            <div class="mt-1 text-slate-100">
               <div><?= htmlspecialchars($booking->customer_name ?? '-'); ?></div>
-              <div class="text-sm text-slate-600"><?= htmlspecialchars($booking->address ?? '-'); ?></div>
+              <div class="text-sm text-slate-300"><?= htmlspecialchars($booking->address ?? '-'); ?></div>
             </div>
           </div>
-          <div class="rounded-lg border border-slate-200 p-4">
-            <div class="text-sm text-slate-500">Schedule Details</div>
-            <div class="mt-1 text-slate-800">
+          <div class="rounded-lg border border-gray-700 p-4">
+            <div class="text-sm text-slate-400">Schedule Details</div>
+            <div class="mt-1 text-slate-100">
               <div>Date: <?= htmlspecialchars($booking->date ?? '-'); ?></div>
               <div>Time: <?= isset($booking->time) ? htmlspecialchars(substr($booking->time,0,5)) : '-'; ?></div>
               <div>Type: <?= (isset($booking->call_type) && $booking->call_type === 'OUT') ? 'Out Premise' : 'At Premise'; ?></div>
@@ -69,11 +69,11 @@
           </div>
         </div>
 
-        <div class="mt-6 rounded-lg border border-slate-200 p-4">
-          <div class="text-sm text-slate-500">Package</div>
-          <div class="mt-1 text-slate-800">
+        <div class="mt-6 rounded-lg border border-gray-700 p-4">
+          <div class="text-sm text-slate-400">Package</div>
+          <div class="mt-1 text-slate-100">
             <div><?= htmlspecialchars($booking->package_name ?? '-'); ?></div>
-            <div class="text-sm text-slate-600">Therapist: <?= htmlspecialchars($booking->therapist_name ?? 'Not specified'); ?></div>
+            <div class="text-sm text-slate-300">Therapist: <?= htmlspecialchars($booking->therapist_name ?? 'Not specified'); ?></div>
           </div>
         </div>
 
@@ -104,13 +104,13 @@
             Contact Admin via WhatsApp
           </a>
           <?php if (!empty($tokenEnc)): ?>
-            <a href="<?= site_url('booking/invoice/'.$tokenEnc); ?>" class="inline-flex items-center rounded-md border border-slate-300 bg-white px-4 py-2 text-slate-700 font-semibold shadow-sm hover:bg-slate-50">
+            <a href="<?= site_url('booking/invoice/'.$tokenEnc); ?>" class="inline-flex items-center rounded-md border border-gray-600 bg-gray-700 px-4 py-2 text-gray-200 font-semibold shadow-sm hover:bg-gray-600">
               View Order Proof
             </a>
           <?php endif; ?>
         </div>
 
-        <div class="mt-4 text-xs text-slate-500">
+        <div class="mt-4 text-xs text-slate-400">
           This page will automatically redirect to WhatsApp in 5 minutes for easy confirmation.
         </div>
       </div>

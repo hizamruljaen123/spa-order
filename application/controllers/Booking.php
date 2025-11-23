@@ -51,6 +51,7 @@ public function index()
         'active_ads' => $active_ads,
         'active_products' => $active_products,
         'exclusive_treatments_grouped' => $this->Exclusive_treatment_model->get_treatments_grouped(),
+        'addons_grouped' => $this->Addon_model->get_active_grouped(), // Load add-ons
         'slider_interval' => (int)$slider_interval * 1000, // Convert to milliseconds for JS
     ];
 

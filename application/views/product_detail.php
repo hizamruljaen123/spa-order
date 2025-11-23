@@ -140,7 +140,7 @@
     }
   </style>
 </head>
-<body class="bg-slate-50">
+<body class="bg-gray-900">
 
 <!-- Advertisement Modal -->
 <?php if (!empty($active_ads)): ?>
@@ -170,15 +170,15 @@
 <?php endif; ?>
 
   <!-- App-like top bar -->
-  <header class="sticky top-0 z-30 bg-white/90 backdrop-blur border-b border-slate-200">
+  <header class="sticky top-0 z-30 bg-gray-800/90 backdrop-blur border-b border-gray-600">
     <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
       <div class="flex items-center gap-2">
         <a href="<?= site_url(); ?>" class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-teal-500 text-white hover:bg-teal-600">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M10.707 4.293a1 1 0 010 1.414L6.414 10H19a1 1 0 110 2H6.414l4.293 4.293a1 1 0 01-1.414 1.414l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 0z"/></svg>
         </a>
         <div>
-          <div class="text-base font-bold text-slate-800">Product Detail</div>
-          <div class="text-xs text-slate-500">SPA Management</div>
+          <div class="text-base font-bold text-slate-100">Product Detail</div>
+          <div class="text-xs text-slate-300">SPA Management</div>
         </div>
       </div>
       <a href="<?= site_url('booking/form'); ?>" class="hidden sm:inline-flex items-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600">
@@ -193,7 +193,7 @@
       <!-- Product Detail Section -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
         <!-- Product Image -->
-        <div class="bg-white rounded-2xl overflow-hidden shadow-sm ring-1 ring-slate-200">
+        <div class="bg-gray-800 rounded-2xl overflow-hidden shadow-sm ring-1 ring-gray-700">
           <div class="w-full overflow-hidden">
             <?php if (!empty($product['image_url'])): ?>
               <img
@@ -203,19 +203,19 @@
                 onclick="openWhatsApp('<?= htmlspecialchars($product['name']); ?>', '<?= number_format($product['price'], 2); ?>', '<?= htmlspecialchars($product['currency']); ?>')"
               >
             <?php else: ?>
-              <div class="w-full h-64 bg-slate-200 flex items-center justify-center cursor-pointer" onclick="openWhatsApp('<?= htmlspecialchars($product['name']); ?>', '<?= number_format($product['price'], 2); ?>', '<?= htmlspecialchars($product['currency']); ?>')">
-                <span class="text-slate-500">No Image</span>
+              <div class="w-full h-64 bg-gray-700 flex items-center justify-center cursor-pointer" onclick="openWhatsApp('<?= htmlspecialchars($product['name']); ?>', '<?= number_format($product['price'], 2); ?>', '<?= htmlspecialchars($product['currency']); ?>')">
+                <span class="text-gray-400">No Image</span>
               </div>
             <?php endif; ?>
           </div>
         </div>
 
         <!-- Product Info -->
-        <div class="bg-white rounded-2xl p-6 shadow-sm ring-1 ring-slate-200">
+        <div class="bg-gray-800 rounded-2xl p-6 shadow-sm ring-1 ring-gray-700">
           <div class="mb-4">
-            <h1 class="text-2xl md:text-3xl font-bold text-slate-800 mb-2"><?= htmlspecialchars($product['name']); ?></h1>
+            <h1 class="text-2xl md:text-3xl font-bold text-slate-100 mb-2"><?= htmlspecialchars($product['name']); ?></h1>
             <?php if (!empty($product['category'])): ?>
-              <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-slate-100 text-slate-700">
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-700 text-gray-300">
                 <?= htmlspecialchars($product['category']); ?>
               </span>
             <?php endif; ?>
@@ -226,7 +226,7 @@
               <?= htmlspecialchars($product['currency']); ?> <?= number_format($product['price'], 2, ',', '.'); ?>
             </div>
             <?php if (!empty($product['description'])): ?>
-              <div class="text-slate-600 leading-relaxed">
+              <div class="text-gray-300 leading-relaxed">
                 <?= nl2br(htmlspecialchars($product['description'])); ?>
               </div>
             <?php endif; ?>
@@ -251,13 +251,13 @@
     <?php else: ?>
       <!-- Product Not Found -->
       <div class="text-center py-12">
-        <div class="w-24 h-24 mx-auto mb-4 bg-slate-200 rounded-full flex items-center justify-center">
-          <svg class="w-12 h-12 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="w-24 h-24 mx-auto mb-4 bg-gray-800 rounded-full flex items-center justify-center">
+          <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.29-1.01-5.625-2.594C6.738 10.832 9.246 10 12 10s5.262.832 6.625 2.406z"/>
           </svg>
         </div>
-        <h2 class="text-2xl font-bold text-slate-800 mb-2">Product Not Found</h2>
-        <p class="text-slate-600 mb-6">Sorry, the product you are looking for is not available or has been moved.</p>
+        <h2 class="text-2xl font-bold text-slate-100 mb-2">Product Not Found</h2>
+        <p class="text-gray-300 mb-6">Sorry, the product you are looking for is not available or has been moved.</p>
         <a href="<?= site_url('products'); ?>" class="inline-flex items-center rounded-lg bg-primary px-6 py-3 text-white font-semibold hover:bg-sky-600">
           Back to Products
         </a>
@@ -266,7 +266,7 @@
 
     <!-- Back to Products CTA -->
     <div class="text-center">
-      <a href="<?= site_url('products'); ?>" class="inline-flex items-center rounded-lg bg-slate-100 px-6 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-200">
+      <a href="<?= site_url('products'); ?>" class="inline-flex items-center rounded-lg bg-gray-700 px-6 py-3 text-sm font-semibold text-gray-200 hover:bg-gray-600">
         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -277,11 +277,11 @@
   </main>
 
   <!-- Bottom sticky CTA (mobile-first) -->
-  <div class="fixed inset-x-0 bottom-0 z-30 border-t border-slate-200 bg-white/95 backdrop-blur">
+  <div class="fixed inset-x-0 bottom-0 z-30 border-t border-gray-600 bg-gray-800/95 backdrop-blur">
     <div class="mx-auto max-w-6xl px-4 py-3 flex items-center">
       <div class="flex-1 text-sm">
-        <div class="font-semibold text-slate-800">Have questions? Contact us</div>
-        <div class="text-slate-500">We're ready to help</div>
+        <div class="font-semibold text-slate-100">Have questions? Contact us</div>
+        <div class="text-gray-300">We're ready to help</div>
       </div>
       <a href="tel:+60380619349" class="inline-flex items-center rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-600">
         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

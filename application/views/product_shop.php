@@ -123,7 +123,7 @@
     }
   </style>
 </head>
-<body class="bg-slate-50">
+<body class="bg-gray-900">
 
 <!-- Advertisement Modal -->
 <?php if (!empty($active_ads)): ?>
@@ -153,19 +153,19 @@
 <?php endif; ?>
 
   <!-- App-like top bar -->
-  <header class="sticky top-0 z-30 bg-white/90 backdrop-blur border-b border-slate-200">
+  <header class="sticky top-0 z-30 bg-gray-800/90 backdrop-blur border-b border-gray-600">
     <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
       <div class="flex items-center gap-2">
         <span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-teal-500 text-white">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
         </span>
         <div>
-          <div class="text-base font-bold text-slate-800">SPA Management</div>
-          <div class="text-xs text-slate-500">Shop & Products</div>
+          <div class="text-base font-bold text-slate-100">SPA Management</div>
+          <div class="text-xs text-slate-300">Shop & Products</div>
         </div>
       </div>
       <div class="flex gap-2">
-        <a href="<?= site_url(''); ?>" class="hidden sm:inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">
+        <a href="<?= site_url(''); ?>" class="hidden sm:inline-flex items-center rounded-lg border border-gray-600 bg-gray-700 px-3 py-2 text-sm font-semibold text-gray-200 hover:bg-gray-600">
           Home
         </a>
         <a href="<?= site_url('booking/form'); ?>" class="hidden sm:inline-flex items-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600">
@@ -203,14 +203,14 @@
     <!-- Products Section -->
     <section class="mt-8 md:mt-12">
       <div class="mb-4 md:mb-6">
-        <h2 class="text-xl md:text-2xl font-bold text-slate-800">Product Catalog</h2>
-        <p class="text-slate-600 mt-1">Quality products for your spa and health needs</p>
+        <h2 class="text-xl md:text-2xl font-bold text-slate-100">Product Catalog</h2>
+        <p class="text-slate-300 mt-1">Quality products for your spa and health needs</p>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         <?php if (!empty($products)): ?>
           <?php foreach ($products as $product): ?>
-            <div class="group rounded-2xl bg-white overflow-hidden shadow-sm ring-1 ring-slate-200 hover:shadow-md transition">
+            <div class="group rounded-2xl bg-gray-800 overflow-hidden shadow-sm ring-1 ring-gray-700 hover:shadow-md transition">
               <div class="aspect-square overflow-hidden">
                 <?php if (!empty($product['image_url'])): ?>
                   <a href="<?= site_url('product_shop/detail/' . $product['id']); ?>">
@@ -221,16 +221,16 @@
                     >
                   </a>
                 <?php else: ?>
-                  <a href="<?= site_url('product_shop/detail/' . $product['id']); ?>" class="w-full h-full bg-slate-200 flex items-center justify-center">
-                    <span class="text-slate-500">No Image</span>
+                  <a href="<?= site_url('product_shop/detail/' . $product['id']); ?>" class="w-full h-full bg-gray-700 flex items-center justify-center">
+                    <span class="text-gray-400">No Image</span>
                   </a>
                 <?php endif; ?>
               </div>
 
               <div class="p-4">
-                <h3 class="font-semibold text-slate-800 mb-1 line-clamp-1"><?= htmlspecialchars($product['name']); ?></h3>
+                <h3 class="font-semibold text-slate-100 mb-1 line-clamp-1"><?= htmlspecialchars($product['name']); ?></h3>
                 <?php if (!empty($product['description'])): ?>
-                  <p class="text-sm text-slate-600 line-clamp-2 mb-3"><?= htmlspecialchars($product['description']); ?></p>
+                  <p class="text-sm text-gray-300 line-clamp-2 mb-3"><?= htmlspecialchars($product['description']); ?></p>
                 <?php endif; ?>
                 <div class="flex items-center justify-between">
                   <div class="text-primary font-bold">
@@ -250,7 +250,7 @@
             </div>
           <?php endforeach; ?>
         <?php else: ?>
-          <div class="col-span-full rounded-xl border border-dashed border-slate-300 bg-white p-6 text-center text-slate-600">
+          <div class="col-span-full rounded-xl border border-dashed border-gray-600 bg-gray-800 p-6 text-center text-gray-400">
             Products not available yet. Please check back later.
           </div>
         <?php endif; ?>
@@ -259,26 +259,26 @@
 
     <!-- Contact Section -->
     <section class="mt-10 md:mt-14">
-      <h2 class="text-xl md:text-2xl font-bold text-slate-800 mb-4 md:mb-6">Contact Us</h2>
+      <h2 class="text-xl md:text-2xl font-bold text-slate-100 mb-4 md:mb-6">Contact Us</h2>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
         <!-- Contact Info -->
-        <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
-          <div class="text-slate-700">
-            <div class="font-semibold text-slate-800">Address</div>
-            <p class="text-sm text-slate-600 mt-1">21-1, Jalan Abadi 2/1</p>
-            <p class="text-sm text-slate-600">Abadi Heights, Puchong, Selangor 71420</p>
-            <p class="text-sm text-slate-600">Malaysia</p>
+        <div class="rounded-2xl bg-gray-800 p-5 shadow-sm ring-1 ring-gray-700">
+          <div class="text-gray-300">
+            <div class="font-semibold text-gray-100">Address</div>
+            <p class="text-sm text-gray-300 mt-1">21-1, Jalan Abadi 2/1</p>
+            <p class="text-sm text-gray-300">Abadi Heights, Puchong, Selangor 71420</p>
+            <p class="text-sm text-gray-300">Malaysia</p>
 
-            <div class="mt-4 font-semibold text-slate-800">Contact</div>
-            <p class="text-sm text-slate-600 mt-1">
+            <div class="mt-4 font-semibold text-gray-100">Contact</div>
+            <p class="text-sm text-gray-300 mt-1">
               Tel:
-              <a href="tel:+60380619349" class="text-blue-600 hover:underline">+603 8061 9349</a> /
-              <a href="tel:+601123332894" class="text-blue-600 hover:underline">+60 11 2333 2894</a>
+              <a href="tel:+60380619349" class="text-blue-400 hover:underline">+603 8061 9349</a> /
+              <a href="tel:+601123332894" class="text-blue-400 hover:underline">+60 11 2333 2894</a>
             </p>
-            <p class="text-sm text-slate-600">
+            <p class="text-sm text-gray-300">
               Email:
-              <a href="mailto:apittmenspa@outlook.com" class="text-blue-600 hover:underline">
+              <a href="mailto:apittmenspa@outlook.com" class="text-blue-400 hover:underline">
                 apittmenspa@outlook.com
               </a>
             </p>
@@ -286,15 +286,15 @@
         </div>
 
         <!-- WhatsApp Contact -->
-        <div class="rounded-2xl bg-green-50 p-5 shadow-sm ring-1 ring-green-200">
+        <div class="rounded-2xl bg-green-900/50 p-5 shadow-sm ring-1 ring-green-800">
           <div class="text-center">
             <div class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-green-600 text-white mb-3">
               <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
               </svg>
             </div>
-            <h3 class="font-semibold text-slate-800 mb-2">Message via WhatsApp</h3>
-            <p class="text-sm text-slate-600 mb-4">For product information and ordering</p>
+            <h3 class="font-semibold text-gray-100 mb-2">Message via WhatsApp</h3>
+            <p class="text-sm text-gray-300 mb-4">For product information and ordering</p>
             <a
               href="https://wa.me/601123332894?text=Hi,%20I'm%20interested%20in%20your%20products"
               target="_blank"

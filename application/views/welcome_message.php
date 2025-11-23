@@ -132,7 +132,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	}
 	</style>
 </head>
-<body>
+<body class="bg-gray-900 text-gray-100">
 
 <!-- Advertisement Modal -->
 <?php if (isset($active_ad) && !empty($active_ad)): ?>
@@ -146,22 +146,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </div>
 <?php endif; ?>
 
-<div id="container">
-	<h1>Welcome to CodeIgniter!</h1>
+<div id="container" class="max-w-2xl mx-auto my-10 p-6 bg-gray-800 rounded-lg shadow-lg ring-1 ring-gray-700">
+	<h1 class="text-2xl font-bold text-slate-100 mb-4">Welcome to CodeIgniter!</h1>
 
-	<div id="body">
-		<p>The page you are looking at is being generated dynamically by CodeIgniter.</p>
+	<div id="body" class="space-y-4">
+		<p class="text-gray-300">The page you are looking at is being generated dynamically by CodeIgniter.</p>
 
-		<p>If you would like to edit this page you'll find it located at:</p>
-		<code>application/views/welcome_message.php</code>
+		<p class="text-gray-300">If you would like to edit this page you'll find it located at:</p>
+		<code class="block bg-gray-700 text-gray-200 p-3 rounded text-sm">application/views/welcome_message.php</code>
 
-		<p>The corresponding controller for this page is found at:</p>
-		<code>application/controllers/Welcome.php</code>
+		<p class="text-gray-300">The corresponding controller for this page is found at:</p>
+		<code class="block bg-gray-700 text-gray-200 p-3 rounded text-sm">application/controllers/Welcome.php</code>
 
-		<p>If you are exploring CodeIgniter for the very first time, you should start by reading the <a href="userguide3/">User Guide</a>.</p>
+		<p class="text-gray-300">If you are exploring CodeIgniter for the very first time, you should start by reading the <a href="userguide3/" class="text-blue-400 hover:underline">User Guide</a>.</p>
 	</div>
 
-	<p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds. <?php echo  (ENVIRONMENT === 'development') ?  'CodeIgniter Version <strong>' . CI_VERSION . '</strong>' : '' ?></p>
+	<p class="footer mt-6 text-sm text-gray-400">Page rendered in <strong class="text-gray-200">{elapsed_time}</strong> seconds. <?php echo  (ENVIRONMENT === 'development') ?  'CodeIgniter Version <strong class="text-gray-200">' . CI_VERSION . '</strong>' : '' ?></p>
 </div>
 
 <script>

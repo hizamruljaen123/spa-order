@@ -26,30 +26,30 @@
     .segmented input[type="radio"]:checked + label { background-color: #0ea5e9; color: #fff; border-color: #0ea5e9; }
   </style>
 </head>
-<body class="bg-white">
-  <div class="mx-auto max-w-md min-h-screen bg-white">
-    <header class="sticky top-0 z-10 bg-white/95 backdrop-blur border-b border-slate-200">
+<body class="bg-gray-900">
+  <div class="mx-auto max-w-md min-h-screen bg-gray-900">
+    <header class="sticky top-0 z-10 bg-gray-800/95 backdrop-blur border-b border-gray-600">
       <div class="px-4 py-3">
-        <h1 class="text-2xl font-bold text-slate-800">Book Spa</h1>
-        <p class="text-sm text-slate-500">Easy version (mobile).</p>
+        <h1 class="text-2xl font-bold text-slate-100">Book Spa</h1>
+        <p class="text-sm text-slate-300">Easy version (mobile).</p>
       </div>
     </header>
 
     <main class="px-4 py-4">
       <?php if (!empty($error)): ?>
-      <div class="mb-4 rounded-md bg-red-50 p-4 ring-1 ring-red-200">
-        <p class="text-sm text-red-700"><?= htmlspecialchars($error); ?></p>
+      <div class="mb-4 rounded-md bg-red-900/50 p-4 ring-1 ring-red-800">
+        <p class="text-sm text-red-300"><?= htmlspecialchars($error); ?></p>
       </div>
       <?php endif; ?>
 
       <?php if (!empty($success)): ?>
-      <div class="mb-4 rounded-md bg-green-50 p-4 ring-1 ring-green-200">
-        <p class="text-sm text-green-700"><?= htmlspecialchars($success); ?></p>
+      <div class="mb-4 rounded-md bg-green-900/50 p-4 ring-1 ring-green-800">
+        <p class="text-sm text-green-300"><?= htmlspecialchars($success); ?></p>
       </div>
       <?php endif; ?>
 
       <?php if (!empty($validation)): ?>
-      <div class="mb-4 rounded-md bg-yellow-50 p-4 ring-1 ring-yellow-200">
+      <div class="mb-4 rounded-md bg-yellow-900/50 p-4 ring-1 ring-yellow-800">
         <?= $validation; ?>
       </div>
       <?php endif; ?>
@@ -58,8 +58,8 @@
 
         <!-- Step 1: Package -->
         <div>
-          <label class="required block text-sm font-semibold text-slate-700" for="package_id">Package</label>
-          <select id="package_id" name="package_id" required class="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-3 text-slate-900 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary">
+          <label class="required block text-sm font-semibold text-slate-200" for="package_id">Package</label>
+          <select id="package_id" name="package_id" required class="mt-1 w-full rounded-lg border border-gray-600 bg-gray-700 px-3 py-3 text-slate-100 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary">
             <option value="">Select package</option>
             <?php if (!empty($packages)): ?>
               <?php foreach ($packages as $p): ?>
@@ -81,8 +81,8 @@
 
         <!-- Step 2: Therapist (optional) -->
         <div>
-          <label class="block text-sm font-semibold text-slate-700" for="therapist_id">Therapist (optional)</label>
-          <select id="therapist_id" name="therapist_id" class="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-3 text-slate-900 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary">
+          <label class="block text-sm font-semibold text-slate-200" for="therapist_id">Therapist (optional)</label>
+          <select id="therapist_id" name="therapist_id" class="mt-1 w-full rounded-lg border border-gray-600 bg-gray-700 px-3 py-3 text-slate-100 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary">
             <option value="">Choose therapist (optional)</option>
             <?php if (!empty($therapists)): ?>
               <?php foreach ($therapists as $t): ?>
@@ -92,45 +92,45 @@
               <?php endforeach; ?>
             <?php endif; ?>
           </select>
-          <p class="mt-1 text-xs text-slate-500">Time availability will adjust to selected therapist.</p>
+          <p class="mt-1 text-xs text-gray-400">Time availability will adjust to selected therapist.</p>
         </div>
 
         <!-- Step 3: Call Type -->
         <div>
-          <span class="required block text-sm font-semibold text-slate-700">Call Type</span>
+          <span class="required block text-sm font-semibold text-slate-200">Call Type</span>
           <div class="mt-2 grid grid-cols-2 gap-2 segmented">
             <input type="radio" id="call_in" name="call_type" value="IN" checked>
             <label for="call_in">In Call</label>
             <input type="radio" id="call_out" name="call_type" value="OUT">
             <label for="call_out">Out Call</label>
           </div>
-          <p class="mt-1 text-xs text-slate-500">Price follows call type.</p>
+          <p class="mt-1 text-xs text-gray-400">Price follows call type.</p>
         </div>
 
         <!-- Step 4: Date -->
         <div>
-          <label class="required block text-sm font-semibold text-slate-700" for="date">Date</label>
-          <input type="date" id="date" name="date" required min="<?= date('Y-m-d'); ?>" class="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-3 text-slate-900 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary">
-          <p class="mt-1 text-xs text-slate-500">Please select a date first.</p>
+          <label class="required block text-sm font-semibold text-slate-200" for="date">Date</label>
+          <input type="date" id="date" name="date" required min="<?= date('Y-m-d'); ?>" class="mt-1 w-full rounded-lg border border-gray-600 bg-gray-700 px-3 py-3 text-slate-100 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary">
+          <p class="mt-1 text-xs text-gray-400">Please select a date first.</p>
         </div>
 
         <!-- Step 5: Time (based on availability) -->
         <div>
-          <span class="required block text-sm font-semibold text-slate-700">Select Time</span>
+          <span class="required block text-sm font-semibold text-slate-200">Select Time</span>
           <input type="hidden" id="time" name="time" required>
           <div id="slots" class="mt-2 grid grid-cols-3 sm:grid-cols-4 gap-2"></div>
-          <div id="slots_help" class="mt-2 text-xs text-slate-500">Available times are in green.</div>
-          <div id="slots_error" class="mt-2 hidden rounded bg-red-50 text-red-700 text-sm px-3 py-2"></div>
+          <div id="slots_help" class="mt-2 text-xs text-gray-400">Available times are in green.</div>
+          <div id="slots_error" class="mt-2 hidden rounded bg-red-900/50 text-red-300 text-sm px-3 py-2"></div>
         </div>
 
         <!-- Step 6: Customer Data -->
         <div>
-          <label class="required block text-sm font-semibold text-slate-700" for="customer_name">Name</label>
-          <input type="text" id="customer_name" name="customer_name" required minlength="2" placeholder="Full name" class="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-3 text-slate-900 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary">
+          <label class="required block text-sm font-semibold text-slate-200" for="customer_name">Name</label>
+          <input type="text" id="customer_name" name="customer_name" required minlength="2" placeholder="Full name" class="mt-1 w-full rounded-lg border border-gray-600 bg-gray-700 px-3 py-3 text-slate-100 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary">
         </div>
         <div>
-          <label class="required block text-sm font-semibold text-slate-700" for="address">Address</label>
-          <textarea id="address" name="address" rows="3" required minlength="5" placeholder="Full address" class="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-3 text-slate-900 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary"></textarea>
+          <label class="required block text-sm font-semibold text-slate-200" for="address">Address</label>
+          <textarea id="address" name="address" rows="3" required minlength="5" placeholder="Full address" class="mt-1 w-full rounded-lg border border-gray-600 bg-gray-700 px-3 py-3 text-slate-100 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary"></textarea>
         </div>
 
         <div class="pt-2">

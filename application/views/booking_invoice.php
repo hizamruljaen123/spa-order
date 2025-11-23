@@ -16,84 +16,84 @@
     .badge { display:inline-flex; align-items:center; gap:6px; padding:4px 10px; border-radius:9999px; font-weight:600; font-size:12px; }
   </style>
 </head>
-<body class="bg-slate-50">
+<body class="bg-gray-900">
   <div class="max-w-3xl mx-auto px-4 py-8">
     <header class="mb-6">
-      <h1 class="text-2xl md:text-3xl font-bold text-slate-800">Order Proof</h1>
-      <p class="text-slate-600 mt-1">Show this page as proof. Admin will contact you.</p>
+      <h1 class="text-2xl md:text-3xl font-bold text-slate-100">Order Proof</h1>
+      <p class="text-slate-300 mt-1">Show this page as proof. Admin will contact you.</p>
     </header>
 
     <?php if (!empty($error)): ?>
-      <div class="mb-4 rounded-md bg-red-50 p-4 ring-1 ring-red-200">
-        <p class="text-sm text-red-700"><?= htmlspecialchars($error); ?></p>
+      <div class="mb-4 rounded-md bg-red-900/50 p-4 ring-1 ring-red-800">
+        <p class="text-sm text-red-300"><?= htmlspecialchars($error); ?></p>
       </div>
     <?php endif; ?>
 
     <?php if (!empty($success)): ?>
-      <div class="mb-4 rounded-md bg-green-50 p-4 ring-1 ring-green-200">
-        <p class="text-sm text-green-700"><?= htmlspecialchars($success); ?></p>
+      <div class="mb-4 rounded-md bg-green-900/50 p-4 ring-1 ring-green-800">
+        <p class="text-sm text-green-300"><?= htmlspecialchars($success); ?></p>
       </div>
     <?php endif; ?>
 
-    <section class="rounded-2xl bg-white shadow ring-1 ring-slate-200 overflow-hidden">
+    <section class="rounded-2xl bg-gray-800 shadow ring-1 ring-gray-700 overflow-hidden">
       <div class="p-6 md:p-8">
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
           <div>
-            <div class="text-xs uppercase tracking-wide text-slate-500">Invoice Number</div>
-            <div class="text-lg font-semibold text-slate-800"><?= htmlspecialchars($invoice->invoice_number ?? '-'); ?></div>
+            <div class="text-xs uppercase tracking-wide text-slate-400">Invoice Number</div>
+            <div class="text-lg font-semibold text-slate-100"><?= htmlspecialchars($invoice->invoice_number ?? '-'); ?></div>
           </div>
           <div class="flex items-center gap-2">
             <?php $ps = $invoice->payment_status ?? 'DP'; ?>
             <?php if (($expired ?? false) && $ps !== 'Paid'): ?>
-              <span class="badge bg-red-100 text-red-700 ring-1 ring-red-200">Expired</span>
+              <span class="badge bg-red-900/50 text-red-300 ring-1 ring-red-800">Expired</span>
             <?php else: ?>
               <?php if ($ps === 'Paid'): ?>
-                <span class="badge bg-emerald-100 text-emerald-700 ring-1 ring-emerald-200">Paid</span>
+                <span class="badge bg-green-900/50 text-green-300 ring-1 ring-green-800">Paid</span>
               <?php else: ?>
-                <span class="badge bg-amber-100 text-amber-700 ring-1 ring-amber-200">Awaiting Payment (DP)</span>
+                <span class="badge bg-yellow-900/50 text-yellow-300 ring-1 ring-yellow-800">Awaiting Payment (DP)</span>
               <?php endif; ?>
             <?php endif; ?>
           </div>
         </div>
 
         <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="rounded-lg border border-slate-200 p-4">
-            <div class="text-sm text-slate-500">Valid Until</div>
-            <div class="mt-1 font-semibold text-slate-800" id="expires_at_text">
+          <div class="rounded-lg border border-gray-700 p-4">
+            <div class="text-sm text-slate-400">Valid Until</div>
+            <div class="mt-1 font-semibold text-slate-100" id="expires_at_text">
               <?= htmlspecialchars($expires_at ?? '-'); ?>
             </div>
             <?php if (!($expired ?? false) && !empty($expires_at)): ?>
-              <div class="mt-2 text-sm text-slate-600">Countdown: <span id="countdown" class="font-semibold text-slate-800">--:--:--</span></div>
+              <div class="mt-2 text-sm text-slate-300">Countdown: <span id="countdown" class="font-semibold text-slate-100">--:--:--</span></div>
               <input type="hidden" id="expires_at_value" value="<?= htmlspecialchars($expires_at); ?>">
             <?php endif; ?>
             <?php if (($expired ?? false) && ($invoice->payment_status ?? 'DP') !== 'Paid'): ?>
-              <div class="mt-2 text-sm text-red-600">Payment time of 1 hour has ended. Please make a new booking or contact admin.</div>
+              <div class="mt-2 text-sm text-red-400">Payment time of 1 hour has ended. Please make a new booking or contact admin.</div>
             <?php endif; ?>
           </div>
-          <div class="rounded-lg border border-slate-200 p-4">
-            <div class="text-sm text-slate-500">Total</div>
-            <div class="mt-1 font-semibold text-slate-800">
+          <div class="rounded-lg border border-gray-700 p-4">
+            <div class="text-sm text-slate-400">Total</div>
+            <div class="mt-1 font-semibold text-slate-100">
               <?php
                 $curr = $booking->currency ?? 'RM';
                 $total = isset($invoice->total) ? (float)$invoice->total : 0;
                 echo htmlspecialchars($curr).' '.number_format($total, 0, ',', '.');
               ?>
             </div>
-            <div class="mt-2 text-xs text-slate-500">Price based on package and call type selected.</div>
+            <div class="mt-2 text-xs text-slate-400">Price based on package and call type selected.</div>
           </div>
         </div>
 
         <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="rounded-lg border border-slate-200 p-4">
-            <div class="text-sm text-slate-500">Customer Details</div>
-            <div class="mt-1 text-slate-800">
+          <div class="rounded-lg border border-gray-700 p-4">
+            <div class="text-sm text-slate-400">Customer Details</div>
+            <div class="mt-1 text-slate-100">
               <div><?= htmlspecialchars($booking->customer_name ?? '-'); ?></div>
-              <div class="text-sm text-slate-600"><?= htmlspecialchars($booking->address ?? '-'); ?></div>
+              <div class="text-sm text-slate-300"><?= htmlspecialchars($booking->address ?? '-'); ?></div>
             </div>
           </div>
-          <div class="rounded-lg border border-slate-200 p-4">
-            <div class="text-sm text-slate-500">Schedule Details</div>
-            <div class="mt-1 text-slate-800">
+          <div class="rounded-lg border border-gray-700 p-4">
+            <div class="text-sm text-slate-400">Schedule Details</div>
+            <div class="mt-1 text-slate-100">
               <div>Date: <?= htmlspecialchars($booking->date ?? '-'); ?></div>
               <div>Time: <?= isset($booking->time) ? htmlspecialchars(substr($booking->time,0,5)) : '-'; ?></div>
               <div>Type: <?= (isset($booking->call_type) && $booking->call_type === 'OUT') ? 'Out Premise' : 'At Premise'; ?></div>
@@ -101,11 +101,11 @@
           </div>
         </div>
 
-        <div class="mt-6 rounded-lg border border-slate-200 p-4">
-          <div class="text-sm text-slate-500">Package</div>
-          <div class="mt-1 text-slate-800">
+        <div class="mt-6 rounded-lg border border-gray-700 p-4">
+          <div class="text-sm text-slate-400">Package</div>
+          <div class="mt-1 text-slate-100">
             <div><?= htmlspecialchars($booking->package_name ?? '-'); ?></div>
-            <div class="text-sm text-slate-600">Therapist: <?= htmlspecialchars($booking->therapist_name ?? 'Not specified'); ?></div>
+            <div class="text-sm text-slate-300">Therapist: <?= htmlspecialchars($booking->therapist_name ?? 'Not specified'); ?></div>
           </div>
         </div>
 
@@ -136,15 +136,15 @@
               . "Invoice: {$inv}"
             );
           ?>
-          <a target="_blank" rel="noopener" href="https://wa.me/<?= $waAdmin; ?>?text=<?= $waMessage; ?>" class="inline-flex items-center rounded-md border border-slate-300 bg-white px-4 py-2 text-slate-700 font-semibold shadow-sm hover:bg-slate-50">
+          <a target="_blank" rel="noopener" href="https://wa.me/<?= $waAdmin; ?>?text=<?= $waMessage; ?>" class="inline-flex items-center rounded-md border border-gray-600 bg-gray-700 px-4 py-2 text-gray-200 font-semibold shadow-sm hover:bg-gray-600">
             Contact Admin via WhatsApp
           </a>
-          <a href="<?= site_url('booking/form'); ?>" class="inline-flex items-center rounded-md border border-slate-300 bg-white px-4 py-2 text-slate-700 font-semibold shadow-sm hover:bg-slate-50">
+          <a href="<?= site_url('booking/form'); ?>" class="inline-flex items-center rounded-md border border-gray-600 bg-gray-700 px-4 py-2 text-gray-200 font-semibold shadow-sm hover:bg-gray-600">
             Create New Booking
           </a>
         </div>
 
-        <div class="mt-6 text-xs text-slate-500">
+        <div class="mt-6 text-xs text-slate-400">
           Invoice validity period is 1 hour from creation. After that, the schedule can be opened again for other customers.
         </div>
       </div>
